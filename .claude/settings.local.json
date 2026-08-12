@@ -259,7 +259,17 @@
       "Bash(powershell -NoProfile -Command \"Stop-Process -Id 21548 -Force -ErrorAction SilentlyContinue\")",
       "Bash(npx next *)",
       "Bash(git add *)",
-      "Bash(grep -iE \"\\\\.sql$|\\\\.log$|\\\\.pdf|\\\\.zip|node_modules|tsbuildinfo\")"
+      "Bash(grep -iE \"\\\\.sql$|\\\\.log$|\\\\.pdf|\\\\.zip|node_modules|tsbuildinfo\")",
+      "Bash(git commit -m ' *)",
+      "Bash(read -r p)",
+      "Bash([ -f \"public$p\" ])",
+      "Bash(rm -f scratch_getproduct.js scratch_newsletter_products.js scratch_render_newsletter.ts http-server.log)",
+      "Bash(mkdir -p \"/c/Users/cinam/AppData/Local/Temp/claude/C--Users-cinam-OneDrive-Desktop-MP-MedPharma/391898a2-dbaa-47eb-8944-177aa28d0d13/scratchpad\")",
+      "Bash(mv newsletter-preview.html newsletter-preview.txt \"/c/Users/cinam/AppData/Local/Temp/claude/C--Users-cinam-OneDrive-Desktop-MP-MedPharma/391898a2-dbaa-47eb-8944-177aa28d0d13/scratchpad/\")",
+      "Read(//c/Users/cinam/AppData/Local/Temp/claude/C--Users-cinam-OneDrive-Desktop-MP-MedPharma/391898a2-dbaa-47eb-8944-177aa28d0d13/scratchpad//**)",
+      "Bash(rm -rf .next/types)",
+      "Bash(grep -n \"escapeHtml\\\\|\\\\${\" \"C:\\\\Users\\\\cinam\\\\OneDrive\\\\Desktop\\\\MP MedPharma\\\\src\\\\lib\\\\productDigest.ts\")",
+      "Bash(git commit *)"
     ]
   }
 }

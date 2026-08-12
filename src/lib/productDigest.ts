@@ -317,8 +317,6 @@ export function buildProductDigestEmail(input: BuildDigestInput): BuiltDigest {
     "New arrivals, recent updates, and this fortnight's featured system inside — take a look.";
 
   const newCardsHtml = newProducts.map((p) => productCard(baseUrl, p, "New Arrival")).join("");
-  const featuredCardHtml =
-    featured && input.newProducts.includes(featured) ? productCard(baseUrl, featured, "New Arrival") : "";
 
   const updateRowsHtml = updatedProducts
     .map((p) => updateRow(baseUrl, p, "Recently Updated"))
@@ -399,11 +397,10 @@ export function buildProductDigestEmail(input: BuildDigestInput): BuiltDigest {
 
           <!-- New products -->
           ${
-            newCardsHtml || featuredCardHtml
+            newCardsHtml
               ? `<tr>
                   <td class="px" style="background:${COLORS.white};padding:28px 40px 4px;">
                     ${sectionLabel("New Products")}
-                    ${featuredCardHtml}
                     ${newCardsHtml}
                   </td>
                 </tr>`
