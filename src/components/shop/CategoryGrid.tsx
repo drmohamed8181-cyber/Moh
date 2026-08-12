@@ -33,7 +33,7 @@ export default function CategoryGrid({ categories }: CategoryGridProps) {
         {/* Header */}
         <div className="flex items-end justify-between mb-10">
           <div>
-            <p className="text-blue-600 text-sm font-semibold uppercase tracking-wider mb-2">Browse By Category</p>
+            <p className="text-blue-600 text-sm font-semibold uppercase tracking-wider mb-2">Equipment Types</p>
             <h2 className="text-3xl font-bold text-slate-900">Featured Categories</h2>
           </div>
           <Link href="/categories" className="hidden sm:flex items-center gap-1.5 text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors">

@@ -16,7 +16,7 @@ const defaults = [
 ];
 
 export default async function CategoriesPage() {
-  const dbCategories = await safeDb((db) => db.category.findMany({ where: { isActive: true }, orderBy: { order: "asc" } }));
+  const dbCategories = await safeDb((db) => db.category.findMany({ where: { isActive: true }, orderBy: { name: "asc" } }));
   const display = (dbCategories && dbCategories.length > 0) ? dbCategories : defaults;
 
   return (

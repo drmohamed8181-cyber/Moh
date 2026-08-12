@@ -53,7 +53,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
 
   const [dbProducts, categories, total] = await Promise.all([
     safeDb((db) => db.product.findMany({ where, orderBy, skip, take: ITEMS_PER_PAGE, include: { category: true } })),
-    safeDb((db) => db.category.findMany({ where: { isActive: true }, orderBy: { order: "asc" } })),
+    safeDb((db) => db.category.findMany({ where: { isActive: true }, orderBy: { name: "asc" } })),
     safeDb((db) => db.product.count({ where })),
   ]);
 

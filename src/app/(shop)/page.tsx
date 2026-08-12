@@ -1,6 +1,7 @@
 import { safeDb } from "@/lib/prisma";
 import HeroSlider from "@/components/shop/HeroSlider";
 import CategoryGrid from "@/components/shop/CategoryGrid";
+import SpecialtiesSection from "@/components/shop/SpecialtiesSection";
 import FeaturedProducts from "@/components/shop/FeaturedProducts";
 import AboutSection from "@/components/shop/AboutSection";
 import ContactSection from "@/components/shop/ContactSection";
@@ -9,7 +10,7 @@ import { Truck, Shield, Award, Headphones } from "lucide-react";
 async function getHomeData() {
   const [slides, categories, products, settingsRows] = await Promise.all([
     safeDb((db) => db.heroSlide.findMany({ where: { isActive: true }, orderBy: { order: "asc" } })),
-    safeDb((db) => db.category.findMany({ where: { isActive: true }, orderBy: { order: "asc" }, take: 6, include: { _count: { select: { products: true } } } })),
+    safeDb((db) => db.category.findMany({ where: { isActive: true }, orderBy: { name: "asc" }, take: 6, include: { _count: { select: { products: true } } } })),
     safeDb((db) => db.product.findMany({ where: { isFeatured: true, isAvailable: true }, take: 8, orderBy: { createdAt: "desc" }, include: { category: { select: { name: true, slug: true } } } })),
     safeDb((db) => db.siteSetting.findMany()),
   ]);
@@ -66,6 +67,7 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <SpecialtiesSection />
       <CategoryGrid categories={categories} />
       <FeaturedProducts products={products} />
       <AboutSection

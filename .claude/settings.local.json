@@ -269,7 +269,17 @@
       "Read(//c/Users/cinam/AppData/Local/Temp/claude/C--Users-cinam-OneDrive-Desktop-MP-MedPharma/391898a2-dbaa-47eb-8944-177aa28d0d13/scratchpad//**)",
       "Bash(rm -rf .next/types)",
       "Bash(grep -n \"escapeHtml\\\\|\\\\${\" \"C:\\\\Users\\\\cinam\\\\OneDrive\\\\Desktop\\\\MP MedPharma\\\\src\\\\lib\\\\productDigest.ts\")",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(gh auth *)",
+      "PowerShell(Get-Command gh -ErrorAction SilentlyContinue)",
+      "PowerShell(gh auth status 2>&1)",
+      "Bash(git remote *)",
+      "Bash(git branch *)",
+      "Bash(git push *)",
+      "Bash(npm view *)",
+      "Bash(npm audit *)",
+      "Bash(rm -rf .next)",
+      "Bash(rm -f .vercel/project.json)"
     ]
   }
 }

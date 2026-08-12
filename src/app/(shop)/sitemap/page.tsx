@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default async function SitemapPage() {
   const categories = await safeDb((db) => db.category.findMany({
     where: { isActive: true },
-    orderBy: { order: "asc" },
+    orderBy: { name: "asc" },
     select: { name: true, slug: true },
   })) ?? [];
 
