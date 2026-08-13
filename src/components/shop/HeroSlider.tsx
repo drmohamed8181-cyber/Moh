@@ -56,14 +56,15 @@ function eyebrowFor(title: string) {
 export default function HeroSlider({ slides = defaultSlides }: HeroSliderProps) {
   const [current, setCurrent] = useState(0);
   const [paused, setPaused] = useState(false);
-  const firstRender = useRef(true);
+  const [firstRender, setFirstRender] = useState(true);
   const touchStartX = useRef(0);
 
   const activeSlides = slides.length > 0 ? slides : defaultSlides;
   const slide = activeSlides[current];
 
   useEffect(() => {
-    firstRender.current = false;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time mount flag to drop image priority after first paint.
+    setFirstRender(false);
   }, []);
 
   const goTo = useCallback(
@@ -200,7 +201,7 @@ export default function HeroSlider({ slides = defaultSlides }: HeroSliderProps) 
                       src={slide.image}
                       alt={slide.title}
                       fill
-                      priority={firstRender.current}
+                      priority={firstRender}
                       sizes="(min-width: 1024px) 420px, 90vw"
                       className="object-contain p-8 drop-shadow-[0_30px_60px_rgba(0,0,0,0.5)]"
                     />

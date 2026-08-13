@@ -280,7 +280,22 @@
       "Bash(npm audit *)",
       "Bash(rm -rf .next)",
       "Bash(rm -f .vercel/project.json)",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://moh-indol.vercel.app/)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://moh-indol.vercel.app/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code} -> %{redirect_url}\\\\n\" https://moh-indol.vercel.app/admin/dashboard)",
+      "Bash(npx @next/codemod@canary upgrade latest)",
+      "PowerShell(Get-CimInstance Win32_Process -Filter \"ProcessId = 29364\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" https://moh-indol.vercel.app/)",
+      "Bash(mkdir -p \"/c/Users/cinam/AppData/Local/Temp/claude/C--Users-cinam-OneDrive-Desktop-MP-MedPharma/22d0a910-038e-464d-8b81-cd9ac85c9280/scratchpad/derm\")",
+      "Bash(curl -sL \"https://images.unsplash.com/photo-1655655314398-c40c8dc6fb75?w=500&q=60\" -o \"/c/Users/cinam/AppData/Local/Temp/claude/C--Users-cinam-OneDrive-Desktop-MP-MedPharma/22d0a910-038e-464d-8b81-cd9ac85c9280/scratchpad/derm/1-device-screen.jpg\")",
+      "Bash(curl -sL \"https://images.unsplash.com/photo-1689103722266-1f2f837145e7?w=500&q=60\" -o \"/c/Users/cinam/AppData/Local/Temp/claude/C--Users-cinam-OneDrive-Desktop-MP-MedPharma/22d0a910-038e-464d-8b81-cd9ac85c9280/scratchpad/derm/2-blue-gloves-machine.jpg\")",
+      "Bash(curl -sL \"https://images.unsplash.com/photo-1785861775561-c6db7da314a0?w=500&q=60\" -o \"/c/Users/cinam/AppData/Local/Temp/claude/C--Users-cinam-OneDrive-Desktop-MP-MedPharma/22d0a910-038e-464d-8b81-cd9ac85c9280/scratchpad/derm/3-laser-hair-removal-chin.jpg\")",
+      "Bash(curl -sL \"https://images.unsplash.com/photo-1785861433534-8cd4c7b994fa?w=500&q=60\" -o \"/c/Users/cinam/AppData/Local/Temp/claude/C--Users-cinam-OneDrive-Desktop-MP-MedPharma/22d0a910-038e-464d-8b81-cd9ac85c9280/scratchpad/derm/4-current-arm-laser.jpg\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3010 --max-time 5)",
+      "Bash(cd \"/c/Users/cinam/OneDrive/Desktop/MP MedPharma\" && ls -la src/app/\\\\\\(shop\\\\\\)/ 2>&1 | head -20 && echo \"---layout---\" && ls src/app/layout.tsx && echo \"---lockfiles in parents---\" && ls -la ../*.lock* ../package-lock.json 2>&1; ls -la package-lock.json 2>&1)",
+      "Bash(curl -s -i http://localhost:3012/api/auth/session)",
+      "Bash(curl -s -o /dev/null -w \"GET /admin/dashboard \\(unauthenticated\\) -> %{http_code} redirect_to:%{redirect_url}\\\\n\" http://localhost:3012/admin/dashboard)",
+      "Bash(curl -s -o /dev/null -w \"GET /products -> %{http_code}\\\\n\" http://localhost:3012/products)",
+      "Bash(curl -s -o /dev/null -w \"GET /login -> %{http_code}\\\\n\" http://localhost:3012/login)"
     ]
   }
 }

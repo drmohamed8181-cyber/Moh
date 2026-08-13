@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSession, signOut } from "next-auth/react";
 import {
@@ -34,6 +35,7 @@ export default function Header() {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const { data: session } = useSession();
+  const router = useRouter();
   const loadWishlist = useWishlistStore((s) => s.load);
   const resetWishlist = useWishlistStore((s) => s.reset);
 
@@ -51,7 +53,7 @@ export default function Header() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      window.location.href = `/search?q=${encodeURIComponent(searchQuery)}`;
+      router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
     }
   };
 

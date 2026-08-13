@@ -20,7 +20,7 @@ const specialtyMeta: Record<
     button: "bg-teal-600 hover:bg-teal-500",
   },
   dermatology: {
-    image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=900&q=80",
+    image: "https://images.unsplash.com/photo-1689103722266-1f2f837145e7?w=900&q=80",
     description: "Laser & light-based devices for skin treatment — launching soon",
     accent: "bg-purple-500",
     button: "bg-purple-600 hover:bg-purple-500",

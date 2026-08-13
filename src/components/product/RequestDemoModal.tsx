@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { toast } from "sonner";
 import { X, ChevronDown, CheckCircle2, Loader2, ArrowRight } from "lucide-react";
@@ -97,14 +97,15 @@ export default function RequestDemoModal({ open, onClose, product }: Props) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const hasOpenedRef = useRef(false);
+  const [hasOpened, setHasOpened] = useState(false);
 
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) =>
     setForm((f) => ({ ...f, [key]: value }));
 
   useEffect(() => {
     if (open) {
-      hasOpenedRef.current = true;
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentionally resets the form each time the modal opens; batched into a single render.
+      setHasOpened(true);
       setForm(initialForm);
       setSuccess(false);
     }
@@ -151,7 +152,7 @@ export default function RequestDemoModal({ open, onClose, product }: Props) {
     }
   };
 
-  if (!open && !hasOpenedRef.current) return null;
+  if (!open && !hasOpened) return null;
 
   return (
     <div

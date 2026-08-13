@@ -11,6 +11,17 @@ import { slugify } from "@/lib/utils";
 interface Category { id: string; name: string; }
 interface Props { categories: Category[]; product?: Product; }
 
+function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
+  return (
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-1.5">
+        {label} {required && <span className="text-red-500">*</span>}
+      </label>
+      {children}
+    </div>
+  );
+}
+
 export default function ProductForm({ categories, product }: Props) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -125,15 +136,6 @@ export default function ProductForm({ categories, product }: Props) {
       setLoading(false);
     }
   };
-
-  const Field = ({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) => (
-    <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1.5">
-        {label} {required && <span className="text-red-500">*</span>}
-      </label>
-      {children}
-    </div>
-  );
 
   const inputClass = "w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm";
 

@@ -20,6 +20,17 @@ const defaultSettings = {
 
 type Settings = typeof defaultSettings;
 
+function Section({ title, icon: Icon, children }: { title: string; icon: LucideIcon; children: React.ReactNode }) {
+  return (
+    <div className="bg-white rounded-2xl border p-6 mb-5">
+      <h2 className="font-bold text-gray-900 flex items-center gap-2 mb-5">
+        <Icon size={18} className="text-primary-600" />{title}
+      </h2>
+      {children}
+    </div>
+  );
+}
+
 export default function AdminSettingsPage() {
   const [settings, setSettings] = useState<Settings>(defaultSettings);
   const [loading, setLoading] = useState(false);
@@ -49,15 +60,6 @@ export default function AdminSettingsPage() {
   };
 
   const inputClass = "w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm";
-
-  const Section = ({ title, icon: Icon, children }: { title: string; icon: LucideIcon; children: React.ReactNode }) => (
-    <div className="bg-white rounded-2xl border p-6 mb-5">
-      <h2 className="font-bold text-gray-900 flex items-center gap-2 mb-5">
-        <Icon size={18} className="text-primary-600" />{title}
-      </h2>
-      {children}
-    </div>
-  );
 
   if (initialLoading) {
     return <div className="text-sm text-gray-400">Loading...</div>;
