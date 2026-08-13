@@ -279,7 +279,8 @@
       "Bash(npm view *)",
       "Bash(npm audit *)",
       "Bash(rm -rf .next)",
-      "Bash(rm -f .vercel/project.json)"
+      "Bash(rm -f .vercel/project.json)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://moh-indol.vercel.app/)"
     ]
   }
 }
