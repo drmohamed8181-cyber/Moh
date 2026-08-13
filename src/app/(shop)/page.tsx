@@ -4,8 +4,10 @@ import CategoryGrid from "@/components/shop/CategoryGrid";
 import SpecialtiesSection from "@/components/shop/SpecialtiesSection";
 import FeaturedProducts from "@/components/shop/FeaturedProducts";
 import AboutSection from "@/components/shop/AboutSection";
-import ContactSection from "@/components/shop/ContactSection";
-import { Truck, Shield, Award, Headphones } from "lucide-react";
+import NewsletterBox from "@/components/ui/NewsletterBox";
+import { Truck, Shield, Award, Headphones, Clock } from "lucide-react";
+
+export const dynamic = "force-dynamic";
 
 async function getHomeData() {
   const [slides, categories, products, settingsRows] = await Promise.all([
@@ -75,7 +77,28 @@ export default async function HomePage() {
         description={settings.aboutDescription}
         image={settings.aboutImage}
       />
-      <ContactSection />
+
+      <section className="py-12 bg-slate-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="bg-blue-600 rounded-2xl text-white p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-10 text-center sm:text-left">
+            <div className="flex items-center gap-3">
+              <Clock className="w-6 h-6" />
+              <h3 className="font-bold text-lg whitespace-nowrap">Business Hours</h3>
+            </div>
+            <div className="flex flex-wrap justify-center gap-x-8 gap-y-1.5 text-sm text-blue-100">
+              <div><span className="font-semibold text-white">Mon – Fri:</span> {settings.hoursWeekday || "8:00 AM – 6:00 PM"}</div>
+              <div><span className="font-semibold text-white">Saturday:</span> {settings.hoursSaturday || "9:00 AM – 4:00 PM"}</div>
+              <div><span className="font-semibold text-white">Sunday:</span> {settings.hoursSunday || "Closed"}</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <NewsletterBox />
+        </div>
+      </section>
     </>
   );
 }

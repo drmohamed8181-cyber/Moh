@@ -18,7 +18,17 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-export default function ContactSection() {
+interface ContactSectionProps {
+  hoursWeekday?: string;
+  hoursSaturday?: string;
+  hoursSunday?: string;
+}
+
+export default function ContactSection({
+  hoursWeekday = "8:00 AM – 6:00 PM",
+  hoursSaturday = "9:00 AM – 4:00 PM",
+  hoursSunday = "Closed",
+}: ContactSectionProps) {
   const [success, setSuccess] = useState(false);
   const {
     register,
@@ -83,13 +93,13 @@ export default function ContactSection() {
               <h4 className="font-bold mb-3">Business Hours</h4>
               <div className="space-y-1.5 text-sm text-blue-100">
                 <div className="flex justify-between">
-                  <span>Mon – Fri</span><span>8:00 AM – 6:00 PM</span>
+                  <span>Mon – Fri</span><span>{hoursWeekday}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Saturday</span><span>9:00 AM – 4:00 PM</span>
+                  <span>Saturday</span><span>{hoursSaturday}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Sunday</span><span>Closed</span>
+                  <span>Sunday</span><span>{hoursSunday}</span>
                 </div>
               </div>
             </div>

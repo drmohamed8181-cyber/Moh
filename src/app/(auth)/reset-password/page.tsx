@@ -89,13 +89,16 @@ function ResetPasswordForm() {
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1.5">New Password</label>
           <div className="relative">
-            <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
             <input
               type={showPass ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full pl-10 pr-10 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
               placeholder="••••••••"
+              data-gramm="false"
+              data-gramm_editor="false"
+              data-enable-grammarly="false"
               required
             />
             <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
@@ -107,13 +110,16 @@ function ResetPasswordForm() {
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1.5">Confirm New Password</label>
           <div className="relative">
-            <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
             <input
               type={showPass ? "text" : "password"}
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
               placeholder="••••••••"
+              data-gramm="false"
+              data-gramm_editor="false"
+              data-enable-grammarly="false"
               required
             />
           </div>

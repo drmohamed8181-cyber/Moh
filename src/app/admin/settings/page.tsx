@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Save, Globe, Phone, Share2, type LucideIcon } from "lucide-react";
+import { Save, Globe, Phone, Share2, Clock, type LucideIcon } from "lucide-react";
 
 const defaultSettings = {
   companyName: "MP MedPharma",
@@ -10,6 +10,9 @@ const defaultSettings = {
   phone: "929-349-8569",
   email: "dr.mohamed8181@gmail.com",
   address: "New York, NY 10001, USA",
+  hoursWeekday: "8:00 AM – 6:00 PM",
+  hoursSaturday: "9:00 AM – 4:00 PM",
+  hoursSunday: "Closed",
   facebook: "",
   twitter: "",
   instagram: "",
@@ -98,6 +101,21 @@ export default function AdminSettingsPage() {
             <div key={key}>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">{label}</label>
               <input type="text" value={settings[key]} onChange={(e) => setSettings({ ...settings, [key]: e.target.value })} className={inputClass} />
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      <Section title="Business Hours" icon={Clock}>
+        <div className="grid sm:grid-cols-3 gap-4">
+          {([
+            { key: "hoursWeekday", label: "Monday – Friday" },
+            { key: "hoursSaturday", label: "Saturday" },
+            { key: "hoursSunday", label: "Sunday" },
+          ] as const).map(({ key, label }) => (
+            <div key={key}>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">{label}</label>
+              <input type="text" value={settings[key]} onChange={(e) => setSettings({ ...settings, [key]: e.target.value })} className={inputClass} placeholder="e.g. 9:00 AM – 5:00 PM" />
             </div>
           ))}
         </div>

@@ -18,6 +18,7 @@ model User {
   role          Role           @default(CUSTOMER)
   isActive      Boolean        @default(true)
   phone         String?
+  organization  String?
   createdAt     DateTime       @default(now()) @db.Timestamptz(6)
   updatedAt     DateTime       @default(now()) @updatedAt @db.Timestamptz(6)
   accounts      Account[]
@@ -292,9 +293,36 @@ model ProfessionalConnection {
 }
 
 model Newsletter {
-  id        String   @id @default(dbgenerated("(gen_random_uuid())::text"))
-  email     String   @unique
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  id           String   @id @default(dbgenerated("(gen_random_uuid())::text"))
+  email        String   @unique
+  name         String?
+  phone        String?
+  address      String?
+  jobTitle     String?
+  organization String?
+  createdAt    DateTime @default(now()) @db.Timestamptz(6)
+}
+
+model Facility {
+  id                 String    @id @default(dbgenerated("(gen_random_uuid())::text"))
+  epgMemberNumber    String    @unique
+  facilityName       String
+  groupAffiliation   String?
+  address            String?
+  city               String?
+  state              String?
+  zipCode            String?
+  effectiveDate      DateTime? @db.Timestamptz(6)
+  facilityType       String?
+  contactName        String?
+  contactTitle       String?
+  email              String?
+  phone              String?
+  createdAt          DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt          DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([email])
+  @@index([state])
 }
 
 model MediaFile {
@@ -306,6 +334,60 @@ model MediaFile {
   mimeType  String?
   folder    String?
   createdAt DateTime @default(now()) @db.Timestamptz(6)
+}
+
+model ProductSubmission {
+  id              String           @id @default(dbgenerated("(gen_random_uuid())::text"))
+  referenceNumber String           @unique
+
+  // Product information
+  productName     String
+  category        String
+  manufacturer    String
+  modelNumber     String?
+  modelYear       String?
+  serialNumber    String?
+  quantity        String?
+  condition       String
+  location        String?
+  description     String?
+  askingPrice     String?
+
+  // Photos — array of { publicId, label, url }
+  images          Json             @default("[]")
+
+  // Contact information
+  fullName        String
+  companyName     String?
+  email           String
+  phone           String
+  preferredContact String?
+  country         String?
+  city            String?
+  comments        String?
+
+  // Consent
+  consentAccurate  Boolean @default(false)
+  consentRight     Boolean @default(false)
+  consentNoPhi     Boolean @default(false)
+  consentContact   Boolean @default(false)
+  consentPrivacy   Boolean @default(false)
+
+  status          SubmissionStatus @default(NEW)
+  adminNotes      String?
+
+  createdAt       DateTime         @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime         @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([email], map: "idx_product_submission_email")
+  @@index([status], map: "idx_product_submission_status")
+}
+
+enum SubmissionStatus {
+  NEW
+  REVIEWING
+  ACCEPTED
+  DECLINED
 }
 
 enum Role {

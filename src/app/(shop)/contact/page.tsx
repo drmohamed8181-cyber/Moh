@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import ContactSection from "@/components/home/ContactSection";
+import NewsletterBox from "@/components/ui/NewsletterBox";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -16,6 +17,13 @@ export default function ContactPage() {
           <p className="text-blue-100 text-lg">We&apos;d love to hear from you. Reach out anytime.</p>
         </div>
       </div>
+
+      <section className="py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <NewsletterBox />
+        </div>
+      </section>
+
       <ContactSection />
     </div>
   );

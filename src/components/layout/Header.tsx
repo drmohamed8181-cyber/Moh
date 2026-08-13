@@ -23,11 +23,21 @@ const defaultNav = [
     ],
   },
   { id: "3", label: "Categories", href: "/categories", children: [] },
-  { id: "4", label: "About Us", href: "/about", children: [] },
-  { id: "5", label: "Contact", href: "/contact", children: [] },
+  { id: "4", label: "Sell Your Product", href: "/sell-your-product", children: [] },
+  { id: "5", label: "About Us", href: "/about", children: [] },
+  { id: "6", label: "Contact", href: "/contact", children: [] },
 ];
 
-export default function Header() {
+type HeaderSettings = {
+  phone?: string;
+  email?: string;
+};
+
+export default function Header({ settings }: { settings?: HeaderSettings }) {
+  const phone = settings?.phone || "929-349-8569";
+  const email = settings?.email || "dr.mohamed8181@gmail.com";
+  const phoneHref = `tel:${phone.replace(/[^\d+]/g, "")}`;
+
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -63,11 +73,11 @@ export default function Header() {
       <div className="bg-primary-700 text-white text-xs py-2 hidden md:block">
         <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="flex gap-6">
-            <a href="tel:9293498569" className="flex items-center gap-1.5 hover:text-primary-200 transition-colors">
-              <Phone size={12} /><span>929-349-8569</span>
+            <a href={phoneHref} className="flex items-center gap-1.5 hover:text-primary-200 transition-colors">
+              <Phone size={12} /><span>{phone}</span>
             </a>
-            <a href="mailto:dr.mohamed8181@gmail.com" className="flex items-center gap-1.5 hover:text-primary-200 transition-colors">
-              <Mail size={12} /><span>dr.mohamed8181@gmail.com</span>
+            <a href={`mailto:${email}`} className="flex items-center gap-1.5 hover:text-primary-200 transition-colors">
+              <Mail size={12} /><span>{email}</span>
             </a>
           </div>
           <div className="flex gap-4 text-xs">

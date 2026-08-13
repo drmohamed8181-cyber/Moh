@@ -83,16 +83,16 @@ export default function AccountSettingsForm({ initialName, initialPhone }: { ini
         <h2 className="font-semibold text-gray-900">Change Password</h2>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1.5">Current Password</label>
-          <input required type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
+          <input required type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false" className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
         </div>
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">New Password</label>
-            <input required type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
+            <input required type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false" className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">Confirm New Password</label>
-            <input required type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
+            <input required type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false" className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
           </div>
         </div>
         <button type="submit" disabled={savingPassword} className="px-6 py-2.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 transition-colors disabled:opacity-60">

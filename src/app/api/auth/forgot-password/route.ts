@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
     }
 
-    const user = await safeDb((db) => db.user.findUnique({ where: { email } }));
+    const user = await safeDb((db) => db.user.findUnique({ where: { email: email.toLowerCase() } }));
 
     if (user) {
       const token = crypto.randomBytes(32).toString("hex");

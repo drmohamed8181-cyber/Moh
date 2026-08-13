@@ -6,7 +6,7 @@ import { signOut } from "next-auth/react";
 import {
   LayoutDashboard, Package, Tags, ShoppingBag, Users,
   MessageSquare, Image, Home, Settings, Search,
-  LogOut, ChevronRight, Globe, Calendar,
+  LogOut, ChevronRight, Globe, Calendar, PackageSearch,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -18,6 +18,7 @@ const navItems = [
   { label: "Customers", href: "/admin/customers", icon: Users },
   { label: "Messages", href: "/admin/messages", icon: MessageSquare },
   { label: "Demo Requests", href: "/admin/demo-requests", icon: Calendar },
+  { label: "Product Submissions", href: "/admin/product-submissions", icon: PackageSearch },
   { label: "Media Library", href: "/admin/media", icon: Image },
   { label: "Homepage", href: "/admin/homepage", icon: Home },
   { label: "SEO", href: "/admin/seo", icon: Search },

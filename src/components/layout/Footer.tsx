@@ -5,7 +5,31 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { Phone, Mail, MapPin, Facebook, Twitter, Instagram, Linkedin, Youtube, Loader2 } from "lucide-react";
 
-export default function Footer() {
+type FooterSettings = {
+  phone?: string;
+  email?: string;
+  address?: string;
+  facebook?: string;
+  twitter?: string;
+  instagram?: string;
+  linkedin?: string;
+  youtube?: string;
+  footerText?: string;
+};
+
+export default function Footer({ settings }: { settings?: FooterSettings }) {
+  const phone = settings?.phone || "929-349-8569";
+  const email = settings?.email || "dr.mohamed8181@gmail.com";
+  const address = settings?.address || "New York, NY 10001, USA";
+  const footerText = settings?.footerText || `© ${new Date().getFullYear()} MP MedPharma. All Rights Reserved.`;
+  const socialLinks = [
+    { icon: Facebook, href: settings?.facebook },
+    { icon: Twitter, href: settings?.twitter },
+    { icon: Instagram, href: settings?.instagram },
+    { icon: Linkedin, href: settings?.linkedin },
+    { icon: Youtube, href: settings?.youtube },
+  ].filter((link): link is { icon: typeof Facebook; href: string } => Boolean(link.href));
+
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [subscribing, setSubscribing] = useState(false);
 
@@ -50,20 +74,16 @@ export default function Footer() {
             <p className="text-sm text-gray-400 leading-relaxed mb-5">
               Providing premium medical equipment for healthcare professionals and home users since 2010. Quality, reliability, and innovation in every product.
             </p>
-            <div className="flex gap-3">
-              {[
-                { icon: Facebook, href: "#" },
-                { icon: Twitter, href: "#" },
-                { icon: Instagram, href: "#" },
-                { icon: Linkedin, href: "#" },
-                { icon: Youtube, href: "#" },
-              ].map(({ icon: Icon, href }, i) => (
-                <a key={i} href={href}
-                  className="w-9 h-9 bg-gray-800 hover:bg-primary-600 text-gray-400 hover:text-white rounded-lg flex items-center justify-center transition-colors">
-                  <Icon size={16} />
-                </a>
-              ))}
-            </div>
+            {socialLinks.length > 0 && (
+              <div className="flex gap-3">
+                {socialLinks.map(({ icon: Icon, href }, i) => (
+                  <a key={i} href={href} target="_blank" rel="noopener noreferrer"
+                    className="w-9 h-9 bg-gray-800 hover:bg-primary-600 text-gray-400 hover:text-white rounded-lg flex items-center justify-center transition-colors">
+                    <Icon size={16} />
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Quick Links */}
@@ -74,6 +94,7 @@ export default function Footer() {
                 { label: "Home", href: "/" },
                 { label: "Products", href: "/products" },
                 { label: "Categories", href: "/categories" },
+                { label: "Sell Your Product", href: "/sell-your-product" },
                 { label: "About Us", href: "/about" },
                 { label: "Contact", href: "/contact" },
               ].map(({ label, href }) => (
@@ -113,19 +134,19 @@ export default function Footer() {
             <ul className="space-y-4 mb-6">
               <li className="flex items-start gap-3">
                 <Phone size={15} className="text-primary-400 mt-0.5 flex-shrink-0" />
-                <a href="tel:9293498569" className="text-sm text-gray-400 hover:text-primary-400 transition-colors">
-                  929-349-8569
+                <a href={`tel:${phone.replace(/[^\d+]/g, "")}`} className="text-sm text-gray-400 hover:text-primary-400 transition-colors">
+                  {phone}
                 </a>
               </li>
               <li className="flex items-start gap-3">
                 <Mail size={15} className="text-primary-400 mt-0.5 flex-shrink-0" />
-                <a href="mailto:dr.mohamed8181@gmail.com" className="text-sm text-gray-400 hover:text-primary-400 transition-colors break-all">
-                  dr.mohamed8181@gmail.com
+                <a href={`mailto:${email}`} className="text-sm text-gray-400 hover:text-primary-400 transition-colors break-all">
+                  {email}
                 </a>
               </li>
               <li className="flex items-start gap-3">
                 <MapPin size={15} className="text-primary-400 mt-0.5 flex-shrink-0" />
-                <span className="text-sm text-gray-400">New York, NY 10001, USA</span>
+                <span className="text-sm text-gray-400">{address}</span>
               </li>
             </ul>
 
@@ -152,7 +173,7 @@ export default function Footer() {
 
         <div className="pt-8 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-sm text-gray-500">
-            © {new Date().getFullYear()} MP MedPharma. All Rights Reserved.
+            {footerText}
           </p>
           <div className="flex gap-4">
             <Link href="/privacy" className="text-xs text-gray-500 hover:text-gray-400 transition-colors">Privacy</Link>

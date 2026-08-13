@@ -41,6 +41,10 @@ export function generateOrderNumber() {
   return `MP-${Date.now()}-${Math.random().toString(36).substr(2, 5).toUpperCase()}`;
 }
 
+export function generateSubmissionReference() {
+  return `MP-SELL-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substr(2, 4).toUpperCase()}`;
+}
+
 export function buildInquiryHref(product: {
   name: string;
   slug?: string;
