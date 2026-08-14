@@ -1,0 +1,14 @@
+import type { MetadataRoute } from "next";
+
+const BASE_URL = process.env.NEXTAUTH_URL || "https://www.mpmedpharma.com";
+
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: {
+      userAgent: "*",
+      allow: "/",
+      disallow: ["/admin", "/api", "/account", "/checkout"],
+    },
+    sitemap: `${BASE_URL}/sitemap.xml`,
+  };
+}
