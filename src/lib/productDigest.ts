@@ -49,7 +49,7 @@ const CONTACT = {
   name: "MP MedPharma",
   phone: "929-349-8569",
   phoneHref: "tel:9293498569",
-  email: "dr.mohamed8181@gmail.com",
+  email: "info@mpmedpharma.com",
   address: "New York, NY 10001, USA",
 };
 

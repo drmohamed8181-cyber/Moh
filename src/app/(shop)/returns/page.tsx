@@ -57,7 +57,7 @@ export default function ReturnsPage() {
           <h2 className="text-xl font-bold text-gray-900 mb-3">Start a Return or Claim</h2>
           <p className="text-gray-600 leading-relaxed">
             Reach out to our team at{" "}
-            <a href="mailto:dr.mohamed8181@gmail.com" className="text-primary-600 hover:underline">dr.mohamed8181@gmail.com</a>{" "}
+            <a href="mailto:info@mpmedpharma.com" className="text-primary-600 hover:underline">info@mpmedpharma.com</a>{" "}
             or <a href="tel:9293498569" className="text-primary-600 hover:underline">929-349-8569</a> with your order
             number, and we&apos;ll walk you through the next steps.
           </p>

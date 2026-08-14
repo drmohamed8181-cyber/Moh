@@ -73,7 +73,7 @@ export default function ContactSection() {
           <div className="space-y-6">
             {[
               { icon: Phone, title: "Phone", content: "929-349-8569", href: "tel:9293498569" },
-              { icon: Mail, title: "Email", content: "dr.mohamed8181@gmail.com", href: "mailto:dr.mohamed8181@gmail.com" },
+              { icon: Mail, title: "Email", content: "info@mpmedpharma.com", href: "mailto:info@mpmedpharma.com" },
               { icon: MapPin, title: "Address", content: "New York, NY 10001, USA", href: "#" },
               { icon: Clock, title: "Hours", content: "Mon–Fri: 9AM – 6PM\nSat: 10AM – 4PM", href: null },
             ].map(({ icon: Icon, title, content, href }) => (

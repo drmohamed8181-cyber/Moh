@@ -35,7 +35,7 @@ type HeaderSettings = {
 
 export default function Header({ settings }: { settings?: HeaderSettings }) {
   const phone = settings?.phone || "929-349-8569";
-  const email = settings?.email || "dr.mohamed8181@gmail.com";
+  const email = settings?.email || "info@mpmedpharma.com";
   const phoneHref = `tel:${phone.replace(/[^\d+]/g, "")}`;
 
   const [isScrolled, setIsScrolled] = useState(false);

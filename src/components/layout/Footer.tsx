@@ -19,7 +19,7 @@ type FooterSettings = {
 
 export default function Footer({ settings }: { settings?: FooterSettings }) {
   const phone = settings?.phone || "929-349-8569";
-  const email = settings?.email || "dr.mohamed8181@gmail.com";
+  const email = settings?.email || "info@mpmedpharma.com";
   const address = settings?.address || "New York, NY 10001, USA";
   const footerText = settings?.footerText || `© ${new Date().getFullYear()} MP MedPharma. All Rights Reserved.`;
   const socialLinks = [

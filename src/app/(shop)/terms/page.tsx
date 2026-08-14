@@ -79,7 +79,7 @@ export default function TermsPage() {
           <h2 className="text-xl font-bold text-gray-900 mb-3">Contact Us</h2>
           <p className="text-gray-600 leading-relaxed">
             Questions about these terms can be sent to{" "}
-            <a href="mailto:dr.mohamed8181@gmail.com" className="text-primary-600 hover:underline">dr.mohamed8181@gmail.com</a>{" "}
+            <a href="mailto:info@mpmedpharma.com" className="text-primary-600 hover:underline">info@mpmedpharma.com</a>{" "}
             or <a href="tel:9293498569" className="text-primary-600 hover:underline">929-349-8569</a>.
           </p>
         </section>
