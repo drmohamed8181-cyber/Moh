@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
-import { Phone, Mail, MapPin, Facebook, Twitter, Instagram, Linkedin, Youtube, Loader2 } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, Facebook, Twitter, Instagram, Linkedin, Youtube, Loader2 } from "lucide-react";
 
 type FooterSettings = {
   phone?: string;
@@ -15,12 +15,18 @@ type FooterSettings = {
   linkedin?: string;
   youtube?: string;
   footerText?: string;
+  hoursWeekday?: string;
+  hoursSaturday?: string;
+  hoursSunday?: string;
 };
 
 export default function Footer({ settings }: { settings?: FooterSettings }) {
   const phone = settings?.phone || "929-349-8569";
   const email = settings?.email || "info@mpmedpharma.com";
   const address = settings?.address || "New York, NY 10001, USA";
+  const hoursWeekday = settings?.hoursWeekday || "8:00 AM – 6:00 PM";
+  const hoursSaturday = settings?.hoursSaturday || "9:00 AM – 4:00 PM";
+  const hoursSunday = settings?.hoursSunday || "Closed";
   const footerText = settings?.footerText || `© ${new Date().getFullYear()} MP MedPharma. All Rights Reserved.`;
   const socialLinks = [
     { icon: Facebook, href: settings?.facebook },
@@ -147,6 +153,14 @@ export default function Footer({ settings }: { settings?: FooterSettings }) {
               <li className="flex items-start gap-3">
                 <MapPin size={15} className="text-primary-400 mt-0.5 flex-shrink-0" />
                 <span className="text-sm text-gray-400">{address}</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <Clock size={15} className="text-primary-400 mt-0.5 flex-shrink-0" />
+                <div className="text-sm text-gray-400 space-y-0.5">
+                  <div>Mon – Fri: {hoursWeekday}</div>
+                  <div>Saturday: {hoursSaturday}</div>
+                  <div>Sunday: {hoursSunday}</div>
+                </div>
               </li>
             </ul>
 
