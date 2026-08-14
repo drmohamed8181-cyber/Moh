@@ -34,7 +34,9 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description,
     keywords,
-    metadataBase: new URL(process.env.NEXTAUTH_URL || "http://localhost:3000"),
+    metadataBase: new URL(
+      process.env.NODE_ENV === "production" ? "https://www.mpmedpharma.com" : "http://localhost:3000"
+    ),
     openGraph: {
       type: "website",
       siteName: "MP MedPharma",

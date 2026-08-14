@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { safeDb } from "@/lib/prisma";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
 
-const BASE_URL = process.env.NEXTAUTH_URL || "https://www.mpmedpharma.com";
+const BASE_URL = "https://www.mpmedpharma.com";
 
 const STATIC_ROUTES: { path: string; changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"]; priority: number }[] = [
   { path: "", changeFrequency: "weekly", priority: 1 },
