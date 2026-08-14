@@ -1,4 +1,5 @@
 import { safeDb } from "@/lib/prisma";
+import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
 import HeroSlider from "@/components/shop/HeroSlider";
 import CategoryGrid from "@/components/shop/CategoryGrid";
 import SpecialtiesSection from "@/components/shop/SpecialtiesSection";
@@ -12,8 +13,8 @@ export const dynamic = "force-dynamic";
 async function getHomeData() {
   const [slides, categories, products, settingsRows] = await Promise.all([
     safeDb((db) => db.heroSlide.findMany({ where: { isActive: true }, orderBy: { order: "asc" } })),
-    safeDb((db) => db.category.findMany({ where: { isActive: true }, orderBy: { name: "asc" }, take: 6, include: { _count: { select: { products: true } } } })),
-    safeDb((db) => db.product.findMany({ where: { isFeatured: true, isAvailable: true }, take: 8, orderBy: { createdAt: "desc" }, include: { category: { select: { name: true, slug: true } } } })),
+    safeDb((db) => db.category.findMany({ where: { isActive: true, slug: { notIn: HIDDEN_CATEGORY_SLUGS } }, orderBy: { name: "asc" }, take: 6, include: { _count: { select: { products: true } } } })),
+    safeDb((db) => db.product.findMany({ where: { isFeatured: true, isAvailable: true, category: { slug: { notIn: HIDDEN_CATEGORY_SLUGS } } }, take: 8, orderBy: { createdAt: "desc" }, include: { category: { select: { name: true, slug: true } } } })),
     safeDb((db) => db.siteSetting.findMany()),
   ]);
 

@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 import { Metadata } from "next";
 import Link from "next/link";
 import { safeDb } from "@/lib/prisma";
+import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
 import ProductCard from "@/components/product/ProductCard";
 import { Search } from "lucide-react";
 
@@ -12,11 +13,16 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   const q = qRaw ?? "";
 
   const products = q ? await safeDb((db) => db.product.findMany({
-    where: { OR: [
-      { name: { contains: q, mode: "insensitive" } },
-      { shortDesc: { contains: q, mode: "insensitive" } },
-      { manufacturer: { contains: q, mode: "insensitive" } },
-    ]},
+    where: {
+      AND: [
+        { OR: [
+          { name: { contains: q, mode: "insensitive" } },
+          { shortDesc: { contains: q, mode: "insensitive" } },
+          { manufacturer: { contains: q, mode: "insensitive" } },
+        ]},
+        { category: { slug: { notIn: HIDDEN_CATEGORY_SLUGS } } },
+      ],
+    },
     include: { category: true },
     take: 24,
   })) : null;

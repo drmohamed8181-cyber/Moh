@@ -6,7 +6,7 @@ import ProductCard from "@/components/product/ProductCard";
 import ProductsSortSelect from "@/components/shop/ProductsSortSelect";
 import InStockFilter from "@/components/shop/InStockFilter";
 import { SlidersHorizontal } from "lucide-react";
-import { DENTAL_CATEGORY_SLUGS, SPECIALTIES } from "@/lib/specialties";
+import { DENTAL_CATEGORY_SLUGS, HIDDEN_CATEGORY_SLUGS, SPECIALTIES } from "@/lib/specialties";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "All Products", description: "Browse our complete range of premium medical equipment." };
@@ -37,10 +37,11 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
     sp.specialty ?? (sp.category ? (DENTAL_CATEGORY_SLUGS.includes(sp.category) ? "dental" : "ophthalmology") : undefined);
 
   const where: Prisma.ProductWhereInput = {};
-  if (sp.category) where.category = { slug: sp.category };
-  else if (sp.specialty === "dental") where.category = { slug: { in: DENTAL_CATEGORY_SLUGS } };
-  else if (sp.specialty === "ophthalmology") where.category = { slug: { notIn: DENTAL_CATEGORY_SLUGS } };
+  if (sp.category) where.category = HIDDEN_CATEGORY_SLUGS.includes(sp.category) ? { slug: "__none__" } : { slug: sp.category };
+  else if (sp.specialty === "dental") where.id = "__none__";
+  else if (sp.specialty === "ophthalmology") where.category = { slug: { notIn: HIDDEN_CATEGORY_SLUGS } };
   else if (sp.specialty === "dermatology") where.id = "__none__";
+  else where.category = { slug: { notIn: HIDDEN_CATEGORY_SLUGS } };
   if (sp.featured === "true") where.isFeatured = true;
   if (sp.q) where.name = { contains: sp.q, mode: "insensitive" };
   if (sp.inStock === "true") where.isAvailable = true;
@@ -53,7 +54,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
 
   const [dbProducts, categories, total] = await Promise.all([
     safeDb((db) => db.product.findMany({ where, orderBy, skip, take: ITEMS_PER_PAGE, include: { category: true } })),
-    safeDb((db) => db.category.findMany({ where: { isActive: true }, orderBy: { name: "asc" } })),
+    safeDb((db) => db.category.findMany({ where: { isActive: true, slug: { notIn: HIDDEN_CATEGORY_SLUGS } }, orderBy: { name: "asc" } })),
     safeDb((db) => db.product.count({ where })),
   ]);
 

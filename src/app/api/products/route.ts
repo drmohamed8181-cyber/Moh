@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import type { Prisma } from "@prisma/client";
 import { safeDb } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
 
 export async function GET(req: NextRequest) {
   try {
@@ -14,7 +15,8 @@ export async function GET(req: NextRequest) {
     const featured = searchParams.get("featured") === "true";
 
     const where: Prisma.ProductWhereInput = {};
-    if (category) where.category = { slug: category };
+    if (category) where.category = HIDDEN_CATEGORY_SLUGS.includes(category) ? { slug: "__none__" } : { slug: category };
+    else where.category = { slug: { notIn: HIDDEN_CATEGORY_SLUGS } };
     if (manufacturer) where.manufacturer = manufacturer;
     if (featured) where.isFeatured = true;
     if (q) where.name = { contains: q, mode: "insensitive" };

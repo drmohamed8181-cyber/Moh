@@ -3,6 +3,7 @@ import { safeDb } from "@/lib/prisma";
 import { sendMail } from "@/lib/mail";
 import { buildProductDigestEmail, type DigestProduct } from "@/lib/productDigest";
 import { createUnsubscribeToken } from "@/lib/unsubscribe";
+import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
 
 const SETTING_KEY = "lastProductDigestAt";
 const DEFAULT_LOOKBACK_MS = 14 * 24 * 60 * 60 * 1000; // biweekly
@@ -73,7 +74,7 @@ export async function GET(req: NextRequest) {
   const [newRows, updatedRows] = await Promise.all([
     safeDb((db) =>
       db.product.findMany({
-        where: { isAvailable: true, createdAt: { gt: since } },
+        where: { isAvailable: true, createdAt: { gt: since }, category: { slug: { notIn: HIDDEN_CATEGORY_SLUGS } } },
         orderBy: { createdAt: "desc" },
         take: MAX_PRODUCTS,
         select: DIGEST_SELECT,
@@ -81,7 +82,7 @@ export async function GET(req: NextRequest) {
     ),
     safeDb((db) =>
       db.product.findMany({
-        where: { isAvailable: true, updatedAt: { gt: since }, createdAt: { lte: since } },
+        where: { isAvailable: true, updatedAt: { gt: since }, createdAt: { lte: since }, category: { slug: { notIn: HIDDEN_CATEGORY_SLUGS } } },
         orderBy: { updatedAt: "desc" },
         take: MAX_PRODUCTS,
         select: DIGEST_SELECT,

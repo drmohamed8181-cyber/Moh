@@ -4,6 +4,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { safeDb } from "@/lib/prisma";
+import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
 import ProductCard from "@/components/product/ProductCard";
 import { ChevronRight } from "lucide-react";
 
@@ -25,6 +26,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+
+  if (HIDDEN_CATEGORY_SLUGS.includes(slug)) notFound();
 
   const [dbCategory, dbProducts] = await Promise.all([
     safeDb((db) => db.category.findUnique({ where: { slug } })),

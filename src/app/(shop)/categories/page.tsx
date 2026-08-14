@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { safeDb } from "@/lib/prisma";
+import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
 
 export const metadata: Metadata = { title: "Product Categories" };
 
@@ -16,7 +17,7 @@ const defaults = [
 ];
 
 export default async function CategoriesPage() {
-  const dbCategories = await safeDb((db) => db.category.findMany({ where: { isActive: true }, orderBy: { name: "asc" } }));
+  const dbCategories = await safeDb((db) => db.category.findMany({ where: { isActive: true, slug: { notIn: HIDDEN_CATEGORY_SLUGS } }, orderBy: { name: "asc" } }));
   const display = (dbCategories && dbCategories.length > 0) ? dbCategories : defaults;
 
   return (

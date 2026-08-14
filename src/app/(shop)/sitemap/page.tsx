@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { safeDb } from "@/lib/prisma";
+import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
 
 export default async function SitemapPage() {
   const categories = await safeDb((db) => db.category.findMany({
-    where: { isActive: true },
+    where: { isActive: true, slug: { notIn: HIDDEN_CATEGORY_SLUGS } },
     orderBy: { name: "asc" },
     select: { name: true, slug: true },
   })) ?? [];

@@ -1,6 +1,8 @@
 export const dynamic = "force-dynamic";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { safeDb } from "@/lib/prisma";
+import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
 import ProductDetail from "@/components/product/ProductDetail";
 
 interface Props {
@@ -9,8 +11,8 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const product = await safeDb((db) => db.product.findUnique({ where: { slug } }));
-  if (!product) return { title: "Product" };
+  const product = await safeDb((db) => db.product.findUnique({ where: { slug }, include: { category: true } }));
+  if (!product || HIDDEN_CATEGORY_SLUGS.includes(product.category.slug)) return { title: "Product" };
   return {
     title: product.seoTitle ?? product.name,
     description: product.seoDesc ?? product.shortDesc ?? undefined,
@@ -23,6 +25,8 @@ export default async function ProductPage({ params }: Props) {
     where: { slug },
     include: { category: true },
   }));
+
+  if (dbProduct && HIDDEN_CATEGORY_SLUGS.includes(dbProduct.category.slug)) notFound();
 
   const product = dbProduct
     ? { ...dbProduct, specifications: dbProduct.specifications as Record<string, string> | null }
