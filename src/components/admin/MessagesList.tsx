@@ -10,6 +10,8 @@ interface ContactMessage {
   name: string;
   email: string;
   phone: string | null;
+  jobTitle: string | null;
+  organization: string | null;
   subject: string;
   message: string;
   isRead: boolean;
@@ -111,7 +113,13 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
 
             {isOpen && (
               <div className="px-5 pb-5 pl-[4.5rem]">
-                {msg.phone && <p className="text-xs text-gray-500 mb-3">Phone: {msg.phone}</p>}
+                {(msg.phone || msg.jobTitle || msg.organization) && (
+                  <p className="text-xs text-gray-500 mb-3 space-x-3">
+                    {msg.phone && <span>Phone: {msg.phone}</span>}
+                    {msg.jobTitle && <span>Job Title: {msg.jobTitle}</span>}
+                    {msg.organization && <span>Workplace: {msg.organization}</span>}
+                  </p>
+                )}
                 {msg.reply && (
                   <div className="bg-green-50 border border-green-100 rounded-xl p-3 mb-3">
                     <p className="text-xs font-semibold text-green-700 mb-1 flex items-center gap-1">

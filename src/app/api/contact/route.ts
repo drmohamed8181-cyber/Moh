@@ -13,13 +13,21 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Too many messages. Please try again later." }, { status: 429 });
     }
 
-    const { name, email, phone, subject, message } = await req.json();
+    const { name, email, phone, jobTitle, organization, subject, message } = await req.json();
     if (!name || !email || !message) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
     const finalSubject = subject || "General Inquiry";
     const saved = await safeDb((db) => db.contactMessage.create({
-      data: { name, email, phone: phone || null, subject: finalSubject, message },
+      data: {
+        name,
+        email,
+        phone: phone || null,
+        jobTitle: jobTitle || null,
+        organization: organization || null,
+        subject: finalSubject,
+        message,
+      },
     }));
     if (!saved) {
       return NextResponse.json({ error: "Internal server error" }, { status: 500 });
@@ -35,12 +43,14 @@ export async function POST(req: NextRequest) {
             <tr><td style="padding:4px 12px 4px 0;color:#667;">Name</td><td>${escapeHtml(name)}</td></tr>
             <tr><td style="padding:4px 12px 4px 0;color:#667;">Email</td><td>${escapeHtml(email)}</td></tr>
             <tr><td style="padding:4px 12px 4px 0;color:#667;">Phone</td><td>${escapeHtml(phone || "—")}</td></tr>
+            <tr><td style="padding:4px 12px 4px 0;color:#667;">Job Title</td><td>${escapeHtml(jobTitle || "—")}</td></tr>
+            <tr><td style="padding:4px 12px 4px 0;color:#667;">Workplace</td><td>${escapeHtml(organization || "—")}</td></tr>
             <tr><td style="padding:4px 12px 4px 0;color:#667;">Subject</td><td>${escapeHtml(finalSubject)}</td></tr>
           </table>
           <p style="margin-top:16px;color:#0a2540;font-weight:600;">Message</p>
           <p style="white-space:pre-line;color:#333;line-height:1.6;">${escapeHtml(message)}</p>
         </div>`,
-      text: `New contact message from ${name} (${email}${phone ? `, ${phone}` : ""})\nSubject: ${finalSubject}\n\n${message}`,
+      text: `New contact message from ${name} (${email}${phone ? `, ${phone}` : ""})${jobTitle ? `\nJob Title: ${jobTitle}` : ""}${organization ? `\nWorkplace: ${organization}` : ""}\nSubject: ${finalSubject}\n\n${message}`,
     });
 
     return NextResponse.json({ success: true });

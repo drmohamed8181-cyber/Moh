@@ -28,7 +28,7 @@ type ContactSettings = {
 };
 
 export default function ContactSection({ settings }: { settings?: ContactSettings }) {
-  const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", jobTitle: "", organization: "", subject: "", message: "" });
   const [loading, setLoading] = useState(false);
 
   const phone = settings?.phone || "929-349-8569";
@@ -61,7 +61,7 @@ export default function ContactSection({ settings }: { settings?: ContactSetting
       });
       if (res.ok) {
         toast.success("Message sent! We'll get back to you shortly.");
-        setForm({ name: "", email: "", phone: "", subject: "", message: "" });
+        setForm({ name: "", email: "", phone: "", jobTitle: "", organization: "", subject: "", message: "" });
       } else {
         toast.error("Failed to send message. Please try again.");
       }
@@ -80,8 +80,7 @@ export default function ContactSection({ settings }: { settings?: ContactSetting
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <p className="text-primary-600 text-sm font-semibold uppercase tracking-wider mb-2">Get in Touch</p>
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Contact Us</h2>
-          <p className="text-gray-600 mt-3 max-w-xl mx-auto">Have questions about our products or need technical support? Our team is ready to help.</p>
+          <p className="text-gray-600 max-w-xl mx-auto">Have questions about our products or need technical support? Our team is ready to help.</p>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-10 max-w-6xl mx-auto">
@@ -149,6 +148,26 @@ export default function ContactSection({ settings }: { settings?: ContactSetting
                     type="text"
                     value={form.subject}
                     onChange={(e) => setForm({ ...form, subject: e.target.value })}
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+                  />
+                </div>
+              </div>
+              <div className="grid sm:grid-cols-2 gap-5">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Job Title</label>
+                  <input
+                    type="text"
+                    value={form.jobTitle}
+                    onChange={(e) => setForm({ ...form, jobTitle: e.target.value })}
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Organization / Workplace</label>
+                  <input
+                    type="text"
+                    value={form.organization}
+                    onChange={(e) => setForm({ ...form, organization: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
                   />
                 </div>

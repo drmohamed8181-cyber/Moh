@@ -222,15 +222,17 @@ model DemoRequest {
 }
 
 model ContactMessage {
-  id        String   @id @default(dbgenerated("(gen_random_uuid())::text"))
-  name      String   @map("fullName")
-  email     String
-  phone     String?
-  subject   String
-  message   String
-  isRead    Boolean  @default(false)
-  reply     String?
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  id           String   @id @default(dbgenerated("(gen_random_uuid())::text"))
+  name         String   @map("fullName")
+  email        String
+  phone        String?
+  jobTitle     String?
+  organization String?
+  subject      String
+  message      String
+  isRead       Boolean  @default(false)
+  reply        String?
+  createdAt    DateTime @default(now()) @db.Timestamptz(6)
 }
 
 model Coupon {
