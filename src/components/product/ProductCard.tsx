@@ -92,7 +92,7 @@ export default function ProductCard({ product }: { product: Product }) {
       <button
         onClick={handleWishlistClick}
         aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
-        className={`absolute top-3 right-3 w-9 h-9 rounded-xl flex items-center justify-center shadow-md transition-all duration-300 translate-x-10 group-hover:translate-x-0 ${
+        className={`absolute top-3 right-3 w-9 h-9 rounded-xl flex items-center justify-center shadow-md transition-all duration-300 ${
           wishlisted ? "bg-red-500 text-white" : "bg-white text-gray-600 hover:text-red-500"
         }`}
       >

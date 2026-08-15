@@ -9,7 +9,7 @@ const defaultSettings = {
   tagline: "Premium Medical Equipment",
   phone: "929-349-8569",
   email: "info@mpmedpharma.com",
-  address: "New York, NY 10001, USA",
+  address: "New Jersey, NJ 07675, USA",
   hoursWeekday: "8:00 AM – 6:00 PM",
   hoursSaturday: "9:00 AM – 4:00 PM",
   hoursSunday: "Closed",

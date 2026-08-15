@@ -23,7 +23,7 @@ type FooterSettings = {
 export default function Footer({ settings }: { settings?: FooterSettings }) {
   const phone = settings?.phone || "929-349-8569";
   const email = settings?.email || "info@mpmedpharma.com";
-  const address = settings?.address || "New York, NY 10001, USA";
+  const address = settings?.address || "New Jersey, NJ 07675, USA";
   const hoursWeekday = settings?.hoursWeekday || "8:00 AM – 6:00 PM";
   const hoursSaturday = settings?.hoursSaturday || "9:00 AM – 4:00 PM";
   const hoursSunday = settings?.hoursSunday || "Closed";

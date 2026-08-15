@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import ContactSection from "@/components/home/ContactSection";
-import NewsletterBox from "@/components/ui/NewsletterBox";
+import { safeDb } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -8,7 +8,10 @@ export const metadata: Metadata = {
   description: "Get in touch with MP MedPharma.",
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const rows = (await safeDb((db) => db.siteSetting.findMany())) ?? [];
+  const settings = Object.fromEntries(rows.map((row) => [row.key, row.value]));
+
   return (
     <div>
       <div className="bg-gradient-to-br from-primary-600 to-primary-800 text-white py-20">
@@ -18,13 +21,7 @@ export default function ContactPage() {
         </div>
       </div>
 
-      <section className="py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <NewsletterBox />
-        </div>
-      </section>
-
-      <ContactSection />
+      <ContactSection settings={settings} />
     </div>
   );
 }

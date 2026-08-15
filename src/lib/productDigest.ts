@@ -50,7 +50,7 @@ const CONTACT = {
   phone: "929-349-8569",
   phoneHref: "tel:9293498569",
   email: "info@mpmedpharma.com",
-  address: "New York, NY 10001, USA",
+  address: "New Jersey, NJ 07675, USA",
 };
 
 const MAX_NEW = 6;

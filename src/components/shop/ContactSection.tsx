@@ -71,7 +71,7 @@ export default function ContactSection({
             {[
               { icon: Phone, title: "Call Us", value: "929-349-8569", href: "tel:929-349-8569" },
               { icon: Mail, title: "Email Us", value: "info@mpmedpharma.com", href: "mailto:info@mpmedpharma.com" },
-              { icon: MapPin, title: "Location", value: "New York, NY, USA", href: "#" },
+              { icon: MapPin, title: "Location", value: "New Jersey, NJ, USA", href: "#" },
             ].map(({ icon: Icon, title, value, href }) => (
               <a
                 key={title}

@@ -18,9 +18,25 @@ function InquiryPrefill({ onPrefill }: { onPrefill: (subject: string, message: s
   return null;
 }
 
-export default function ContactSection() {
+type ContactSettings = {
+  phone?: string;
+  email?: string;
+  address?: string;
+  hoursWeekday?: string;
+  hoursSaturday?: string;
+  hoursSunday?: string;
+};
+
+export default function ContactSection({ settings }: { settings?: ContactSettings }) {
   const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
   const [loading, setLoading] = useState(false);
+
+  const phone = settings?.phone || "929-349-8569";
+  const email = settings?.email || "info@mpmedpharma.com";
+  const address = settings?.address || "New Jersey, NJ 07675, USA";
+  const hoursWeekday = settings?.hoursWeekday || "8:00 AM – 6:00 PM";
+  const hoursSaturday = settings?.hoursSaturday || "9:00 AM – 4:00 PM";
+  const hoursSunday = settings?.hoursSunday || "Closed";
 
   const handlePrefill = useCallback((subject: string, message: string) => {
     setForm((f) => ({
@@ -72,10 +88,10 @@ export default function ContactSection() {
           {/* Info */}
           <div className="space-y-6">
             {[
-              { icon: Phone, title: "Phone", content: "929-349-8569", href: "tel:9293498569" },
-              { icon: Mail, title: "Email", content: "info@mpmedpharma.com", href: "mailto:info@mpmedpharma.com" },
-              { icon: MapPin, title: "Address", content: "New York, NY 10001, USA", href: "#" },
-              { icon: Clock, title: "Hours", content: "Mon–Fri: 9AM – 6PM\nSat: 10AM – 4PM", href: null },
+              { icon: Phone, title: "Phone", content: phone, href: `tel:${phone.replace(/[^\d+]/g, "")}` },
+              { icon: Mail, title: "Email", content: email, href: `mailto:${email}` },
+              { icon: MapPin, title: "Address", content: address, href: "#" },
+              { icon: Clock, title: "Hours", content: `Mon – Fri: ${hoursWeekday}\nSaturday: ${hoursSaturday}\nSunday: ${hoursSunday}`, href: null },
             ].map(({ icon: Icon, title, content, href }) => (
               <div key={title} className="flex gap-4 p-5 bg-white rounded-2xl shadow-card">
                 <div className="w-11 h-11 bg-primary-50 text-primary-600 rounded-xl flex items-center justify-center flex-shrink-0">
