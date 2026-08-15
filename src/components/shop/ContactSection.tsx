@@ -118,14 +118,12 @@ export default function ContactSection({
                 <div className="grid sm:grid-cols-2 gap-4">
                   <Input
                     label="Full Name *"
-                    placeholder="John Smith"
                     {...register("fullName")}
                     error={errors.fullName?.message}
                   />
                   <Input
                     label="Email Address *"
                     type="email"
-                    placeholder="john@example.com"
                     {...register("email")}
                     error={errors.email?.message}
                   />
@@ -134,12 +132,10 @@ export default function ContactSection({
                   <Input
                     label="Phone Number"
                     type="tel"
-                    placeholder="+1 (555) 000-0000"
                     {...register("phone")}
                   />
                   <Input
                     label="Subject *"
-                    placeholder="Product inquiry"
                     {...register("subject")}
                     error={errors.subject?.message}
                   />
@@ -148,7 +144,6 @@ export default function ContactSection({
                   <label className="block text-sm font-medium text-slate-700 mb-1.5">Message *</label>
                   <textarea
                     rows={5}
-                    placeholder="Tell us about your needs…"
                     {...register("message")}
                     className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder:text-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                   />

@@ -121,7 +121,6 @@ export default function ContactSection({ settings }: { settings?: ContactSetting
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
-                    placeholder="John Doe"
                   />
                 </div>
                 <div>
@@ -131,7 +130,6 @@ export default function ContactSection({ settings }: { settings?: ContactSetting
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
-                    placeholder="john@example.com"
                   />
                 </div>
               </div>
@@ -143,7 +141,6 @@ export default function ContactSection({ settings }: { settings?: ContactSetting
                     value={form.phone}
                     onChange={(e) => setForm({ ...form, phone: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
-                    placeholder="+1 (555) 000-0000"
                   />
                 </div>
                 <div>
@@ -153,7 +150,6 @@ export default function ContactSection({ settings }: { settings?: ContactSetting
                     value={form.subject}
                     onChange={(e) => setForm({ ...form, subject: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
-                    placeholder="Product inquiry..."
                   />
                 </div>
               </div>
@@ -164,7 +160,6 @@ export default function ContactSection({ settings }: { settings?: ContactSetting
                   value={form.message}
                   onChange={(e) => setForm({ ...form, message: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm resize-none"
-                  placeholder="How can we help you?"
                 />
               </div>
               <button
