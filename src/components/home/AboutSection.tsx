@@ -39,19 +39,18 @@ export default function AboutSection({ content }: Props) {
           <div>
             <p className="text-primary-600 text-sm font-semibold uppercase tracking-wider mb-3">About Us</p>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 leading-tight">
-              {content?.heading ?? "Your Trusted Partner in Ophthalmic, Dental & Surgical Equipment"}
+              {content?.heading ?? "Your Trusted Partner in Ophthalmic & Surgical Equipment"}
             </h2>
             <p className="text-gray-600 leading-relaxed mb-6">
-              {content?.text ?? "MP MedPharma is a trusted supplier of ophthalmic, dental, and surgical medical devices, built on nearly two decades of industry experience. We work directly with leading global manufacturers to bring healthcare providers new and certified refurbished equipment — never a compromise on quality, always backed by documented service history and warranty coverage."}
+              {content?.text ?? "MP MedPharma is a trusted supplier of ophthalmic and surgical medical devices, built on nearly two decades of industry experience. We work directly with leading global manufacturers to bring healthcare providers new and certified refurbished equipment — never a compromise on quality, always backed by documented service history and warranty coverage."}
             </p>
             <p className="text-gray-600 leading-relaxed mb-8">
-              As the official distributor of LIGHTMED SAPPHIRE dental lasers, we give clinics and hospitals direct access to advanced, authorized technology. Our equipment acquisition program also offers healthcare facilities fair, transparent valuations for pre-owned devices — making it simple to upgrade, sell, or invest with confidence.
+              Our equipment acquisition program offers healthcare facilities fair, transparent valuations for pre-owned devices — making it simple to upgrade, sell, or invest with confidence.
             </p>
 
             <ul className="space-y-3 mb-8">
               {[
-                "New & refurbished ophthalmic, dental & surgical equipment",
-                "Official distributor of LIGHTMED SAPPHIRE dental lasers",
+                "New & refurbished ophthalmic & surgical equipment",
                 "Documented service records & warranty on every product",
                 "We buy your used ophthalmic & surgical equipment — fair, transparent offers",
               ].map((item) => (

@@ -5,7 +5,7 @@ import TrustBar from "@/components/home/TrustBar";
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "About Us",
-  description: "MP MedPharma – trusted supplier of ophthalmic, dental & surgical equipment, and official distributor of LIGHTMED SAPPHIRE dental lasers.",
+  description: "MP MedPharma – trusted supplier of ophthalmic & surgical equipment.",
 };
 
 export default function AboutPage() {

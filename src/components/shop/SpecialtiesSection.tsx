@@ -13,12 +13,6 @@ const specialtyMeta: Record<
     accent: "bg-blue-500",
     button: "bg-blue-600 hover:bg-blue-500",
   },
-  dental: {
-    image: "/devices/sapphire-2__09970.png",
-    description: "Official distributor of LightMed SAPPHIRE Er:YAG dental lasers for soft-tissue surgery and precision dental applications",
-    accent: "bg-teal-400",
-    button: "bg-teal-600 hover:bg-teal-500",
-  },
   dermatology: {
     image: "https://images.unsplash.com/photo-1689103722266-1f2f837145e7?w=900&q=80",
     description: "Laser & light-based devices for skin treatment — launching soon",
@@ -41,7 +35,7 @@ export default function SpecialtiesSection() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl">
           {SPECIALTIES.map((s) => {
             const meta = specialtyMeta[s.slug];
             const inner = (
