@@ -17,11 +17,29 @@ const DEFAULT_DESCRIPTION =
   "MP MedPharma offers premium medical equipment for hospitals, clinics, and home healthcare. Shop diagnostic tools, patient monitors, surgical instruments, and more.";
 const DEFAULT_KEYWORDS = "medical equipment, hospital supplies, diagnostic tools, patient monitors, MP MedPharma";
 
-export async function generateMetadata(): Promise<Metadata> {
+const SETTINGS_KEYS = [
+  "seoTitle",
+  "seoDescription",
+  "seoKeywords",
+  "phone",
+  "email",
+  "logo",
+  "facebook",
+  "twitter",
+  "instagram",
+  "linkedin",
+  "youtube",
+];
+
+async function getSiteSettings() {
   const rows = await safeDb((db) => db.siteSetting.findMany({
-    where: { key: { in: ["seoTitle", "seoDescription", "seoKeywords"] } },
+    where: { key: { in: SETTINGS_KEYS } },
   })) ?? [];
-  const s = Object.fromEntries(rows.map((r) => [r.key, r.value]));
+  return Object.fromEntries(rows.map((r) => [r.key, r.value])) as Record<string, string | undefined>;
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const s = await getSiteSettings();
 
   const title = s.seoTitle || DEFAULT_TITLE;
   const description = s.seoDescription || DEFAULT_DESCRIPTION;
@@ -46,10 +64,31 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const s = await getSiteSettings();
+
+  const sameAs = [s.facebook, s.twitter, s.instagram, s.linkedin, s.youtube].filter(Boolean);
+
+  const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "MP MedPharma",
+    alternateName: "MPMedPharma",
+    url: "https://www.mpmedpharma.com",
+    ...(s.logo ? { logo: s.logo } : {}),
+    description: DEFAULT_DESCRIPTION,
+    ...(s.phone ? { telephone: s.phone } : {}),
+    ...(s.email ? { email: s.email } : {}),
+    ...(sameAs.length > 0 ? { sameAs } : {}),
+  };
+
   return (
     <html lang="en" className={`${inter.variable} ${cormorant.variable}`}>
       <body className="min-h-screen bg-white antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
         <SessionProvider>
           {children}
           <Toaster richColors position="top-right" />
