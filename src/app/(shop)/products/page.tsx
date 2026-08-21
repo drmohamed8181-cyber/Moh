@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import type { Prisma } from "@prisma/client";
 import { safeDb } from "@/lib/prisma";
-import { PUBLIC_PRODUCT_SELECT } from "@/lib/productSelect";
+import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
 import ProductCard from "@/components/product/ProductCard";
 import ProductsSortSelect from "@/components/shop/ProductsSortSelect";
 import InStockFilter from "@/components/shop/InStockFilter";
@@ -54,12 +54,12 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
     : { isFeatured: "desc" };
 
   const [dbProducts, categories, total] = await Promise.all([
-    safeDb((db) => db.product.findMany({ where, orderBy, skip, take: ITEMS_PER_PAGE, select: { ...PUBLIC_PRODUCT_SELECT, category: true } })),
+    safeDb((db) => db.product.findMany({ where, orderBy, skip, take: ITEMS_PER_PAGE, select: { ...LISTING_PRODUCT_SELECT, category: true } })),
     safeDb((db) => db.category.findMany({ where: { isActive: true, slug: { notIn: HIDDEN_CATEGORY_SLUGS } }, orderBy: { name: "asc" } })),
     safeDb((db) => db.product.count({ where })),
   ]);
 
-  const products = dbProducts ?? fallbackProducts;
+  const products = dbProducts ? dbProducts.map(withPublicPrice) : fallbackProducts;
   const totalPages = Math.ceil((total ?? fallbackProducts.length) / ITEMS_PER_PAGE);
 
   return (

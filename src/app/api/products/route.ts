@@ -3,7 +3,7 @@ import type { Prisma } from "@prisma/client";
 import { safeDb } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
-import { PUBLIC_PRODUCT_SELECT } from "@/lib/productSelect";
+import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
 
 export async function GET(req: NextRequest) {
   try {
@@ -24,11 +24,11 @@ export async function GET(req: NextRequest) {
 
     const products = await safeDb((db) => db.product.findMany({
       where, skip: (page - 1) * limit, take: limit,
-      select: { ...PUBLIC_PRODUCT_SELECT, category: true }, orderBy: { isFeatured: "desc" },
+      select: { ...LISTING_PRODUCT_SELECT, category: true }, orderBy: { isFeatured: "desc" },
     }));
     const total = await safeDb((db) => db.product.count({ where }));
 
-    return NextResponse.json({ products: products ?? [], total: total ?? 0, page, pages: Math.ceil((total ?? 0) / limit) });
+    return NextResponse.json({ products: (products ?? []).map(withPublicPrice), total: total ?? 0, page, pages: Math.ceil((total ?? 0) / limit) });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Server error";
     return NextResponse.json({ error: message }, { status: 500 });

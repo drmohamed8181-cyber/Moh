@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 import { Mail, Heart, Shield, Truck, RotateCcw, ChevronRight, ZoomIn, CheckCircle2, Calendar } from "lucide-react";
 import { toast } from "sonner";
 import RequestDemoModal from "./RequestDemoModal";
-import { buildInquiryHref } from "@/lib/utils";
+import { buildInquiryHref, formatPrice } from "@/lib/utils";
 import { useWishlistStore } from "@/store/wishlistStore";
 
 interface Product {
@@ -17,6 +17,7 @@ interface Product {
   slug: string;
   sku: string;
   images: string[];
+  publicPrice?: number | null;
   shortDesc?: string | null;
   description?: string | null;
   specifications?: Record<string, string> | null;
@@ -141,7 +142,11 @@ export default function ProductDetail({ product }: { product: Product }) {
             <div className="flex items-center gap-4 mb-5 p-5 bg-gray-50 rounded-xl">
               <div className="flex-1">
                 <p className="text-[11px] text-gray-400 uppercase tracking-wide font-medium mb-0.5">Pricing</p>
-                <p className="text-lg font-semibold text-gray-800 italic">Price on Request</p>
+                {product.publicPrice != null ? (
+                  <p className="text-lg font-semibold text-gray-900">{formatPrice(product.publicPrice)}</p>
+                ) : (
+                  <p className="text-lg font-semibold text-gray-800 italic">Price on Request</p>
+                )}
               </div>
               <Link
                 href={inquiryHref}

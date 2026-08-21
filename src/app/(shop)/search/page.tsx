@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { safeDb } from "@/lib/prisma";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
-import { PUBLIC_PRODUCT_SELECT } from "@/lib/productSelect";
+import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
 import ProductCard from "@/components/product/ProductCard";
 import { Search } from "lucide-react";
 
@@ -13,7 +13,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   const { q: qRaw } = await searchParams;
   const q = qRaw ?? "";
 
-  const products = q ? await safeDb((db) => db.product.findMany({
+  const dbProducts = q ? await safeDb((db) => db.product.findMany({
     where: {
       AND: [
         { OR: [
@@ -24,9 +24,10 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
         { category: { slug: { notIn: HIDDEN_CATEGORY_SLUGS } } },
       ],
     },
-    select: { ...PUBLIC_PRODUCT_SELECT, category: true },
+    select: { ...LISTING_PRODUCT_SELECT, category: true },
     take: 24,
   })) : null;
+  const products = dbProducts ? dbProducts.map(withPublicPrice) : null;
 
   return (
     <div className="min-h-screen bg-gray-50">

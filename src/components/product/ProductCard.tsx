@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Mail, Heart } from "lucide-react";
 import { toast } from "sonner";
-import { buildInquiryHref } from "@/lib/utils";
+import { buildInquiryHref, formatPrice } from "@/lib/utils";
 import { useWishlistStore } from "@/store/wishlistStore";
 
 interface Product {
@@ -19,6 +19,7 @@ interface Product {
   category?: { name: string } | null;
   isAvailable: boolean;
   stockQty: number;
+  publicPrice?: number | null;
 }
 
 export default function ProductCard({ product }: { product: Product }) {
@@ -103,7 +104,11 @@ export default function ProductCard({ product }: { product: Product }) {
       <div className="flex items-center justify-between gap-2 px-4 pb-4 pt-4 border-t border-gray-50 mt-auto">
         <div>
           <p className="text-[10px] text-gray-400 uppercase tracking-wide font-medium">Pricing</p>
-          <p className="text-sm font-semibold text-gray-700 italic">Price on Request</p>
+          {product.publicPrice != null ? (
+            <p className="text-sm font-semibold text-gray-900">{formatPrice(product.publicPrice)}</p>
+          ) : (
+            <p className="text-sm font-semibold text-gray-700 italic">Price on Request</p>
+          )}
         </div>
         <Link
           href={buildInquiryHref({ name: product.name, slug: product.slug, category: product.category?.name })}

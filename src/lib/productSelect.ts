@@ -41,4 +41,26 @@ export const ADMIN_PRODUCT_SELECT = {
   ...PUBLIC_PRODUCT_SELECT,
   dealerPrice: true,
   retailPrice: true,
+  retailPricePublic: true,
 } as const;
+
+// For public listing/detail pages — same public fields, plus the retail
+// price and its publish flag so withPublicPrice() can decide whether to
+// surface it. dealerPrice is never included here.
+export const LISTING_PRODUCT_SELECT = {
+  ...PUBLIC_PRODUCT_SELECT,
+  retailPrice: true,
+  retailPricePublic: true,
+} as const;
+
+// Strips retailPrice/retailPricePublic out of a query result fetched with
+// LISTING_PRODUCT_SELECT and replaces them with a single publicPrice field
+// — null unless the admin has explicitly published it — so the raw retail
+// price/flag never gets serialized into a page passed to a client component
+// for an unpublished product.
+export function withPublicPrice<T extends { retailPrice: number | null; retailPricePublic: boolean }>(
+  product: T
+): Omit<T, "retailPrice" | "retailPricePublic"> & { publicPrice: number | null } {
+  const { retailPrice, retailPricePublic, ...rest } = product;
+  return { ...rest, publicPrice: retailPricePublic ? retailPrice : null };
+}

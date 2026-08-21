@@ -1,6 +1,6 @@
 import { safeDb } from "@/lib/prisma";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
-import { PUBLIC_PRODUCT_SELECT } from "@/lib/productSelect";
+import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
 import HeroSlider from "@/components/shop/HeroSlider";
 import CategoryGrid from "@/components/shop/CategoryGrid";
 import SpecialtiesSection from "@/components/shop/SpecialtiesSection";
@@ -15,7 +15,7 @@ async function getHomeData() {
   const [slides, categories, products, settingsRows] = await Promise.all([
     safeDb((db) => db.heroSlide.findMany({ where: { isActive: true }, orderBy: { order: "asc" } })),
     safeDb((db) => db.category.findMany({ where: { isActive: true, slug: { notIn: HIDDEN_CATEGORY_SLUGS } }, orderBy: { name: "asc" }, take: 6, include: { _count: { select: { products: true } } } })),
-    safeDb((db) => db.product.findMany({ where: { isFeatured: true, isAvailable: true, category: { slug: { notIn: HIDDEN_CATEGORY_SLUGS } } }, take: 8, orderBy: { createdAt: "desc" }, select: { ...PUBLIC_PRODUCT_SELECT, category: { select: { name: true, slug: true } } } })),
+    safeDb((db) => db.product.findMany({ where: { isFeatured: true, isAvailable: true, category: { slug: { notIn: HIDDEN_CATEGORY_SLUGS } } }, take: 8, orderBy: { createdAt: "desc" }, select: { ...LISTING_PRODUCT_SELECT, category: { select: { name: true, slug: true } } } })),
     safeDb((db) => db.siteSetting.findMany()),
   ]);
 
@@ -24,7 +24,7 @@ async function getHomeData() {
   return {
     slides: slides ?? [],
     categories: categories ?? [],
-    products: products ?? [],
+    products: (products ?? []).map(withPublicPrice),
     settings: s,
   };
 }

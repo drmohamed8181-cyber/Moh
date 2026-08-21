@@ -5,7 +5,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { safeDb } from "@/lib/prisma";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
-import { PUBLIC_PRODUCT_SELECT } from "@/lib/productSelect";
+import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
 import ProductCard from "@/components/product/ProductCard";
 import { ChevronRight } from "lucide-react";
 
@@ -35,7 +35,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
     safeDb((db) => db.product.findMany({
       where: { category: { slug }, isAvailable: true },
       orderBy: { isFeatured: "desc" },
-      select: { ...PUBLIC_PRODUCT_SELECT, category: true },
+      select: { ...LISTING_PRODUCT_SELECT, category: true },
     })),
   ]);
 
@@ -44,7 +44,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
 
   if (!category) notFound();
 
-  const products = dbProducts ?? [];
+  const products = (dbProducts ?? []).map(withPublicPrice);
 
   return (
     <div className="min-h-screen bg-gray-50">

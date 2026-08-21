@@ -46,6 +46,7 @@ export default function ProductForm({ categories, product }: Props) {
     discountPrice: product?.discountPrice ?? "",
     dealerPrice: product?.dealerPrice ?? "",
     retailPrice: product?.retailPrice ?? "",
+    retailPricePublic: product?.retailPricePublic ?? false,
     shortDesc: product?.shortDesc ?? "",
     description: product?.description ?? "",
     isAvailable: product?.isAvailable ?? true,
@@ -328,6 +329,13 @@ export default function ProductForm({ categories, product }: Props) {
             <Field label="End-User / Retail Price (USD)">
               <input type="number" step="0.01" value={form.retailPrice} onChange={(e) => setForm((f) => ({ ...f, retailPrice: e.target.value }))} className={inputClass} placeholder="0.00" />
             </Field>
+            <label className="flex items-center gap-3 cursor-pointer pt-1">
+              <input type="checkbox" checked={form.retailPricePublic} onChange={(e) => setForm((f) => ({ ...f, retailPricePublic: e.target.checked }))} className="rounded text-primary-600" />
+              <span className="text-sm text-gray-700">Publish end-user price on the public product page</span>
+            </label>
+            {form.retailPricePublic && !form.retailPrice && (
+              <p className="text-xs text-amber-600">Set the end-user price above for it to actually show — otherwise the page still shows &quot;Price on Request&quot;.</p>
+            )}
           </div>
 
           <div className="bg-white rounded-2xl border p-6 space-y-4">
