@@ -7,6 +7,7 @@ import { ADMIN_PRODUCT_SELECT } from "@/lib/productSelect";
 import { formatPrice } from "@/lib/utils";
 import { Plus, Pencil, Package } from "lucide-react";
 import DeleteProductButton from "@/components/admin/DeleteProductButton";
+import PublishPriceToggle from "@/components/admin/PublishPriceToggle";
 
 export const metadata: Metadata = { title: "Products – Admin" };
 
@@ -70,7 +71,10 @@ export default async function AdminProductsPage() {
                       {p.dealerPrice != null ? formatPrice(p.dealerPrice) : <span className="text-gray-300">—</span>}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-600">
-                      {p.retailPrice != null ? formatPrice(p.retailPrice) : <span className="text-gray-300">—</span>}
+                      <div className="flex flex-col items-start">
+                        {p.retailPrice != null ? formatPrice(p.retailPrice) : <span className="text-gray-300">—</span>}
+                        <PublishPriceToggle id={p.id} published={p.retailPricePublic} hasPrice={p.retailPrice != null} />
+                      </div>
                     </td>
                     <td className="px-6 py-4">
                       <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${
