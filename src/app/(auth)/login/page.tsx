@@ -20,7 +20,13 @@ export default function LoginPage() {
     const res = await signIn("credentials", { email, password, redirect: false });
     if (res?.ok) {
       toast.success("Welcome back!");
-      const session = await getSession();
+      // getSession() immediately after signIn() can race the session cookie
+      // being applied, returning a stale/anonymous session — retry once.
+      let session = await getSession();
+      if (!session?.user?.role) {
+        await new Promise((r) => setTimeout(r, 300));
+        session = await getSession();
+      }
       const role = session?.user?.role;
       router.push(role && ["ADMIN", "SUPER_ADMIN", "CONTENT_MANAGER"].includes(role) ? "/admin" : "/");
     } else {
