@@ -71,9 +71,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth(async () => {
     callbacks: {
       async jwt({ token, user }) {
         if (user) {
+          console.log("[auth debug] jwt callback, user object:", JSON.stringify(user));
           token.role = user.role;
           token.id = user.id;
         }
+        console.log("[auth debug] jwt callback, resulting token.role:", token.role);
         return token;
       },
       async session({ session, token }) {
@@ -81,6 +83,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth(async () => {
           session.user.role = token.role ?? "CUSTOMER";
           session.user.id = token.id ?? "";
         }
+        console.log("[auth debug] session callback, resulting role:", session.user?.role);
         return session;
       },
     },
