@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { safeDb } from "@/lib/prisma";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
+import { PUBLIC_PRODUCT_SELECT } from "@/lib/productSelect";
 import ProductCard from "@/components/product/ProductCard";
 import { Search } from "lucide-react";
 
@@ -23,7 +24,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
         { category: { slug: { notIn: HIDDEN_CATEGORY_SLUGS } } },
       ],
     },
-    include: { category: true },
+    select: { ...PUBLIC_PRODUCT_SELECT, category: true },
     take: 24,
   })) : null;
 

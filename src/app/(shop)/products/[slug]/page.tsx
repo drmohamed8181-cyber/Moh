@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { safeDb } from "@/lib/prisma";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
+import { PUBLIC_PRODUCT_SELECT } from "@/lib/productSelect";
 import ProductDetail from "@/components/product/ProductDetail";
 
 interface Props {
@@ -23,7 +24,7 @@ export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
   const dbProduct = await safeDb((db) => db.product.findUnique({
     where: { slug },
-    include: { category: true },
+    select: { ...PUBLIC_PRODUCT_SELECT, category: true },
   }));
 
   if (dbProduct && HIDDEN_CATEGORY_SLUGS.includes(dbProduct.category.slug)) notFound();

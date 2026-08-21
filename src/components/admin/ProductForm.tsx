@@ -9,7 +9,10 @@ import type { Product } from "@prisma/client";
 import { slugify } from "@/lib/utils";
 
 interface Category { id: string; name: string; }
-interface Props { categories: Category[]; product?: Product; }
+// dealerPrice/retailPrice are confidential distributor pricing and are
+// deliberately never fetched for this form — see src/lib/productSelect.ts.
+type SafeProduct = Omit<Product, "dealerPrice" | "retailPrice">;
+interface Props { categories: Category[]; product?: SafeProduct; }
 
 function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
   return (

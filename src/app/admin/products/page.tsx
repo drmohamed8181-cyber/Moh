@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { safeDb } from "@/lib/prisma";
+import { PUBLIC_PRODUCT_SELECT } from "@/lib/productSelect";
 import { formatPrice } from "@/lib/utils";
 import { Plus, Pencil, Package } from "lucide-react";
 import DeleteProductButton from "@/components/admin/DeleteProductButton";
@@ -10,7 +11,7 @@ import DeleteProductButton from "@/components/admin/DeleteProductButton";
 export const metadata: Metadata = { title: "Products – Admin" };
 
 export default async function AdminProductsPage() {
-  const products = await safeDb((db) => db.product.findMany({ orderBy: { createdAt: "desc" }, include: { category: true } })) ?? [];
+  const products = await safeDb((db) => db.product.findMany({ orderBy: { createdAt: "desc" }, select: { ...PUBLIC_PRODUCT_SELECT, category: true } })) ?? [];
 
   return (
     <div>

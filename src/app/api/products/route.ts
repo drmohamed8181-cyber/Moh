@@ -3,6 +3,7 @@ import type { Prisma } from "@prisma/client";
 import { safeDb } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
+import { PUBLIC_PRODUCT_SELECT } from "@/lib/productSelect";
 
 export async function GET(req: NextRequest) {
   try {
@@ -23,7 +24,7 @@ export async function GET(req: NextRequest) {
 
     const products = await safeDb((db) => db.product.findMany({
       where, skip: (page - 1) * limit, take: limit,
-      include: { category: true }, orderBy: { isFeatured: "desc" },
+      select: { ...PUBLIC_PRODUCT_SELECT, category: true }, orderBy: { isFeatured: "desc" },
     }));
     const total = await safeDb((db) => db.product.count({ where }));
 
