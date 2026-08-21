@@ -88,6 +88,8 @@ model Product {
   manufacturer   String?
   price          Float
   discountPrice  Float?
+  dealerPrice    Float?
+  retailPrice    Float?
   images         String[]       @default([])
   shortDesc      String?        @map("shortDescription")
   description    String?
@@ -228,6 +230,8 @@ model ContactMessage {
   phone        String?
   jobTitle     String?
   organization String?
+  address      String?
+  workLocation String?
   subject      String
   message      String
   isRead       Boolean  @default(false)

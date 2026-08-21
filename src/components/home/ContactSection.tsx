@@ -5,13 +5,14 @@ import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
 
-function InquiryPrefill({ onPrefill }: { onPrefill: (subject: string, message: string) => void }) {
+function InquiryPrefill({ onPrefill }: { onPrefill: (subject: string, message: string, productSlug: string) => void }) {
   const searchParams = useSearchParams();
 
   useEffect(() => {
     const subject = searchParams.get("subject");
     const message = searchParams.get("message");
-    if (subject || message) onPrefill(subject ?? "", message ?? "");
+    const productSlug = searchParams.get("product");
+    if (subject || message || productSlug) onPrefill(subject ?? "", message ?? "", productSlug ?? "");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
@@ -28,8 +29,9 @@ type ContactSettings = {
 };
 
 export default function ContactSection({ settings }: { settings?: ContactSettings }) {
-  const [form, setForm] = useState({ name: "", email: "", phone: "", jobTitle: "", organization: "", subject: "", message: "" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", jobTitle: "", organization: "", address: "", workLocation: "", subject: "", message: "", productSlug: "" });
   const [loading, setLoading] = useState(false);
+  const isInquiry = Boolean(form.productSlug);
 
   const phone = settings?.phone || "929-349-8569";
   const email = settings?.email || "info@mpmedpharma.com";
@@ -38,11 +40,12 @@ export default function ContactSection({ settings }: { settings?: ContactSetting
   const hoursSaturday = settings?.hoursSaturday || "9:00 AM – 4:00 PM";
   const hoursSunday = settings?.hoursSunday || "Closed";
 
-  const handlePrefill = useCallback((subject: string, message: string) => {
+  const handlePrefill = useCallback((subject: string, message: string, productSlug: string) => {
     setForm((f) => ({
       ...f,
       subject: subject || f.subject,
       message: message || f.message,
+      productSlug: productSlug || f.productSlug,
     }));
   }, []);
 
@@ -50,6 +53,10 @@ export default function ContactSection({ settings }: { settings?: ContactSetting
     e.preventDefault();
     if (!form.name || !form.email || !form.message) {
       toast.error("Please fill in all required fields");
+      return;
+    }
+    if (isInquiry && (!form.address.trim() || !form.workLocation.trim())) {
+      toast.error("Please share your address and work location so we can process your inquiry.");
       return;
     }
     setLoading(true);
@@ -61,7 +68,7 @@ export default function ContactSection({ settings }: { settings?: ContactSetting
       });
       if (res.ok) {
         toast.success("Message sent! We'll get back to you shortly.");
-        setForm({ name: "", email: "", phone: "", jobTitle: "", organization: "", subject: "", message: "" });
+        setForm({ name: "", email: "", phone: "", jobTitle: "", organization: "", address: "", workLocation: "", subject: "", message: "", productSlug: "" });
       } else {
         toast.error("Failed to send message. Please try again.");
       }
@@ -172,6 +179,30 @@ export default function ContactSection({ settings }: { settings?: ContactSetting
                   />
                 </div>
               </div>
+              {isInquiry && (
+                <div className="grid sm:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Address <span className="text-red-500">*</span></label>
+                    <input
+                      type="text"
+                      value={form.address}
+                      onChange={(e) => setForm({ ...form, address: e.target.value })}
+                      placeholder="Street, City, State"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Work Location <span className="text-red-500">*</span></label>
+                    <input
+                      type="text"
+                      value={form.workLocation}
+                      onChange={(e) => setForm({ ...form, workLocation: e.target.value })}
+                      placeholder="Practice / facility location"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+                    />
+                  </div>
+                </div>
+              )}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">Message <span className="text-red-500">*</span></label>
                 <textarea

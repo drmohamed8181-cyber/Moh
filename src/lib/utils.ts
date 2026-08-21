@@ -59,5 +59,6 @@ export function buildInquiryHref(product: {
   lines.push("", "Please send me more details and pricing.");
 
   const params = new URLSearchParams({ subject, message: lines.join("\n") });
+  if (product.slug) params.set("product", product.slug);
   return `/contact?${params.toString()}`;
 }
