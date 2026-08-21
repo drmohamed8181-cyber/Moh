@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { safeDb } from "@/lib/prisma";
-import { PUBLIC_PRODUCT_SELECT } from "@/lib/productSelect";
+import { ADMIN_PRODUCT_SELECT } from "@/lib/productSelect";
 import { formatPrice } from "@/lib/utils";
 import { Plus, Pencil, Package } from "lucide-react";
 import DeleteProductButton from "@/components/admin/DeleteProductButton";
@@ -11,7 +11,7 @@ import DeleteProductButton from "@/components/admin/DeleteProductButton";
 export const metadata: Metadata = { title: "Products – Admin" };
 
 export default async function AdminProductsPage() {
-  const products = await safeDb((db) => db.product.findMany({ orderBy: { createdAt: "desc" }, select: { ...PUBLIC_PRODUCT_SELECT, category: true } })) ?? [];
+  const products = await safeDb((db) => db.product.findMany({ orderBy: { createdAt: "desc" }, select: { ...ADMIN_PRODUCT_SELECT, category: true } })) ?? [];
 
   return (
     <div>
@@ -42,7 +42,7 @@ export default async function AdminProductsPage() {
             <table className="w-full">
               <thead>
                 <tr className="border-b bg-gray-50">
-                  {["Product", "Category", "Price", "Stock", "Status", "Actions"].map((h) => (
+                  {["Product", "Category", "Price", "Reseller Price", "End-User Price", "Stock", "Status", "Actions"].map((h) => (
                     <th key={h} className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wide px-6 py-3">{h}</th>
                   ))}
                 </tr>
@@ -65,6 +65,12 @@ export default async function AdminProductsPage() {
                     <td className="px-6 py-4">
                       <p className="text-sm font-semibold text-gray-900">{formatPrice(p.discountPrice ?? p.price)}</p>
                       {p.discountPrice && <p className="text-xs text-gray-400 line-through">{formatPrice(p.price)}</p>}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600">
+                      {p.dealerPrice != null ? formatPrice(p.dealerPrice) : <span className="text-gray-300">—</span>}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600">
+                      {p.retailPrice != null ? formatPrice(p.retailPrice) : <span className="text-gray-300">—</span>}
                     </td>
                     <td className="px-6 py-4">
                       <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${

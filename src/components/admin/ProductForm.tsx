@@ -9,10 +9,7 @@ import type { Product } from "@prisma/client";
 import { slugify } from "@/lib/utils";
 
 interface Category { id: string; name: string; }
-// dealerPrice/retailPrice are confidential distributor pricing and are
-// deliberately never fetched for this form — see src/lib/productSelect.ts.
-type SafeProduct = Omit<Product, "dealerPrice" | "retailPrice">;
-interface Props { categories: Category[]; product?: SafeProduct; }
+interface Props { categories: Category[]; product?: Product; }
 
 function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
   return (
@@ -47,6 +44,8 @@ export default function ProductForm({ categories, product }: Props) {
     manufacturer: product?.manufacturer ?? "",
     price: product?.price ?? "",
     discountPrice: product?.discountPrice ?? "",
+    dealerPrice: product?.dealerPrice ?? "",
+    retailPrice: product?.retailPrice ?? "",
     shortDesc: product?.shortDesc ?? "",
     description: product?.description ?? "",
     isAvailable: product?.isAvailable ?? true,
@@ -108,6 +107,8 @@ export default function ProductForm({ categories, product }: Props) {
         ...form,
         price: parseFloat(form.price as string),
         discountPrice: form.discountPrice ? parseFloat(form.discountPrice as string) : null,
+        dealerPrice: form.dealerPrice ? parseFloat(form.dealerPrice as string) : null,
+        retailPrice: form.retailPrice ? parseFloat(form.retailPrice as string) : null,
         stockQty: parseInt(form.stockQty as string),
         weight: form.weight ? parseFloat(form.weight as string) : null,
         images,
@@ -313,6 +314,19 @@ export default function ProductForm({ categories, product }: Props) {
             </Field>
             <Field label="Discount Price">
               <input type="number" step="0.01" value={form.discountPrice} onChange={(e) => setForm((f) => ({ ...f, discountPrice: e.target.value }))} className={inputClass} placeholder="Leave empty for no discount" />
+            </Field>
+          </div>
+
+          <div className="bg-white rounded-2xl border p-6 space-y-4">
+            <div>
+              <h2 className="font-semibold text-gray-900">Confidential Pricing</h2>
+              <p className="text-xs text-gray-400 mt-0.5">Internal only — never shown on public pages.</p>
+            </div>
+            <Field label="Reseller / Dealer Price (USD)">
+              <input type="number" step="0.01" value={form.dealerPrice} onChange={(e) => setForm((f) => ({ ...f, dealerPrice: e.target.value }))} className={inputClass} placeholder="0.00" />
+            </Field>
+            <Field label="End-User / Retail Price (USD)">
+              <input type="number" step="0.01" value={form.retailPrice} onChange={(e) => setForm((f) => ({ ...f, retailPrice: e.target.value }))} className={inputClass} placeholder="0.00" />
             </Field>
           </div>
 
