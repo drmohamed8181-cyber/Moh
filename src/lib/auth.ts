@@ -32,19 +32,30 @@ export const { handlers, signIn, signOut, auth } = NextAuth(async () => {
           password: { label: "Password", type: "password" },
         },
         async authorize(credentials, request) {
-          if (!credentials?.email || !credentials?.password) return null;
-          if (!prisma) return null;
+          if (!credentials?.email || !credentials?.password) {
+            console.log("[auth debug] missing email or password in request");
+            return null;
+          }
+          if (!prisma) {
+            console.log("[auth debug] prisma client unavailable");
+            return null;
+          }
 
           const ip = getClientIp(request);
           const email = (credentials.email as string).toLowerCase();
           const ipOk = checkRateLimit(`login:ip:${ip}`, 20, 15 * 60 * 1000);
           const emailOk = checkRateLimit(`login:email:${email}`, 5, 15 * 60 * 1000);
-          if (!ipOk || !emailOk) return null;
+          if (!ipOk || !emailOk) {
+            console.log("[auth debug] rate limited", { ipOk, emailOk, ip, email });
+            return null;
+          }
 
           try {
             const user = await prisma.user.findUnique({
               where: { email },
             });
+
+            console.log("[auth debug] lookup for", email, "found:", !!user, "hasPassword:", !!user?.password, "isActive:", user?.isActive, "role:", user?.role);
 
             if (!user || !user.password) return null;
             if (!user.isActive) return null;
@@ -53,6 +64,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth(async () => {
               credentials.password as string,
               user.password
             );
+            console.log("[auth debug] password valid:", valid);
             if (!valid) return null;
 
             return {
@@ -62,7 +74,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth(async () => {
               image: user.image,
               role: user.role,
             };
-          } catch {
+          } catch (err) {
+            console.log("[auth debug] authorize threw:", err instanceof Error ? err.message : err);
             return null;
           }
         },
