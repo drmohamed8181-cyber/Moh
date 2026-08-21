@@ -10,6 +10,24 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     }
     const { id } = await params;
     const body = await req.json();
+
+    // Track price drops on the end-user price so the public page can show a
+    // "was X, now Y" strikethrough. If the new price is lower than what's
+    // currently stored, snapshot the old value; if it goes back up (or is
+    // cleared), there's no more drop to show.
+    if (Object.prototype.hasOwnProperty.call(body, "retailPrice")) {
+      const current = await safeDb((db) => db.product.findUnique({ where: { id }, select: { retailPrice: true } }));
+      const oldPrice = current?.retailPrice ?? null;
+      const newPrice = body.retailPrice as number | null;
+      if (newPrice !== oldPrice) {
+        if (oldPrice != null && newPrice != null && newPrice < oldPrice) {
+          body.previousRetailPrice = oldPrice;
+        } else {
+          body.previousRetailPrice = null;
+        }
+      }
+    }
+
     const product = await safeDb((db) => db.product.update({ where: { id }, data: body }));
     return NextResponse.json(product);
   } catch (error) {

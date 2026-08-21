@@ -90,6 +90,7 @@ model Product {
   discountPrice  Float?
   dealerPrice    Float?
   retailPrice    Float?
+  previousRetailPrice Float?
   retailPricePublic Boolean     @default(false)
   images         String[]       @default([])
   shortDesc      String?        @map("shortDescription")

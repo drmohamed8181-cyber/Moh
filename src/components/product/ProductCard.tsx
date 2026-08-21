@@ -20,6 +20,7 @@ interface Product {
   isAvailable: boolean;
   stockQty: number;
   publicPrice?: number | null;
+  previousPublicPrice?: number | null;
 }
 
 export default function ProductCard({ product }: { product: Product }) {
@@ -105,7 +106,12 @@ export default function ProductCard({ product }: { product: Product }) {
         <div>
           <p className="text-[10px] text-gray-400 uppercase tracking-wide font-medium">Pricing</p>
           {product.publicPrice != null ? (
-            <p className="text-sm font-semibold text-gray-900">{formatPrice(product.publicPrice)}</p>
+            <>
+              {product.previousPublicPrice != null && (
+                <p className="text-xs text-gray-400 line-through">{formatPrice(product.previousPublicPrice)}</p>
+              )}
+              <p className="text-sm font-semibold text-gray-900">{formatPrice(product.publicPrice)}</p>
+            </>
           ) : (
             <p className="text-sm font-semibold text-gray-700 italic">Price on Request</p>
           )}

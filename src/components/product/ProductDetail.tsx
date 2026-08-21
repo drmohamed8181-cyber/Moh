@@ -18,6 +18,7 @@ interface Product {
   sku: string;
   images: string[];
   publicPrice?: number | null;
+  previousPublicPrice?: number | null;
   shortDesc?: string | null;
   description?: string | null;
   specifications?: Record<string, string> | null;
@@ -143,7 +144,12 @@ export default function ProductDetail({ product }: { product: Product }) {
               <div className="flex-1">
                 <p className="text-[11px] text-gray-400 uppercase tracking-wide font-medium mb-0.5">Pricing</p>
                 {product.publicPrice != null ? (
-                  <p className="text-lg font-semibold text-gray-900">{formatPrice(product.publicPrice)}</p>
+                  <>
+                    {product.previousPublicPrice != null && (
+                      <p className="text-sm text-gray-400 line-through">{formatPrice(product.previousPublicPrice)}</p>
+                    )}
+                    <p className="text-lg font-semibold text-gray-900">{formatPrice(product.publicPrice)}</p>
+                  </>
                 ) : (
                   <p className="text-lg font-semibold text-gray-800 italic">Price on Request</p>
                 )}
