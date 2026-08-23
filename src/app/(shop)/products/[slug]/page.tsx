@@ -80,5 +80,38 @@ export default async function ProductPage({ params }: Props) {
     isFeatured: true,
   };
 
-  return <ProductDetail product={product} />;
+  const publicPrice = "publicPrice" in product ? product.publicPrice : null;
+
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    sku: product.sku,
+    description: product.shortDesc ?? product.description ?? undefined,
+    image: product.images.map((img) =>
+      img.startsWith("http") ? img : `https://www.mpmedpharma.com${img}`
+    ),
+    ...(product.category ? { category: product.category.name } : {}),
+    ...(product.manufacturer ? { brand: { "@type": "Brand", name: product.manufacturer } } : {}),
+    offers: {
+      "@type": "Offer",
+      url: `https://www.mpmedpharma.com/products/${slug}`,
+      priceCurrency: "USD",
+      availability: product.isAvailable
+        ? "https://schema.org/InStock"
+        : "https://schema.org/OutOfStock",
+      seller: { "@type": "Organization", name: "MP MedPharma" },
+      ...(publicPrice != null ? { price: publicPrice } : {}),
+    },
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
+      <ProductDetail product={product} />
+    </>
+  );
 }

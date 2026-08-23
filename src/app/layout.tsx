@@ -71,7 +71,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   const organizationJsonLd = {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": ["MedicalBusiness", "Store"],
     name: "MP MedPharma",
     alternateName: "MPMedPharma",
     url: "https://www.mpmedpharma.com",
