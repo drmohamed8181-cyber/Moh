@@ -4,6 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "FAQ",
   description: "Frequently asked questions about MP MedPharma's medical equipment, pricing, and ordering process.",
+  alternates: { canonical: "/faq" },
 };
 
 const faqs = [

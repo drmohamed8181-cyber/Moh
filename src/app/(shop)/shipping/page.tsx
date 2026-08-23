@@ -3,6 +3,7 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Shipping Policy",
   description: "MP MedPharma's shipping, delivery, and installation policy for medical equipment orders.",
+  alternates: { canonical: "/shipping" },
 };
 
 export default function ShippingPage() {

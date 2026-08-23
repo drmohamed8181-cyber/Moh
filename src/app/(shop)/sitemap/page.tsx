@@ -7,6 +7,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Sitemap",
   description: "A complete map of the pages available on the MP MedPharma website.",
+  alternates: { canonical: "/sitemap" },
 };
 
 export default async function SitemapPage() {

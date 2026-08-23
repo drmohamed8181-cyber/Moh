@@ -17,6 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: product.seoTitle ?? product.name,
     description: product.seoDesc ?? product.shortDesc ?? undefined,
+    alternates: { canonical: `/products/${slug}` },
   };
 }
 

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { safeDb } from "@/lib/prisma";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
 import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
@@ -10,6 +11,7 @@ import NewsletterBox from "@/components/ui/NewsletterBox";
 import { Truck, Shield, Award, Headphones } from "lucide-react";
 
 export const dynamic = "force-dynamic";
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 async function getHomeData() {
   const [slides, categories, products, settingsRows] = await Promise.all([

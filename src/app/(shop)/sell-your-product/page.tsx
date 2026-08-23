@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Sell Your Product to MP MedPharma",
   description:
     "Submit your medical device, healthcare product, or pharmaceutical-related item to MP MedPharma for review, resale, trade-in, acquisition, or quotation.",
+  alternates: { canonical: "/sell-your-product" },
 };
 
 const steps = [

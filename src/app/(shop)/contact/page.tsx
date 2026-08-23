@@ -6,6 +6,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Contact Us",
   description: "Get in touch with MP MedPharma.",
+  alternates: { canonical: "/contact" },
 };
 
 export default async function ContactPage() {

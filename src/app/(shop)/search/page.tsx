@@ -7,7 +7,11 @@ import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
 import ProductCard from "@/components/product/ProductCard";
 import { Search } from "lucide-react";
 
-export const metadata: Metadata = { title: "Search Products" };
+export const metadata: Metadata = {
+  title: "Search Products",
+  alternates: { canonical: "/search" },
+  robots: { index: false, follow: true },
+};
 
 export default async function SearchPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const { q: qRaw } = await searchParams;

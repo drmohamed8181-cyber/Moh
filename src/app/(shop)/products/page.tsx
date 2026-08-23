@@ -10,7 +10,11 @@ import { SlidersHorizontal } from "lucide-react";
 import { DENTAL_CATEGORY_SLUGS, HIDDEN_CATEGORY_SLUGS, SPECIALTIES } from "@/lib/specialties";
 
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = { title: "All Products", description: "Browse our complete range of premium medical equipment." };
+export const metadata: Metadata = {
+  title: "All Products",
+  description: "Browse our complete range of premium medical equipment.",
+  alternates: { canonical: "/products" },
+};
 
 const ITEMS_PER_PAGE = 12;
 

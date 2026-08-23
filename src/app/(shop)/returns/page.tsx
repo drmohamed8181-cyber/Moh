@@ -3,6 +3,7 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Return Policy",
   description: "MP MedPharma's return, cancellation, and warranty claim policy for medical equipment orders.",
+  alternates: { canonical: "/returns" },
 };
 
 export default function ReturnsPage() {

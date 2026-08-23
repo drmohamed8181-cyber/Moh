@@ -3,6 +3,7 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Terms & Conditions",
   description: "The terms and conditions governing use of the MP MedPharma website and purchase of equipment.",
+  alternates: { canonical: "/terms" },
 };
 
 export default function TermsPage() {

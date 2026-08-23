@@ -6,6 +6,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "About Us",
   description: "MP MedPharma – trusted supplier of ophthalmic & surgical equipment.",
+  alternates: { canonical: "/about" },
 };
 
 export default function AboutPage() {

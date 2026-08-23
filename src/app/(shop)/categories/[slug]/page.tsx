@@ -22,7 +22,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const cat = await safeDb((db) => db.category.findUnique({ where: { slug } }));
   const name = cat?.name ?? defaultCategories[slug]?.name ?? "Category";
-  return { title: name, description: cat?.description ?? defaultCategories[slug]?.description };
+  return {
+    title: name,
+    description: cat?.description ?? defaultCategories[slug]?.description,
+    alternates: { canonical: `/categories/${slug}` },
+  };
 }
 
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {

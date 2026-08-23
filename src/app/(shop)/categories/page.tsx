@@ -5,7 +5,7 @@ import Image from "next/image";
 import { safeDb } from "@/lib/prisma";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
 
-export const metadata: Metadata = { title: "Product Categories" };
+export const metadata: Metadata = { title: "Product Categories", alternates: { canonical: "/categories" } };
 
 const defaults = [
   { id: "1", name: "Patient Monitoring", slug: "patient-monitoring", image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=500&q=80", description: "ECG monitors, patient monitors, vital signs equipment" },
