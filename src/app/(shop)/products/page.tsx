@@ -66,8 +66,23 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
   const products = dbProducts ? dbProducts.map(withPublicPrice) : fallbackProducts;
   const totalPages = Math.ceil((total ?? fallbackProducts.length) / ITEMS_PER_PAGE);
 
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: products.map((product, i) => ({
+      "@type": "ListItem",
+      position: skip + i + 1,
+      url: `https://www.mpmedpharma.com/products/${product.slug}`,
+      name: product.name,
+    })),
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+      />
       <div className="bg-white border-b">
         <div className="container mx-auto px-4 py-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-1">All Products</h1>

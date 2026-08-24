@@ -79,11 +79,26 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
     ],
   };
 
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: products.map((product, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `https://www.mpmedpharma.com/products/${product.slug}`,
+      name: product.name,
+    })),
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
       />
       {/* Hero */}
       <div className="bg-gradient-to-br from-primary-600 to-primary-800 text-white py-14">
