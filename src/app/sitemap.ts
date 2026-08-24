@@ -26,7 +26,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
     safeDb((db) => db.product.findMany({
       where: { isAvailable: true, category: { slug: { notIn: HIDDEN_CATEGORY_SLUGS } } },
-      select: { slug: true, updatedAt: true },
+      select: { slug: true, updatedAt: true, images: true },
     })),
   ]);
 
@@ -49,6 +49,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: product.updatedAt,
     changeFrequency: "weekly",
     priority: 0.7,
+    ...(product.images.length > 0
+      ? { images: product.images.map((img) => (img.startsWith("http") ? img : `${BASE_URL}${img}`)) }
+      : {}),
   }));
 
   return [...staticEntries, ...categoryEntries, ...productEntries];
