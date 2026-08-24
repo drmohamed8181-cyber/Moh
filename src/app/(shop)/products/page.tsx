@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { Prisma } from "@prisma/client";
 import { safeDb } from "@/lib/prisma";
 import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
+import { jsonLdScript } from "@/lib/jsonLd";
 import ProductCard from "@/components/product/ProductCard";
 import ProductsSortSelect from "@/components/shop/ProductsSortSelect";
 import InStockFilter from "@/components/shop/InStockFilter";
@@ -81,7 +82,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
     <div className="min-h-screen bg-gray-50">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(itemListJsonLd) }}
       />
       <div className="bg-white border-b">
         <div className="container mx-auto px-4 py-8">

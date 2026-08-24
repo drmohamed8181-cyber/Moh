@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import SessionProvider from "@/components/auth/SessionProvider";
 import { safeDb } from "@/lib/prisma";
+import { jsonLdScript } from "@/lib/jsonLd";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const cormorant = Cormorant_Garamond({
@@ -105,7 +106,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body className="min-h-screen bg-white antialiased">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: jsonLdScript(organizationJsonLd) }}
         />
         <SessionProvider>
           {children}

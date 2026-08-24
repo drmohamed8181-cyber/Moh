@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import { jsonLdScript } from "@/lib/jsonLd";
 
 export const metadata: Metadata = {
   title: "FAQ",
@@ -57,7 +58,7 @@ export default function FaqPage() {
     <div>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(faqJsonLd) }}
       />
       <div className="bg-gradient-to-br from-primary-600 to-primary-800 text-white py-16">
         <div className="container mx-auto px-4 text-center">

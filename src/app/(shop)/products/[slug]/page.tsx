@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { safeDb } from "@/lib/prisma";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
 import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
+import { jsonLdScript } from "@/lib/jsonLd";
 import ProductDetail from "@/components/product/ProductDetail";
 import ProductCard from "@/components/product/ProductCard";
 
@@ -109,11 +110,11 @@ export default async function ProductPage({ params }: Props) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(productJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(breadcrumbJsonLd) }}
       />
       <ProductDetail product={product} />
       {relatedProducts.length > 0 && (

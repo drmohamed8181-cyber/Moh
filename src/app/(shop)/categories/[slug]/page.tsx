@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { safeDb } from "@/lib/prisma";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
 import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
+import { jsonLdScript } from "@/lib/jsonLd";
 import ProductCard from "@/components/product/ProductCard";
 import { ChevronRight } from "lucide-react";
 
@@ -83,11 +84,11 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
     <div className="min-h-screen bg-gray-50">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(breadcrumbJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(itemListJsonLd) }}
       />
       {/* Hero */}
       <div className="bg-gradient-to-br from-primary-600 to-primary-800 text-white py-14">
