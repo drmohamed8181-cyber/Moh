@@ -303,19 +303,5 @@ ALTER TABLE "Address" ENABLE ROW LEVEL SECURITY;
 -- لكن تحميها من الوصول المباشر
 
 -- ============================================================
--- INITIAL SEED DATA (بيانات أولية)
--- ============================================================
-
--- Site Settings الأساسية
-INSERT INTO "SiteSetting" (id, key, value, "updatedAt") VALUES
-  (gen_random_uuid()::TEXT, 'siteName', 'MedPharma', NOW()),
-  (gen_random_uuid()::TEXT, 'siteEmail', 'info@medpharma.com', NOW()),
-  (gen_random_uuid()::TEXT, 'sitePhone', '+20-100-000-0000', NOW()),
-  (gen_random_uuid()::TEXT, 'siteAddress', 'Cairo, Egypt', NOW()),
-  (gen_random_uuid()::TEXT, 'currency', 'EGP', NOW()),
-  (gen_random_uuid()::TEXT, 'shippingFee', '50', NOW()),
-  (gen_random_uuid()::TEXT, 'freeShippingOver', '500', NOW());
-
--- ============================================================
 -- انتهى! الآن المشروع جاهز للربط مع Prisma
 -- ============================================================
