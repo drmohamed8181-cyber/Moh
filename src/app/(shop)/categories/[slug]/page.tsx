@@ -9,21 +9,13 @@ import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
 import ProductCard from "@/components/product/ProductCard";
 import { ChevronRight } from "lucide-react";
 
-const defaultCategories: Record<string, { name: string; description: string; image: string }> = {
-  "patient-monitoring": { name: "Patient Monitoring", description: "ECG monitors, patient monitors, vital signs equipment", image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=800&q=80" },
-  "diagnostic-equipment": { name: "Diagnostic Equipment", description: "Blood pressure monitors, stethoscopes, diagnostic tools", image: "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=800&q=80" },
-  "laboratory-equipment": { name: "Laboratory Equipment", description: "Lab analyzers, centrifuges, microscopes", image: "https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=800&q=80" },
-  "surgical-instruments": { name: "Surgical Instruments", description: "Scalpels, forceps, retractors, surgical sets", image: "https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800&q=80" },
-  "hospital-furniture": { name: "Hospital Furniture", description: "Hospital beds, stretchers, medical carts", image: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=800&q=80" },
-  "home-healthcare": { name: "Home Healthcare", description: "Nebulizers, CPAP machines, home monitors", image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&q=80" },
-};
-
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const cat = await safeDb((db) => db.category.findUnique({ where: { slug } }));
-  const name = cat?.name ?? defaultCategories[slug]?.name ?? "Category";
-  const description = cat?.description ?? defaultCategories[slug]?.description;
-  const rawImage = cat?.image ?? defaultCategories[slug]?.image;
+  if (!cat) notFound();
+  const name = cat.name;
+  const description = cat.description ?? undefined;
+  const rawImage = cat.image;
   const image = rawImage
     ? rawImage.startsWith("http")
       ? rawImage
@@ -53,7 +45,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
 
   if (HIDDEN_CATEGORY_SLUGS.includes(slug)) notFound();
 
-  const [dbCategory, dbProducts] = await Promise.all([
+  const [category, dbProducts] = await Promise.all([
     safeDb((db) => db.category.findUnique({ where: { slug } })),
     safeDb((db) => db.product.findMany({
       where: { category: { slug }, isAvailable: true },
@@ -61,9 +53,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
       select: { ...LISTING_PRODUCT_SELECT, category: true },
     })),
   ]);
-
-  const fallback = defaultCategories[slug];
-  const category = dbCategory ?? (fallback ? { id: slug, name: fallback.name, description: fallback.description, slug, image: fallback.image } : null);
 
   if (!category) notFound();
 
