@@ -9,6 +9,7 @@ import {
   LogOut, ChevronRight, Globe, Calendar, PackageSearch,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { LogoMark } from "@/components/ui/Logo";
 
 const navItems = [
   { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
@@ -33,12 +34,10 @@ export default function AdminSidebar() {
       {/* Logo */}
       <div className="p-6 border-b border-gray-800">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center">
-            <span className="font-bold text-sm">MP</span>
-          </div>
+          <LogoMark className="w-10 h-10 rounded-full" />
           <div>
-            <p className="font-bold text-white text-sm leading-tight">MP MedPharma</p>
-            <p className="text-xs text-gray-400 leading-tight">Admin Panel</p>
+            <p className="font-display font-semibold text-white text-sm leading-tight">MedPharma</p>
+            <p className="text-xs text-gold-300 leading-tight">Admin Panel</p>
           </div>
         </div>
       </div>

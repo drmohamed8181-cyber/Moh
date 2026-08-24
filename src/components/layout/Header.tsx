@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useWishlistStore } from "@/store/wishlistStore";
+import { LogoMark } from "@/components/ui/Logo";
 
 const defaultNav = [
   { id: "1", label: "Home", href: "/", children: [] },
@@ -105,12 +106,10 @@ export default function Header({ settings }: { settings?: HeaderSettings }) {
           >
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 flex-shrink-0 group">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary-600 to-primary-700 rounded-xl flex items-center justify-center shadow-sm shadow-primary-600/30 transition-transform duration-300 group-hover:scale-105">
-                <span className="text-white font-bold text-sm">MP</span>
-              </div>
+              <LogoMark className="w-10 h-10 shadow-sm shadow-black/20 rounded-full transition-transform duration-300 group-hover:scale-105" />
               <div className="hidden sm:block">
-                <div className="text-lg font-bold text-primary-700 leading-tight">MP MedPharma</div>
-                <div className="text-xs text-gray-500 leading-tight">Medical Equipment</div>
+                <div className="font-display text-xl font-semibold tracking-tight text-[#1B2C42] leading-tight">MedPharma</div>
+                <div className="text-[10px] uppercase tracking-[0.15em] text-gold-600 leading-tight">Medical Equipment</div>
               </div>
             </Link>
 

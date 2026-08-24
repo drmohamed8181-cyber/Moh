@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { Phone, Mail, MapPin, Clock, Facebook, Twitter, Instagram, Linkedin, Youtube, Loader2 } from "lucide-react";
+import { LogoMark } from "@/components/ui/Logo";
 
 type FooterSettings = {
   phone?: string;
@@ -69,12 +70,10 @@ export default function Footer({ settings }: { settings?: FooterSettings }) {
           {/* Brand */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center">
-                <span className="text-white font-bold text-sm">MP</span>
-              </div>
+              <LogoMark className="w-10 h-10 rounded-full flex-shrink-0" />
               <div>
-                <div className="text-white font-bold text-lg leading-tight">MP MedPharma</div>
-                <div className="text-xs text-gray-500 leading-tight">Medical Equipment</div>
+                <div className="font-display text-lg font-semibold leading-tight text-white">MedPharma</div>
+                <div className="text-[10px] uppercase tracking-[0.15em] text-gold-400 leading-tight">Medical Equipment</div>
               </div>
             </div>
             <p className="text-sm text-gray-400 leading-relaxed mb-5">

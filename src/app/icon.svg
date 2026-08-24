@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+  <defs>
+    <linearGradient id="ink" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1B2C42"/>
+      <stop offset="100%" stop-color="#060B14"/>
+    </linearGradient>
+    <linearGradient id="beam" gradientUnits="userSpaceOnUse" x1="86" y1="170" x2="154" y2="170">
+      <stop offset="0%" stop-color="#D9BD82" stop-opacity="0"/>
+      <stop offset="12%" stop-color="#D9BD82" stop-opacity="0.9"/>
+      <stop offset="88%" stop-color="#FBEFD3" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#FBEFD3" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <circle cx="120" cy="120" r="118" fill="url(#ink)"/>
+  <circle cx="120" cy="120" r="100" fill="none" stroke="#D9BD82" stroke-width="2"/>
+  <text x="120" y="146" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-weight="600" font-size="92" letter-spacing="2" fill="#E4CB98">MP</text>
+
+  <line x1="86" y1="170" x2="154" y2="170" stroke="url(#beam)" stroke-width="7" stroke-linecap="round" opacity="0.35"/>
+  <line x1="87" y1="170" x2="153" y2="170" stroke="url(#beam)" stroke-width="3.5" stroke-linecap="round" opacity="0.6"/>
+  <line x1="88" y1="170" x2="152" y2="170" stroke="url(#beam)" stroke-width="1.4" stroke-linecap="round"/>
+
+  <circle cx="152" cy="170" r="2.6" fill="#FBEFD3"/>
+  <circle cx="152" cy="170" r="5.5" fill="#FBEFD3" opacity="0.25"/>
+  <g stroke="#FBEFD3" stroke-width="1" stroke-linecap="round" opacity="0.85">
+    <line x1="152" y1="162" x2="152" y2="165.5"/>
+    <line x1="152" y1="174.5" x2="152" y2="178"/>
+    <line x1="144" y1="170" x2="147.5" y2="170"/>
+    <line x1="156.5" y1="170" x2="160" y2="170"/>
+  </g>
+</svg>
