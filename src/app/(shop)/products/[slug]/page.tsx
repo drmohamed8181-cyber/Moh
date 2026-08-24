@@ -5,6 +5,7 @@ import { safeDb } from "@/lib/prisma";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
 import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
 import ProductDetail from "@/components/product/ProductDetail";
+import ProductCard from "@/components/product/ProductCard";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -48,6 +49,16 @@ export default async function ProductPage({ params }: Props) {
   }));
 
   if (dbProduct && HIDDEN_CATEGORY_SLUGS.includes(dbProduct.category.slug)) notFound();
+
+  const dbRelatedProducts = dbProduct
+    ? await safeDb((db) => db.product.findMany({
+        where: { categoryId: dbProduct.categoryId, id: { not: dbProduct.id }, isAvailable: true },
+        orderBy: { isFeatured: "desc" },
+        take: 4,
+        select: { ...LISTING_PRODUCT_SELECT, category: true },
+      }))
+    : null;
+  const relatedProducts = (dbRelatedProducts ?? []).map(withPublicPrice);
 
   const product = dbProduct
     ? { ...withPublicPrice(dbProduct), specifications: dbProduct.specifications as Record<string, string> | null }
@@ -155,6 +166,18 @@ export default async function ProductPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <ProductDetail product={product} />
+      {relatedProducts.length > 0 && (
+        <div className="bg-white border-t">
+          <div className="container mx-auto px-4 py-12">
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Related Equipment</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {relatedProducts.map((related) => (
+                <ProductCard key={related.id} product={related} />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
