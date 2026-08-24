@@ -124,11 +124,35 @@ export default async function ProductPage({ params }: Props) {
     },
   };
 
+  const breadcrumbItems = [
+    { name: "Home", url: "https://www.mpmedpharma.com/" },
+    { name: "Products", url: "https://www.mpmedpharma.com/products" },
+    ...(product.category
+      ? [{ name: product.category.name, url: `https://www.mpmedpharma.com/categories/${product.category.slug}` }]
+      : []),
+    { name: product.name, url: `https://www.mpmedpharma.com/products/${slug}` },
+  ];
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: breadcrumbItems.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <ProductDetail product={product} />
     </>

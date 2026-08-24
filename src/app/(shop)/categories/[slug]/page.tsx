@@ -69,8 +69,22 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
 
   const products = (dbProducts ?? []).map(withPublicPrice);
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.mpmedpharma.com/" },
+      { "@type": "ListItem", position: 2, name: "Categories", item: "https://www.mpmedpharma.com/categories" },
+      { "@type": "ListItem", position: 3, name: category.name, item: `https://www.mpmedpharma.com/categories/${slug}` },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       {/* Hero */}
       <div className="bg-gradient-to-br from-primary-600 to-primary-800 text-white py-14">
         <div className="container mx-auto px-4">
