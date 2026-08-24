@@ -108,7 +108,7 @@ export default function Header({ settings }: { settings?: HeaderSettings }) {
             <Link href="/" className="flex items-center gap-3 flex-shrink-0 group">
               <LogoMark className="w-10 h-10 shadow-sm shadow-black/20 rounded-full transition-transform duration-300 group-hover:scale-105" />
               <div className="hidden sm:block">
-                <div className="font-display text-xl font-semibold tracking-tight text-[#1B2C42] leading-tight">MedPharma</div>
+                <div className="font-display text-xl font-semibold tracking-tight text-[#0B0F16] leading-tight">MedPharma</div>
                 <div className="text-[10px] uppercase tracking-[0.15em] text-gold-600 leading-tight">Medical Equipment</div>
               </div>
             </Link>
