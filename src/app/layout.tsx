@@ -60,6 +60,13 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: "MP MedPharma",
       title,
       description,
+      ...(s.logo ? { images: [{ url: s.logo }] } : {}),
+    },
+    twitter: {
+      card: s.logo ? "summary_large_image" : "summary",
+      title,
+      description,
+      ...(s.logo ? { images: [s.logo] } : {}),
     },
   };
 }

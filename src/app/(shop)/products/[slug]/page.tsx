@@ -14,10 +14,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const product = await safeDb((db) => db.product.findUnique({ where: { slug }, include: { category: true } }));
   if (!product || HIDDEN_CATEGORY_SLUGS.includes(product.category.slug)) return { title: "Product" };
+  const title = product.seoTitle ?? product.name;
+  const description = product.seoDesc ?? product.shortDesc ?? undefined;
+  const image = product.images[0]
+    ? product.images[0].startsWith("http")
+      ? product.images[0]
+      : `https://www.mpmedpharma.com${product.images[0]}`
+    : undefined;
   return {
-    title: product.seoTitle ?? product.name,
-    description: product.seoDesc ?? product.shortDesc ?? undefined,
+    title,
+    description,
     alternates: { canonical: `/products/${slug}` },
+    openGraph: {
+      type: "website",
+      title,
+      description,
+      ...(image ? { images: [{ url: image }] } : {}),
+    },
+    twitter: {
+      card: image ? "summary_large_image" : "summary",
+      title,
+      description,
+      ...(image ? { images: [image] } : {}),
+    },
   };
 }
 
