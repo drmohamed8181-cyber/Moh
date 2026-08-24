@@ -22,10 +22,29 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const cat = await safeDb((db) => db.category.findUnique({ where: { slug } }));
   const name = cat?.name ?? defaultCategories[slug]?.name ?? "Category";
+  const description = cat?.description ?? defaultCategories[slug]?.description;
+  const rawImage = cat?.image ?? defaultCategories[slug]?.image;
+  const image = rawImage
+    ? rawImage.startsWith("http")
+      ? rawImage
+      : `https://www.mpmedpharma.com${rawImage}`
+    : undefined;
   return {
     title: name,
-    description: cat?.description ?? defaultCategories[slug]?.description,
+    description,
     alternates: { canonical: `/categories/${slug}` },
+    openGraph: {
+      type: "website",
+      title: name,
+      description,
+      ...(image ? { images: [{ url: image }] } : {}),
+    },
+    twitter: {
+      card: image ? "summary_large_image" : "summary",
+      title: name,
+      description,
+      ...(image ? { images: [image] } : {}),
+    },
   };
 }
 

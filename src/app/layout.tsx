@@ -38,8 +38,19 @@ async function getSiteSettings() {
   return Object.fromEntries(rows.map((r) => [r.key, r.value])) as Record<string, string | undefined>;
 }
 
+async function getFallbackOgImage(logo: string | undefined) {
+  if (logo) return logo;
+  const slide = await safeDb((db) => db.heroSlide.findFirst({
+    where: { isActive: true },
+    orderBy: { order: "asc" },
+    select: { image: true },
+  }));
+  return slide?.image;
+}
+
 export async function generateMetadata(): Promise<Metadata> {
   const s = await getSiteSettings();
+  const ogImage = await getFallbackOgImage(s.logo);
 
   const title = s.seoTitle || DEFAULT_TITLE;
   const description = s.seoDescription || DEFAULT_DESCRIPTION;
@@ -60,13 +71,13 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: "MP MedPharma",
       title,
       description,
-      ...(s.logo ? { images: [{ url: s.logo }] } : {}),
+      ...(ogImage ? { images: [{ url: ogImage }] } : {}),
     },
     twitter: {
-      card: s.logo ? "summary_large_image" : "summary",
+      card: ogImage ? "summary_large_image" : "summary",
       title,
       description,
-      ...(s.logo ? { images: [s.logo] } : {}),
+      ...(ogImage ? { images: [ogImage] } : {}),
     },
   };
 }
