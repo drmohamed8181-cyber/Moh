@@ -12,6 +12,7 @@ async function checkAdmin() {
 }
 
 export async function GET() {
+  if (!await checkAdmin()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const slides = await safeDb((db) => db.heroSlide.findMany({ orderBy: { order: "asc" } })) ?? [];
   return NextResponse.json(slides);
 }

@@ -5,6 +5,10 @@ import { auth } from "@/lib/auth";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
+  const session = await auth();
+  if (!session?.user || !["ADMIN", "SUPER_ADMIN", "CONTENT_MANAGER"].includes(session.user.role)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   const settings = await safeDb((db) => db.siteSetting.findMany()) ?? [];
   const obj = Object.fromEntries(settings.map((s) => [s.key, s.value]));
   return NextResponse.json(obj);
