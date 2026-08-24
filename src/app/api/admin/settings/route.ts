@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { safeDb } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   const settings = await safeDb((db) => db.siteSetting.findMany()) ?? [];
   const obj = Object.fromEntries(settings.map((s) => [s.key, s.value]));
