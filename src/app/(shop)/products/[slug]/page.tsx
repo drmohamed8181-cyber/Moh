@@ -74,16 +74,20 @@ export default async function ProductPage({ params }: Props) {
     ),
     ...(product.category ? { category: product.category.name } : {}),
     ...(product.manufacturer ? { brand: { "@type": "Brand", name: product.manufacturer } } : {}),
-    offers: {
-      "@type": "Offer",
-      url: `https://www.mpmedpharma.com/products/${slug}`,
-      priceCurrency: "USD",
-      availability: product.isAvailable
-        ? "https://schema.org/InStock"
-        : "https://schema.org/OutOfStock",
-      seller: { "@type": "Organization", name: "MP MedPharma" },
-      ...(publicPrice != null ? { price: publicPrice } : {}),
-    },
+    ...(publicPrice != null
+      ? {
+          offers: {
+            "@type": "Offer",
+            url: `https://www.mpmedpharma.com/products/${slug}`,
+            priceCurrency: "USD",
+            price: publicPrice,
+            availability: product.isAvailable
+              ? "https://schema.org/InStock"
+              : "https://schema.org/OutOfStock",
+            seller: { "@type": "Organization", name: "MP MedPharma" },
+          },
+        }
+      : {}),
   };
 
   const breadcrumbItems = [
