@@ -63,19 +63,22 @@ export default async function ProductPage({ params }: Props) {
 
   const publicPrice = product.publicPrice;
 
-  const productJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name: product.name,
-    sku: product.sku,
-    description: product.shortDesc ?? product.description ?? undefined,
-    image: product.images.map((img) =>
-      img.startsWith("http") ? img : `https://www.mpmedpharma.com${img}`
-    ),
-    ...(product.category ? { category: product.category.name } : {}),
-    ...(product.manufacturer ? { brand: { "@type": "Brand", name: product.manufacturer } } : {}),
-    ...(publicPrice != null
+  // Google requires a Product to carry at least one of offers/review/aggregateRating.
+  // Quote-only products (no public price, no reviews) can satisfy none of the three,
+  // so we omit Product markup for them entirely rather than emit an incomplete one.
+  const productJsonLd =
+    publicPrice != null
       ? {
+          "@context": "https://schema.org",
+          "@type": "Product",
+          name: product.name,
+          sku: product.sku,
+          description: product.shortDesc ?? product.description ?? undefined,
+          image: product.images.map((img) =>
+            img.startsWith("http") ? img : `https://www.mpmedpharma.com${img}`
+          ),
+          ...(product.category ? { category: product.category.name } : {}),
+          ...(product.manufacturer ? { brand: { "@type": "Brand", name: product.manufacturer } } : {}),
           offers: {
             "@type": "Offer",
             url: `https://www.mpmedpharma.com/products/${slug}`,
@@ -87,8 +90,7 @@ export default async function ProductPage({ params }: Props) {
             seller: { "@type": "Organization", name: "MP MedPharma" },
           },
         }
-      : {}),
-  };
+      : null;
 
   const breadcrumbItems = [
     { name: "Home", url: "https://www.mpmedpharma.com/" },
@@ -112,10 +114,12 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLdScript(productJsonLd) }}
-      />
+      {productJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdScript(productJsonLd) }}
+        />
+      )}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLdScript(breadcrumbJsonLd) }}
