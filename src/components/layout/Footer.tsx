@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
-import { Phone, Mail, MapPin, Clock, Facebook, Twitter, Instagram, Linkedin, Youtube, Loader2 } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, Facebook, Twitter, Instagram, Youtube, Loader2 } from "lucide-react";
 import { LogoMark } from "@/components/ui/Logo";
 
 type FooterSettings = {
@@ -29,11 +29,11 @@ export default function Footer({ settings }: { settings?: FooterSettings }) {
   const hoursSaturday = settings?.hoursSaturday || "9:00 AM – 4:00 PM";
   const hoursSunday = settings?.hoursSunday || "Closed";
   const footerText = settings?.footerText || `© ${new Date().getFullYear()} MP MedPharma. All Rights Reserved.`;
+  const linkedin = settings?.linkedin;
   const socialLinks = [
     { icon: Facebook, href: settings?.facebook },
     { icon: Twitter, href: settings?.twitter },
     { icon: Instagram, href: settings?.instagram },
-    { icon: Linkedin, href: settings?.linkedin },
     { icon: Youtube, href: settings?.youtube },
   ].filter((link): link is { icon: typeof Facebook; href: string } => Boolean(link.href));
 
@@ -79,6 +79,20 @@ export default function Footer({ settings }: { settings?: FooterSettings }) {
             <p className="text-sm text-gray-400 leading-relaxed mb-5">
               Providing premium medical equipment for healthcare professionals and home users since 2010. Quality, reliability, and innovation in every product.
             </p>
+            {linkedin && (
+              <a
+                href={linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="MP MedPharma on LinkedIn"
+                className="inline-flex items-center gap-2.5 rounded-lg bg-[#0A66C2] px-4 py-2.5 mb-4 transition-colors hover:bg-[#004182] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0A66C2]"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true" className="h-7 w-7 flex-shrink-0 fill-white">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z" />
+                </svg>
+                <span className="text-[15px] font-semibold leading-none text-white">LinkedIn</span>
+              </a>
+            )}
             {socialLinks.length > 0 && (
               <div className="flex gap-3">
                 {socialLinks.map(({ icon: Icon, href }, i) => (
