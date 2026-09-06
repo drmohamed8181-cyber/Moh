@@ -31,9 +31,9 @@ export default function CustomerSearchBar() {
       else params.delete("q");
       lastPushed.current = next;
       router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, 250);
     return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   const handleSubmit = (e: React.FormEvent) => {

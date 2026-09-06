@@ -11,6 +11,24 @@ type SortKey = "name" | "state" | "joined";
 
 const DEFAULT_ORDER: Record<SortKey, "asc" | "desc"> = { name: "asc", state: "asc", joined: "desc" };
 
+function sortHref(key: SortKey, sort: SortKey, order: "asc" | "desc", q: string) {
+  const nextOrder = sort === key ? (order === "asc" ? "desc" : "asc") : DEFAULT_ORDER[key];
+  const params = new URLSearchParams();
+  params.set("sort", key);
+  params.set("order", nextOrder);
+  if (q) params.set("q", q);
+  return `/admin/customers?${params.toString()}`;
+}
+
+function SortHeader({ label, sortKey, sort, order, q }: { label: string; sortKey: SortKey; sort: SortKey; order: "asc" | "desc"; q: string }) {
+  return (
+    <Link href={sortHref(sortKey, sort, order, q)} className="inline-flex items-center gap-1 hover:text-slate-600 transition-colors">
+      {label}
+      {sort === sortKey && (order === "asc" ? <ArrowUp size={12} /> : <ArrowDown size={12} />)}
+    </Link>
+  );
+}
+
 export default async function AdminCustomersPage({ searchParams }: { searchParams: Promise<{ sort?: string; order?: string; q?: string }> }) {
   const sp = await searchParams;
   const sort: SortKey = sp.sort === "name" || sp.sort === "state" ? sp.sort : "joined";
@@ -53,22 +71,6 @@ export default async function AdminCustomersPage({ searchParams }: { searchParam
     return order === "asc" ? result : -result;
   });
 
-  const sortHref = (key: SortKey) => {
-    const nextOrder = sort === key ? (order === "asc" ? "desc" : "asc") : DEFAULT_ORDER[key];
-    const params = new URLSearchParams();
-    params.set("sort", key);
-    params.set("order", nextOrder);
-    if (q) params.set("q", q);
-    return `/admin/customers?${params.toString()}`;
-  };
-
-  const SortHeader = ({ label, sortKey }: { label: string; sortKey: SortKey }) => (
-    <Link href={sortHref(sortKey)} className="inline-flex items-center gap-1 hover:text-slate-600 transition-colors">
-      {label}
-      {sort === sortKey && (order === "asc" ? <ArrowUp size={12} /> : <ArrowDown size={12} />)}
-    </Link>
-  );
-
   return (
     <div>
       <div className="mb-6">
@@ -85,12 +87,12 @@ export default async function AdminCustomersPage({ searchParams }: { searchParam
           <table className="w-full">
             <thead>
               <tr className="border-b border-slate-100">
-                <th className="text-left px-5 py-3 text-xs font-medium text-slate-400 uppercase tracking-wider"><SortHeader label="Customer" sortKey="name" /></th>
+                <th className="text-left px-5 py-3 text-xs font-medium text-slate-400 uppercase tracking-wider"><SortHeader label="Customer" sortKey="name" sort={sort} order={order} q={q} /></th>
                 <th className="text-left px-5 py-3 text-xs font-medium text-slate-400 uppercase tracking-wider">Organization</th>
-                <th className="text-left px-5 py-3 text-xs font-medium text-slate-400 uppercase tracking-wider"><SortHeader label="Address" sortKey="state" /></th>
+                <th className="text-left px-5 py-3 text-xs font-medium text-slate-400 uppercase tracking-wider"><SortHeader label="Address" sortKey="state" sort={sort} order={order} q={q} /></th>
                 <th className="text-left px-5 py-3 text-xs font-medium text-slate-400 uppercase tracking-wider">Phone</th>
                 <th className="text-left px-5 py-3 text-xs font-medium text-slate-400 uppercase tracking-wider">Orders</th>
-                <th className="text-left px-5 py-3 text-xs font-medium text-slate-400 uppercase tracking-wider"><SortHeader label="Joined" sortKey="joined" /></th>
+                <th className="text-left px-5 py-3 text-xs font-medium text-slate-400 uppercase tracking-wider"><SortHeader label="Joined" sortKey="joined" sort={sort} order={order} q={q} /></th>
                 <th className="text-left px-5 py-3 text-xs font-medium text-slate-400 uppercase tracking-wider">Status</th>
                 <th className="text-left px-5 py-3 text-xs font-medium text-slate-400 uppercase tracking-wider"></th>
               </tr>
