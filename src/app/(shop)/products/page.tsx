@@ -8,7 +8,13 @@ import ProductCard from "@/components/product/ProductCard";
 import ProductsSortSelect from "@/components/shop/ProductsSortSelect";
 import InStockFilter from "@/components/shop/InStockFilter";
 import { SlidersHorizontal } from "lucide-react";
-import { DENTAL_CATEGORY_SLUGS, HIDDEN_CATEGORY_SLUGS, SPECIALTIES } from "@/lib/specialties";
+import {
+  DENTAL_CATEGORY_SLUGS,
+  HIDDEN_CATEGORY_SLUGS,
+  NON_OPHTHALMOLOGY_CATEGORY_SLUGS,
+  PUBLIC_DENTAL_CATEGORY_SLUGS,
+  SPECIALTIES,
+} from "@/lib/specialties";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -44,8 +50,11 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
 
   const where: Prisma.ProductWhereInput = {};
   if (sp.category) where.category = HIDDEN_CATEGORY_SLUGS.includes(sp.category) ? { slug: "__none__" } : { slug: sp.category };
-  else if (sp.specialty === "dental") where.id = "__none__";
-  else if (sp.specialty === "ophthalmology") where.category = { slug: { notIn: HIDDEN_CATEGORY_SLUGS } };
+  else if (sp.specialty === "dental") where.category = { slug: { in: PUBLIC_DENTAL_CATEGORY_SLUGS } };
+  // Ophthalmology used to mean "everything not hidden", which worked only while
+  // it was the sole visible specialty. Now that Dental is live it has to exclude
+  // the other specialties' categories too, or the chairs land under it.
+  else if (sp.specialty === "ophthalmology") where.category = { slug: { notIn: NON_OPHTHALMOLOGY_CATEGORY_SLUGS } };
   else if (sp.specialty === "dermatology") where.id = "__none__";
   else where.category = { slug: { notIn: HIDDEN_CATEGORY_SLUGS } };
   if (sp.featured === "true") where.isFeatured = true;
