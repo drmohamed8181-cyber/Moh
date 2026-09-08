@@ -1,4 +1,4 @@
-export const DENTAL_CATEGORY_SLUGS = ["dental-lasers"];
+export const DENTAL_CATEGORY_SLUGS = ["dental-lasers", "dental-chairs"];
 
 export const SPECIALTIES: { slug: string; name: string; comingSoon?: boolean }[] = [
   { slug: "ophthalmology", name: "Ophthalmology" },
