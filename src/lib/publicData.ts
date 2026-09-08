@@ -157,6 +157,38 @@ export const getProductsInCategory = unstable_cache(
   { tags: [PRODUCTS_TAG, CATEGORIES_TAG], revalidate: ONE_HOUR }
 );
 
+/**
+ * Everything the XML sitemap lists, in one cached read.
+ *
+ * Tagged so the product/category write routes expire it the moment the admin
+ * adds something. Before this existed the sitemap was a static route with no
+ * revalidate, regenerated only by a deploy — so a product added through the
+ * admin stayed absent from the sitemap until the next unrelated push. Eight
+ * products were invisible to Google that way.
+ *
+ * Throws rather than degrading if the database is unreachable. A sitemap that
+ * silently lists only the static routes is worse than no response at all: it
+ * would be cached, and it tells Google the catalogue no longer exists.
+ */
+export const getSitemapEntries = unstable_cache(
+  async () => {
+    if (!prisma) throw new DatabaseUnavailableError();
+    const [categories, products] = await Promise.all([
+      prisma.category.findMany({
+        where: { isActive: true, slug: { notIn: HIDDEN_CATEGORY_SLUGS } },
+        select: { slug: true, updatedAt: true },
+      }),
+      prisma.product.findMany({
+        where: { isAvailable: true, category: { slug: { notIn: HIDDEN_CATEGORY_SLUGS } } },
+        select: { slug: true, updatedAt: true, images: true },
+      }),
+    ]);
+    return { categories, products };
+  },
+  ["sitemap-entries"],
+  { tags: [PRODUCTS_TAG, CATEGORIES_TAG], revalidate: ONE_HOUR }
+);
+
 /** Slugs of every publicly visible category, for generateStaticParams. */
 export async function getPublicCategorySlugs(): Promise<string[]> {
   try {
