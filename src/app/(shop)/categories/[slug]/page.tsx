@@ -23,6 +23,15 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
+
+  // Same guard as the page below, and it has to be here too. notFound() in the
+  // page component replaces the <head> with the site default, but whatever this
+  // function already returned still ships inside the streamed RSC payload of the
+  // 404 body. Without this line, requesting a hidden category leaked its name,
+  // description and image path — for dental-lasers that meant "Dental Lasers"
+  // and the Sapphire photo filename, ahead of the distributor deal.
+  if (HIDDEN_CATEGORY_SLUGS.includes(slug)) notFound();
+
   const cat = await getCategoryBySlug(slug);
   if (!cat) notFound();
   const name = cat.name;
