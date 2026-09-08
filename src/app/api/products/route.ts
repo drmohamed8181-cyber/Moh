@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import type { Prisma } from "@prisma/client";
 import { safeDb } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
+import { PRODUCTS_TAG } from "@/lib/publicData";
 import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
 
 export async function GET(req: NextRequest) {
@@ -43,6 +45,8 @@ export async function POST(req: NextRequest) {
     }
     const body = await req.json();
     const product = await safeDb((db) => db.product.create({ data: body }));
+    // Let the new product appear on the cached public listing/detail pages.
+    revalidateTag(PRODUCTS_TAG, { expire: 0 });
     return NextResponse.json(product, { status: 201 });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Server error";

@@ -1,20 +1,32 @@
-export const dynamic = "force-dynamic";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { safeDb } from "@/lib/prisma";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
-import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
+import { getProductBySlug, getRelatedProducts, getPublicProductSlugs } from "@/lib/publicData";
 import { jsonLdScript } from "@/lib/jsonLd";
 import ProductDetail from "@/components/product/ProductDetail";
 import ProductCard from "@/components/product/ProductCard";
+
+// Product pages are the same for every visitor, so they are prerendered and
+// served from the ISR cache rather than rebuilt per request. Admin edits
+// invalidate them immediately via revalidateTag(PRODUCTS_TAG, { expire: 0 });
+// this TTL is only a backstop. See src/lib/publicData.ts.
+export const revalidate = 3600;
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
+// Prerender the known catalogue at build time so the first crawler hit is
+// already warm. dynamicParams stays at its default (true), so a product added
+// after the last deploy still renders on demand and is cached from then on.
+export async function generateStaticParams() {
+  const slugs = await getPublicProductSlugs();
+  return slugs.map((slug) => ({ slug }));
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const product = await safeDb((db) => db.product.findUnique({ where: { slug }, include: { category: true } }));
+  const product = await getProductBySlug(slug);
   if (!product || HIDDEN_CATEGORY_SLUGS.includes(product.category.slug)) notFound();
   const title = product.seoTitle ?? product.name;
   const description = product.seoDesc ?? product.shortDesc ?? undefined;
@@ -44,22 +56,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
-  const dbProduct = await safeDb((db) => db.product.findUnique({
-    where: { slug },
-    select: { ...LISTING_PRODUCT_SELECT, category: true },
-  }));
+  const dbProduct = await getProductBySlug(slug);
 
   if (!dbProduct || HIDDEN_CATEGORY_SLUGS.includes(dbProduct.category.slug)) notFound();
 
-  const dbRelatedProducts = await safeDb((db) => db.product.findMany({
-    where: { categoryId: dbProduct.categoryId, id: { not: dbProduct.id }, isAvailable: true },
-    orderBy: { isFeatured: "desc" },
-    take: 4,
-    select: { ...LISTING_PRODUCT_SELECT, category: true },
-  }));
-  const relatedProducts = (dbRelatedProducts ?? []).map(withPublicPrice);
+  // A failure here must not take down the whole page: the related rail is
+  // decoration, and before caching was introduced this query failing still left
+  // the product itself rendering fine.
+  const dbRelatedProducts = await getRelatedProducts(dbProduct.categoryId, dbProduct.id).catch(() => []);
+  const relatedProducts = dbRelatedProducts ?? [];
 
-  const product = { ...withPublicPrice(dbProduct), specifications: dbProduct.specifications as Record<string, string> | null };
+  // Already stripped of confidential pricing inside the cache boundary.
+  const product = { ...dbProduct, specifications: dbProduct.specifications as Record<string, string> | null };
 
   const publicPrice = product.publicPrice;
 

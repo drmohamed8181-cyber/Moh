@@ -1,18 +1,29 @@
-export const dynamic = "force-dynamic";
-
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { safeDb } from "@/lib/prisma";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
-import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
+import {
+  getCategoryBySlug,
+  getProductsInCategory,
+  getPublicCategorySlugs,
+} from "@/lib/publicData";
 import { jsonLdScript } from "@/lib/jsonLd";
 import ProductCard from "@/components/product/ProductCard";
 import { ChevronRight } from "lucide-react";
 
+// These pages were the ones sitting in Google's "Discovered - currently not
+// indexed" bucket. Prerendering them makes each one cheap for Googlebot to
+// fetch instead of a live database round trip.
+export const revalidate = 3600;
+
+export async function generateStaticParams() {
+  const slugs = await getPublicCategorySlugs();
+  return slugs.map((slug) => ({ slug }));
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const cat = await safeDb((db) => db.category.findUnique({ where: { slug } }));
+  const cat = await getCategoryBySlug(slug);
   if (!cat) notFound();
   const name = cat.name;
   const description = cat.description ?? undefined;
@@ -47,17 +58,14 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
   if (HIDDEN_CATEGORY_SLUGS.includes(slug)) notFound();
 
   const [category, dbProducts] = await Promise.all([
-    safeDb((db) => db.category.findUnique({ where: { slug } })),
-    safeDb((db) => db.product.findMany({
-      where: { category: { slug }, isAvailable: true },
-      orderBy: { isFeatured: "desc" },
-      select: { ...LISTING_PRODUCT_SELECT, category: true },
-    })),
+    getCategoryBySlug(slug),
+    getProductsInCategory(slug),
   ]);
 
   if (!category) notFound();
 
-  const products = (dbProducts ?? []).map(withPublicPrice);
+  // Already stripped of confidential pricing inside the cache boundary.
+  const products = dbProducts ?? [];
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import { safeDb } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { PRODUCTS_TAG } from "@/lib/publicData";
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -29,6 +31,8 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     }
 
     const product = await safeDb((db) => db.product.update({ where: { id }, data: body }));
+    // Public product pages are cached; drop them so the edit is visible now.
+    revalidateTag(PRODUCTS_TAG, { expire: 0 });
     return NextResponse.json(product);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Server error";
@@ -44,6 +48,7 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
     }
     const { id } = await params;
     await safeDb((db) => db.product.delete({ where: { id } }));
+    revalidateTag(PRODUCTS_TAG, { expire: 0 });
     return NextResponse.json({ success: true });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Server error";

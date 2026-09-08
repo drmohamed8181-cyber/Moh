@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import { auth } from "@/lib/auth";
 import { safeDb } from "@/lib/prisma";
+import { CATEGORIES_TAG } from "@/lib/publicData";
 
 async function checkAdmin() {
   const session = await auth();
@@ -26,6 +28,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   }));
 
   if (!category) return NextResponse.json({ error: "Failed to update category" }, { status: 500 });
+  revalidateTag(CATEGORIES_TAG, { expire: 0 });
   return NextResponse.json(category);
 }
 
@@ -35,5 +38,6 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
 
   const result = await safeDb((db) => db.category.delete({ where: { id } }));
   if (!result) return NextResponse.json({ error: "Failed to delete category. It may still have products assigned to it." }, { status: 409 });
+  revalidateTag(CATEGORIES_TAG, { expire: 0 });
   return NextResponse.json({ success: true });
 }

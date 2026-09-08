@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import { safeDb } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { SITE_SETTINGS_TAG } from "@/lib/publicData";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +32,8 @@ export async function POST(req: NextRequest) {
         }))
       )
     );
+    // Header/footer settings are cached for the public shop — refresh them.
+    revalidateTag(SITE_SETTINGS_TAG, { expire: 0 });
     return NextResponse.json({ success: true });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Server error";

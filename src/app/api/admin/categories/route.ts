@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import { auth } from "@/lib/auth";
 import { safeDb } from "@/lib/prisma";
+import { CATEGORIES_TAG } from "@/lib/publicData";
 
 async function checkAdmin() {
   const session = await auth();
@@ -28,5 +30,6 @@ export async function POST(req: NextRequest) {
   }));
 
   if (!category) return NextResponse.json({ error: "A category with that slug may already exist." }, { status: 409 });
+  revalidateTag(CATEGORIES_TAG, { expire: 0 });
   return NextResponse.json(category, { status: 201 });
 }

@@ -1,9 +1,11 @@
-export const dynamic = "force-dynamic";
 import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { safeDb } from "@/lib/prisma";
-import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
+import { getPublicCategories } from "@/lib/publicData";
+
+// Cached rather than dynamic so crawlers get this from the ISR cache; admin
+// category writes invalidate it via revalidateTag(CATEGORIES_TAG).
+export const revalidate = 3600;
 
 export const metadata: Metadata = { title: "Product Categories", alternates: { canonical: "/categories" } };
 
@@ -17,8 +19,16 @@ const defaults = [
 ];
 
 export default async function CategoriesPage() {
-  const dbCategories = await safeDb((db) => db.category.findMany({ where: { isActive: true, slug: { notIn: HIDDEN_CATEGORY_SLUGS } }, orderBy: { name: "asc" } }));
-  const display = (dbCategories && dbCategories.length > 0) ? dbCategories : defaults;
+  // Deliberately NOT caught. This page is now cached, so swallowing a database
+  // failure into `defaults` would bake six placeholder categories — none of
+  // which exist in this catalogue — into the ISR entry for an hour, every one
+  // of them linking to a slug that 404s. Letting the error propagate renders an
+  // uncached 500 instead, which Google treats as "try again later". Same
+  // reasoning as DatabaseUnavailableError in src/lib/publicData.ts.
+  //
+  // `defaults` is still used below, but only as a per-card image/description
+  // fallback for real categories that lack one.
+  const display = await getPublicCategories();
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -29,6 +39,14 @@ export default async function CategoriesPage() {
         </div>
       </div>
       <div className="container mx-auto px-4 py-12">
+        {display.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-gray-500 text-lg mb-2">Categories are being updated. Please check back shortly.</p>
+            <Link href="/products" className="inline-flex items-center gap-2 mt-4 px-6 py-3 bg-primary-600 text-white rounded-xl font-semibold hover:bg-primary-700 transition-colors">
+              Browse All Products
+            </Link>
+          </div>
+        ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {display.map((cat, i) => {
             const def = defaults[i] ?? defaults[0];
@@ -50,6 +68,7 @@ export default async function CategoriesPage() {
             );
           })}
         </div>
+        )}
       </div>
     </div>
   );

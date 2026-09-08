@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { PRODUCTS_TAG } from "@/lib/publicData";
 import { z } from "zod";
 const schema = z.object({
   name: z.string().min(2),
@@ -43,6 +45,7 @@ export async function POST(req: NextRequest) {
     const data = schema.parse(body);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const product = await prisma.product.create({ data: data as any });
+    revalidateTag(PRODUCTS_TAG, { expire: 0 });
     return NextResponse.json(product, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) return NextResponse.json({ error: error.issues }, { status: 400 });
