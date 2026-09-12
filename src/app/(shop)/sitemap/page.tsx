@@ -1,11 +1,9 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { safeDb } from "@/lib/prisma";
-import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
-import { getPublicBrands } from "@/lib/publicData";
+import { getPublicBrands, getPublicCategories } from "@/lib/publicData";
 import { GUIDES } from "@/content/guides";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 export const metadata: Metadata = {
   title: "Sitemap",
   description: "A complete map of the pages available on the MP MedPharma website.",
@@ -13,14 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default async function SitemapPage() {
-  const [categories, brands] = await Promise.all([
-    safeDb((db) => db.category.findMany({
-      where: { isActive: true, slug: { notIn: HIDDEN_CATEGORY_SLUGS } },
-      orderBy: { name: "asc" },
-      select: { name: true, slug: true },
-    })).then((rows) => rows ?? []),
-    getPublicBrands().catch(() => []),
-  ]);
+  const [categories, brands] = await Promise.all([getPublicCategories(), getPublicBrands()]);
 
   const sections: { title: string; links: { label: string; href: string }[] }[] = [
     {

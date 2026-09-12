@@ -234,6 +234,93 @@ export async function getPublicProductSlugs(): Promise<string[]> {
 }
 
 // ---------------------------------------------------------------------------
+// Homepage and product listing
+//
+// These pages were `force-dynamic`, so every visit re-ran their queries —
+// every Googlebot crawl included. Search Console shows this site being
+// crawled roughly monthly, and how fast a server answers is part of what
+// Google spends crawl budget on, so the homepage and the main listing were
+// the two worst places to be paying a database round trip.
+//
+// Same shape as the readers above: cached, tagged so admin writes invalidate
+// them immediately, and throwing rather than degrading when the database is
+// unreachable. An empty homepage or an empty catalogue baked into the cache
+// for an hour is worse than a 500 that Google retries.
+// ---------------------------------------------------------------------------
+
+export const HERO_SLIDES_TAG = "hero-slides";
+
+/** Active hero slides, in display order. */
+export const getHeroSlides = unstable_cache(
+  async () => {
+    if (!prisma) throw new DatabaseUnavailableError();
+    return prisma.heroSlide.findMany({ where: { isActive: true }, orderBy: { order: "asc" } });
+  },
+  ["hero-slides"],
+  { tags: [HERO_SLIDES_TAG], revalidate: ONE_HOUR }
+);
+
+/**
+ * Up to six categories for the homepage grid, with product counts.
+ * Tagged on products as well as categories because the count moves when the
+ * catalogue does.
+ */
+export const getHomeCategories = unstable_cache(
+  async () => {
+    if (!prisma) throw new DatabaseUnavailableError();
+    return prisma.category.findMany({
+      where: { isActive: true, slug: { notIn: HIDDEN_CATEGORY_SLUGS } },
+      orderBy: { name: "asc" },
+      take: 6,
+      include: { _count: { select: { products: true } } },
+    });
+  },
+  ["home-categories"],
+  { tags: [CATEGORIES_TAG, PRODUCTS_TAG], revalidate: ONE_HOUR }
+);
+
+/** Featured, available products for the homepage rail. */
+export const getFeaturedProducts = unstable_cache(
+  async () => {
+    if (!prisma) throw new DatabaseUnavailableError();
+    const products = await prisma.product.findMany({
+      where: { isFeatured: true, isAvailable: true, category: { slug: { notIn: HIDDEN_CATEGORY_SLUGS } } },
+      take: 8,
+      orderBy: { createdAt: "desc" },
+      select: { ...LISTING_PRODUCT_SELECT, category: { select: { name: true, slug: true } } },
+    });
+    return products.map(withPublicPrice);
+  },
+  ["home-featured-products"],
+  { tags: [PRODUCTS_TAG, CATEGORIES_TAG], revalidate: ONE_HOUR }
+);
+
+/**
+ * One page of the unfiltered product listing — the only variant a crawler
+ * ever requests, and the one worth caching. Filtered and sorted views stay
+ * live: caching them would key on an unbounded set of query strings.
+ */
+export const getDefaultProductListing = unstable_cache(
+  async (page: number, pageSize: number) => {
+    if (!prisma) throw new DatabaseUnavailableError();
+    const where = { category: { slug: { notIn: HIDDEN_CATEGORY_SLUGS } } };
+    const [products, total] = await Promise.all([
+      prisma.product.findMany({
+        where,
+        orderBy: { isFeatured: "desc" },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        select: { ...LISTING_PRODUCT_SELECT, category: true },
+      }),
+      prisma.product.count({ where }),
+    ]);
+    return { products: products.map(withPublicPrice), total };
+  },
+  ["default-product-listing"],
+  { tags: [PRODUCTS_TAG, CATEGORIES_TAG], revalidate: ONE_HOUR }
+);
+
+// ---------------------------------------------------------------------------
 // Brands
 //
 // There is no Brand table: the manufacturer is a free-text field on Product.

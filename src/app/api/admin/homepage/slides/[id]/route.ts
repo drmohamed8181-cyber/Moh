@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import { safeDb } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import { HERO_SLIDES_TAG } from "@/lib/publicData";
 
 async function checkAdmin() {
   try {
@@ -17,6 +19,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
   try {
     const body = await req.json();
     const slide = await safeDb((db) => db.heroSlide.update({ where: { id }, data: body }));
+    revalidateTag(HERO_SLIDES_TAG, { expire: 0 });
     return NextResponse.json(slide);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Server error";
@@ -29,6 +32,7 @@ export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id:
   const { id } = await params;
   try {
     await safeDb((db) => db.heroSlide.delete({ where: { id } }));
+    revalidateTag(HERO_SLIDES_TAG, { expire: 0 });
     return NextResponse.json({ success: true });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Server error";

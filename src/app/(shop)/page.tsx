@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import { safeDb } from "@/lib/prisma";
-import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
-import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
-import { getPublicBrands } from "@/lib/publicData";
+import {
+  getFeaturedProducts,
+  getHeroSlides,
+  getHomeCategories,
+  getPublicBrands,
+  getSiteSettings,
+} from "@/lib/publicData";
 import HeroSlider from "@/components/shop/HeroSlider";
 import CategoryGrid from "@/components/shop/CategoryGrid";
 import SpecialtiesSection from "@/components/shop/SpecialtiesSection";
@@ -12,29 +15,30 @@ import AboutSection from "@/components/shop/AboutSection";
 import NewsletterBox from "@/components/ui/NewsletterBox";
 import { Truck, Shield, Award, Headphones } from "lucide-react";
 
-export const dynamic = "force-dynamic";
+// The homepage is the same for every visitor, so it is prerendered and served
+// from the ISR cache rather than rebuilt per request. It was `force-dynamic`,
+// which meant every crawl paid for five database queries; this site is crawled
+// about monthly, and response time is part of what that budget is spent on.
+//
+// Freshness comes from tag invalidation, not this TTL: the admin product,
+// category, settings and hero-slide routes expire the tags these reads carry,
+// so an edit still shows up immediately. See src/lib/publicData.ts.
+export const revalidate = 3600;
 export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 async function getHomeData() {
-  const [slides, categories, products, settingsRows, brands] = await Promise.all([
-    safeDb((db) => db.heroSlide.findMany({ where: { isActive: true }, orderBy: { order: "asc" } })),
-    safeDb((db) => db.category.findMany({ where: { isActive: true, slug: { notIn: HIDDEN_CATEGORY_SLUGS } }, orderBy: { name: "asc" }, take: 6, include: { _count: { select: { products: true } } } })),
-    safeDb((db) => db.product.findMany({ where: { isFeatured: true, isAvailable: true, category: { slug: { notIn: HIDDEN_CATEGORY_SLUGS } } }, take: 8, orderBy: { createdAt: "desc" }, select: { ...LISTING_PRODUCT_SELECT, category: { select: { name: true, slug: true } } } })),
-    safeDb((db) => db.siteSetting.findMany()),
-    // Cached read; the brand strip is decoration, so a failure leaves it empty
-    // rather than taking the homepage down.
+  const [slides, categories, products, settings, brands] = await Promise.all([
+    getHeroSlides(),
+    getHomeCategories(),
+    getFeaturedProducts(),
+    // Already degrades to {} on its own; the chrome has its own defaults.
+    getSiteSettings(),
+    // The brand strip is decoration, so it stays optional even though a
+    // failure here almost certainly means the reads above have thrown too.
     getPublicBrands().catch(() => []),
   ]);
 
-  const s = Object.fromEntries((settingsRows ?? []).map((row) => [row.key, row.value]));
-
-  return {
-    slides: slides ?? [],
-    categories: categories ?? [],
-    products: (products ?? []).map(withPublicPrice),
-    settings: s,
-    brands,
-  };
+  return { slides, categories, products, settings, brands };
 }
 
 // Only claims the business actually makes elsewhere on the site (see /about

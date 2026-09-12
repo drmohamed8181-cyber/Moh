@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import AboutSection from "@/components/home/AboutSection";
 import TrustBar from "@/components/home/TrustBar";
 
-export const dynamic = "force-dynamic";
+// Nothing on this page reads the database, so it is fully static.
 export const metadata: Metadata = {
   title: "About Us",
   description:

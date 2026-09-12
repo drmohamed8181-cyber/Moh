@@ -1,8 +1,10 @@
 import { Metadata } from "next";
 import ContactSection from "@/components/home/ContactSection";
-import { safeDb } from "@/lib/prisma";
+import { getSiteSettings } from "@/lib/publicData";
 
-export const dynamic = "force-dynamic";
+// Settings come from a cached, tag-invalidated read, so the admin settings
+// route still makes an edit appear immediately.
+export const revalidate = 3600;
 export const metadata: Metadata = {
   title: "Contact Us",
   description:
@@ -11,8 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ContactPage() {
-  const rows = (await safeDb((db) => db.siteSetting.findMany())) ?? [];
-  const settings = Object.fromEntries(rows.map((row) => [row.key, row.value]));
+  const settings = await getSiteSettings();
 
   return (
     <div>
