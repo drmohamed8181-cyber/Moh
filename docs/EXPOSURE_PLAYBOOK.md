@@ -54,9 +54,26 @@ You cannot improve what you cannot see. Today the site has no analytics at all.
 Nobody searches "premium medical equipment". They search
 `alcon centurion for sale`, `used zeiss cirrus 5000 price`,
 `ellex tango slt yag refurbished`. The code now builds titles that way
-automatically, but the page still needs real text to rank:
+automatically, but the page still needs real text to rank.
 
-For every product in `/admin/products`:
+**Done for you:** `src/content/productContent.ts` holds a written description,
+feature list, indications and the safe specifications for every model in the
+catalogue (Alcon, Zeiss, Ellex, Iridex, Lumenis, J&J Vision, Bausch + Lomb,
+Ziemer, Endo Optiks, CSO). Load it into the live database once:
+
+```bash
+# from a machine with the production DATABASE_URL in .env.local
+npm run content:apply            # dry run: shows which products match
+npm run content:apply -- --apply # writes it; only empty fields are filled
+```
+
+It never overwrites text you typed in the admin unless you add `--overwrite`.
+The public pages show the new text within an hour, or immediately after you
+save any product in the admin.
+Products it reports as unmatched need an entry in that file or text in the
+admin.
+
+Then, per product in `/admin/products`, improve on it where you know more:
 - **Full Description**: 150–300 words in your own words. Who uses it, what
   procedures, what generation/model year, what is included, condition,
   warranty. Copying the manufacturer brochure does not count – Google already
@@ -90,16 +107,18 @@ just the homepage.
 
 ## 5. Content that earns visits over time (one piece per month)
 
-Write for the questions your customers ask you on the phone. Examples:
-- "Refurbished vs new phaco system: what actually differs?"
-- "Alcon Centurion vs Infiniti: what changed"
-- "What to check before buying a used excimer laser"
-- "How much does a used OCT cost in 2026?"
+**Done for you:** the site now has a `/guides` section with four articles,
+each targeting a real query and linking into the catalogue:
+- Refurbished vs new ophthalmic equipment: what actually differs
+- What to check before buying a used excimer laser
+- Alcon Centurion vs Infiniti: what changed and which to buy
+- How to sell used ophthalmic equipment: valuation, paperwork and logistics
 
-Each one targets a real query, links to the relevant brand and product pages,
-and gives other sites a reason to link to you. When you are ready for this,
-ask for a `/guides` section in the site; the brand pages were built the same
-way.
+To add one, append an entry to `src/content/guides.ts`; the index, sitemap and
+Article markup update automatically. Good next topics are the questions your
+customers ask on the phone: "how much does a used OCT cost", "SLT vs YAG:
+which laser first", "what a phaco service contract should include". Share
+each guide on LinkedIn and in the product-digest email when it goes live.
 
 ## 6. Turn visitors into inquiries
 
@@ -107,9 +126,10 @@ Traffic is only useful if it converts:
 - Keep the newsletter and the product-digest email (already automated) going.
 - Reply to inquiries the same day; add the WhatsApp number to Google Business
   Profile too.
-- Fix the trust-bar copy on the homepage (`src/app/(shop)/page.tsx`): "FDA & CE
-  certified", "ISO 13485", "24/7 clinical support", "same-day dispatch" came
-  from the template. Replace with what is true; buyers of $50k lasers check.
+- The template's trust claims ("FDA & CE certified", "ISO 13485", "24/7
+  clinical support", "same-day dispatch", "2,000+ partners") have been
+  replaced with statements the About page actually makes. If you do hold a
+  certification, add it back with the certificate number.
 
 ## What "working" looks like
 

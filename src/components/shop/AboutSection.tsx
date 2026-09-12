@@ -8,22 +8,24 @@ interface AboutSectionProps {
   image?: string;
 }
 
+// No invented counts: the "2,000+ partners / 500+ products" figures came from
+// the template. Values are statements the About page already makes.
 const stats = [
-  { icon: Award, label: "Years of Experience", value: "15+" },
-  { icon: Users, label: "Healthcare Partners", value: "2,000+" },
-  { icon: Shield, label: "Certified Products", value: "500+" },
+  { icon: Award, label: "Serving eye care", value: "Since 2009" },
+  { icon: Users, label: "Hospitals & eye clinics", value: "Worldwide" },
+  { icon: Shield, label: "On every unit", value: "Warranty" },
 ];
 
 const points = [
-  "ISO 13485 certified medical device quality management",
-  "Direct partnerships with leading global manufacturers",
-  "Expert clinical support team available 24/7",
-  "Nationwide delivery with same-day dispatch",
+  "New and certified refurbished ophthalmic & surgical equipment",
+  "Documented service history and warranty on every unit",
+  "Private demos arranged before you buy",
+  "Fair, transparent offers on the equipment you are replacing",
 ];
 
 export default function AboutSection({
-  title = "Your Trusted Medical Equipment Partner",
-  description = "MP MedPharma has been serving healthcare professionals, hospitals, and clinics since 2009. We supply a comprehensive range of premium medical equipment — from patient monitoring systems to surgical instruments — backed by rigorous quality standards and expert support.",
+  title = "Your Trusted Partner in Ophthalmic & Surgical Equipment",
+  description = "MP MedPharma has supplied hospitals and eye clinics since 2009 with new and certified refurbished ophthalmic and surgical equipment: phaco and vitrectomy systems, refractive, retina and glaucoma lasers, OCT and imaging, slit lamps and surgical microscopes. Every unit comes with documented service history and warranty coverage.",
   image = "https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=700&q=80",
 }: AboutSectionProps) {
   return (

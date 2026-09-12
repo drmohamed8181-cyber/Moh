@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getPublicBrands, getSitemapEntries } from "@/lib/publicData";
+import { GUIDES } from "@/content/guides";
 
 const BASE_URL = "https://www.mpmedpharma.com";
 
@@ -13,6 +14,7 @@ const STATIC_ROUTES: { path: string; changeFrequency: MetadataRoute.Sitemap[numb
   { path: "/products", changeFrequency: "daily", priority: 0.9 },
   { path: "/categories", changeFrequency: "weekly", priority: 0.8 },
   { path: "/brands", changeFrequency: "weekly", priority: 0.8 },
+  { path: "/guides", changeFrequency: "monthly", priority: 0.7 },
   { path: "/about", changeFrequency: "monthly", priority: 0.6 },
   { path: "/contact", changeFrequency: "monthly", priority: 0.6 },
   { path: "/faq", changeFrequency: "monthly", priority: 0.5 },
@@ -59,5 +61,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  return [...staticEntries, ...categoryEntries, ...brandEntries, ...productEntries];
+  const guideEntries: MetadataRoute.Sitemap = GUIDES.map((guide) => ({
+    url: `${BASE_URL}/guides/${guide.slug}`,
+    lastModified: new Date(guide.publishedAt),
+    changeFrequency: "monthly",
+    priority: 0.6,
+  }));
+
+  return [...staticEntries, ...categoryEntries, ...brandEntries, ...guideEntries, ...productEntries];
 }

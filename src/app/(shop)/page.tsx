@@ -37,11 +37,14 @@ async function getHomeData() {
   };
 }
 
+// Only claims the business actually makes elsewhere on the site (see /about
+// and the equipment acquisition program). The template's "FDA & CE certified",
+// "ISO 13485" and "24/7" lines were removed: buyers of capital equipment check.
 const trustFeatures = [
-  { icon: Truck, title: "Fast Delivery", description: "Same-day dispatch on orders before 2 PM" },
-  { icon: Shield, title: "Certified Products", description: "All equipment is FDA & CE certified" },
-  { icon: Award, title: "Quality Guaranteed", description: "ISO 13485 quality management system" },
-  { icon: Headphones, title: "Expert Support", description: "Clinical support team available 24/7" },
+  { icon: Shield, title: "Documented Service History", description: "Every unit ships with its service records" },
+  { icon: Award, title: "Warranty on Every Unit", description: "New and certified refurbished equipment" },
+  { icon: Headphones, title: "Private Demos", description: "See the unit running before you buy" },
+  { icon: Truck, title: "We Buy Used Equipment", description: "Fair, transparent offers on the device you retire" },
 ];
 
 export default async function HomePage() {
