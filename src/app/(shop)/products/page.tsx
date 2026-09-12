@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { Prisma } from "@prisma/client";
 import { safeDb } from "@/lib/prisma";
 import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
+import { getDefaultProductListing, getPublicCategories } from "@/lib/publicData";
 import { jsonLdScript } from "@/lib/jsonLd";
 import ProductCard from "@/components/product/ProductCard";
 import ProductsSortSelect from "@/components/shop/ProductsSortSelect";
@@ -16,34 +17,74 @@ import {
   SPECIALTIES,
 } from "@/lib/specialties";
 
+// This route reads searchParams, so it is dynamic by definition and cannot be
+// prerendered. What was costing crawls was the database work behind it, and
+// that is now served from the tagged Data Cache for the unfiltered listing —
+// the only variant a crawler ever requests. Filtered views stay live.
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = {
-  title: "All Ophthalmic Equipment for Sale – New & Refurbished",
-  description:
-    "Browse every ophthalmic laser, phaco system, OCT, slit lamp and surgical microscope in stock at MP MedPharma. New and certified refurbished, with warranty. Request a quote or a private demo.",
-  alternates: { canonical: "/products" },
-};
 
 const ITEMS_PER_PAGE = 12;
 
-const fallbackProducts = [
-  { id: "1", name: "Digital Blood Pressure Monitor Pro", slug: "digital-bp-monitor-pro", price: 89.99, discountPrice: 69.99, images: ["https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=400&q=80"], shortDesc: "Clinical-grade accuracy, irregular heartbeat detection, 60-memory storage.", category: { name: "Diagnostic Equipment" }, brand: "MedTech", isAvailable: true, stockQty: 25, sku: "BP-001" },
-  { id: "2", name: "Fingertip Pulse Oximeter", slug: "fingertip-pulse-oximeter", price: 45.99, discountPrice: null, images: ["https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&q=80"], shortDesc: "Real-time SpO₂ and pulse rate with bright OLED display.", category: { name: "Diagnostic Equipment" }, brand: "OxyPro", isAvailable: true, stockQty: 50, sku: "OX-001" },
-  { id: "3", name: "Infrared Forehead Thermometer", slug: "infrared-forehead-thermometer", price: 39.99, discountPrice: 29.99, images: ["https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=400&q=80"], shortDesc: "Non-contact 1-second readings for all ages.", category: { name: "Diagnostic Equipment" }, brand: "ThermoScan", isAvailable: true, stockQty: 75, sku: "TH-001" },
-  { id: "4", name: "12-Lead ECG Machine", slug: "12-lead-ecg-machine", price: 1299.99, discountPrice: 999.99, images: ["https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=400&q=80"], shortDesc: "Hospital-grade ECG with wireless data transfer and AI analysis.", category: { name: "Patient Monitoring" }, brand: "CardioTech", isAvailable: true, stockQty: 8, sku: "ECG-001" },
-  { id: "5", name: "Portable Ultrasound Scanner", slug: "portable-ultrasound-scanner", price: 4999.99, discountPrice: null, images: ["https://images.unsplash.com/photo-1516549655169-df83a0774514?w=400&q=80"], shortDesc: "WiFi-enabled handheld ultrasound with AI-assisted diagnostics.", category: { name: "Diagnostic Equipment" }, brand: "UltraScan", isAvailable: true, stockQty: 3, sku: "US-001" },
-  { id: "6", name: "Multi-Parameter Patient Monitor", slug: "multi-parameter-patient-monitor", price: 2499.99, discountPrice: 1999.99, images: ["https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=400&q=80"], shortDesc: "ECG, SpO₂, NIBP, temperature monitoring in one unit.", category: { name: "Patient Monitoring" }, brand: "VitalGuard", isAvailable: true, stockQty: 12, sku: "PM-001" },
-  { id: "7", name: "Medical Mesh Nebulizer", slug: "medical-mesh-nebulizer", price: 79.99, discountPrice: 59.99, images: ["https://images.unsplash.com/photo-1631815590058-860e4d65b977?w=400&q=80"], shortDesc: "Silent mesh nebulizer, portable and rechargeable.", category: { name: "Home Healthcare" }, brand: "BreathEasy", isAvailable: true, stockQty: 30, sku: "NB-001" },
-  { id: "8", name: "Hospital Bed with Rails", slug: "hospital-bed-with-rails", price: 3499.99, discountPrice: null, images: ["https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=400&q=80"], shortDesc: "Adjustable electric hospital bed with safety rails.", category: { name: "Hospital Furniture" }, brand: "ComfortCare", isAvailable: true, stockQty: 5, sku: "HB-001" },
-  { id: "9", name: "Stethoscope Premium", slug: "stethoscope-premium", price: 149.99, discountPrice: 119.99, images: ["https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=400&q=80"], shortDesc: "Dual-head stethoscope with superior acoustics.", category: { name: "Diagnostic Equipment" }, brand: "CardioCare", isAvailable: true, stockQty: 40, sku: "ST-001" },
-  { id: "10", name: "Glucometer Kit", slug: "glucometer-kit", price: 59.99, discountPrice: 44.99, images: ["https://images.unsplash.com/photo-1631815590058-860e4d65b977?w=400&q=80"], shortDesc: "Fast blood glucose monitoring with 50-test strips included.", category: { name: "Home Healthcare" }, brand: "GlucoSmart", isAvailable: true, stockQty: 60, sku: "GL-001" },
-  { id: "11", name: "Portable Defibrillator AED", slug: "portable-defibrillator-aed", price: 1899.99, discountPrice: null, images: ["https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=400&q=80"], shortDesc: "Automated external defibrillator with voice prompts.", category: { name: "Patient Monitoring" }, brand: "RescueTech", isAvailable: true, stockQty: 7, sku: "AED-001" },
-  { id: "12", name: "Medical Oxygen Concentrator", slug: "medical-oxygen-concentrator", price: 799.99, discountPrice: 649.99, images: ["https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&q=80"], shortDesc: "5L/min portable oxygen concentrator for home use.", category: { name: "Home Healthcare" }, brand: "OxyGen", isAvailable: true, stockQty: 15, sku: "OC-001" },
-];
+const LISTING_TITLE = "All Ophthalmic Equipment for Sale – New & Refurbished";
+const LISTING_DESCRIPTION =
+  "Browse every ophthalmic laser, phaco system, OCT, slit lamp and surgical microscope in stock at MP MedPharma. New and certified refurbished, with warranty. Request a quote or a private demo.";
+
+/**
+ * Canonical for the listing.
+ *
+ * Every variant used to declare /products as its canonical, pagination
+ * included. That tells Google page two is a duplicate of page one, which
+ * makes the pagination a dead end for a crawler walking the catalogue.
+ * Pages now point at themselves; filters and sorts still fold onto the bare
+ * listing, which is what keeps faceted URLs out of the index.
+ */
+function canonicalFor(page: number): string {
+  return page > 1 ? `/products?page=${page}` : "/products";
+}
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}): Promise<Metadata> {
+  const { page } = await searchParams;
+  const pageNumber = Math.max(1, Number.parseInt(page ?? "1", 10) || 1);
+  return {
+    title: pageNumber > 1 ? `${LISTING_TITLE} – Page ${pageNumber}` : LISTING_TITLE,
+    description: LISTING_DESCRIPTION,
+    alternates: { canonical: canonicalFor(pageNumber) },
+  };
+}
+
+
+
+/**
+ * One page of a filtered or sorted listing. Throws rather than degrading when
+ * the database is unreachable: this page used to answer with twelve invented
+ * products — a blood pressure monitor, a hospital bed — none of which exist in
+ * this catalogue, at HTTP 200. Serving fabricated stock to a buyer is worse
+ * than an error, and serving it to a crawler is how a site teaches Google not
+ * to trust its URLs.
+ */
+async function loadFilteredListing(
+  where: Prisma.ProductWhereInput,
+  orderBy: Prisma.ProductOrderByWithRelationInput,
+  skip: number
+) {
+  const [rows, total] = await Promise.all([
+    safeDb((db) =>
+      db.product.findMany({ where, orderBy, skip, take: ITEMS_PER_PAGE, select: { ...LISTING_PRODUCT_SELECT, category: true } })
+    ),
+    safeDb((db) => db.product.count({ where })),
+  ]);
+  if (!rows || total === null) throw new Error("Product catalogue unavailable");
+  return { products: rows.map(withPublicPrice), total };
+}
 
 export default async function ProductsPage({ searchParams }: { searchParams: Promise<{ category?: string; specialty?: string; sort?: string; featured?: string; q?: string; page?: string; inStock?: string }> }) {
   const sp = await searchParams;
-  const page = parseInt(sp.page ?? "1");
+  // parseInt("abc") is NaN, which made skip NaN and the query return nothing.
+  const page = Math.max(1, Number.parseInt(sp.page ?? "1", 10) || 1);
   const skip = (page - 1) * ITEMS_PER_PAGE;
 
   const activeSpecialty =
@@ -68,14 +109,20 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
     : sp.sort === "newest" ? { createdAt: "desc" }
     : { isFeatured: "desc" };
 
-  const [dbProducts, categories, total] = await Promise.all([
-    safeDb((db) => db.product.findMany({ where, orderBy, skip, take: ITEMS_PER_PAGE, select: { ...LISTING_PRODUCT_SELECT, category: true } })),
-    safeDb((db) => db.category.findMany({ where: { isActive: true, slug: { notIn: HIDDEN_CATEGORY_SLUGS } }, orderBy: { name: "asc" } })),
-    safeDb((db) => db.product.count({ where })),
+  // Anything that narrows or reorders the catalogue makes this a one-off
+  // query. The bare listing is the same for everyone, so it comes from the
+  // cache instead.
+  const isDefaultListing = !sp.category && !sp.specialty && !sp.featured && !sp.q && !sp.inStock && !sp.sort;
+
+  const [listing, categories] = await Promise.all([
+    isDefaultListing
+      ? getDefaultProductListing(page, ITEMS_PER_PAGE)
+      : loadFilteredListing(where, orderBy, skip),
+    getPublicCategories(),
   ]);
 
-  const products = dbProducts ? dbProducts.map(withPublicPrice) : fallbackProducts;
-  const totalPages = Math.ceil((total ?? fallbackProducts.length) / ITEMS_PER_PAGE);
+  const { products, total } = listing;
+  const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
 
   const itemListJsonLd = {
     "@context": "https://schema.org",
