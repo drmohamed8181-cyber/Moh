@@ -53,6 +53,13 @@ const BRAND_RULES: BrandRule[] = [
 
 const normalise = (text: string) => text.toLowerCase().replace(/[^a-z0-9]/g, "");
 
+/** The rule matching `text`, or undefined. Only consults the table above. */
+function matchRule(text: string): BrandRule | undefined {
+  const key = normalise(text);
+  if (!key) return undefined;
+  return BRAND_RULES.find((candidate) => candidate.match.some((needle) => key.includes(needle)));
+}
+
 /**
  * The canonical brand for a manufacturer string, or null when the string is
  * empty or has no letters or digits at all. Manufacturers with no rule keep
@@ -64,7 +71,7 @@ export function canonicalBrand(manufacturer: string | null | undefined): Canonic
   const key = normalise(name);
   if (!key) return null;
 
-  const rule = BRAND_RULES.find((candidate) => candidate.match.some((needle) => key.includes(needle)));
+  const rule = matchRule(name);
   if (rule) return { name: rule.name, slug: rule.slug };
 
   // Not slugify() from lib/utils: that strips "+" and "&" but leaves the
@@ -76,4 +83,25 @@ export function canonicalBrand(manufacturer: string | null | undefined): Canonic
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
   return slug ? { name, slug } : null;
+}
+
+/**
+ * The brand a product belongs to.
+ *
+ * Prefers the manufacturer field. When that is blank — two Zeiss OCT units in
+ * the live catalogue have no manufacturer set, which kept them off every brand
+ * page — falls back to reading a known company out of the product name, so
+ * "Zeiss Cirrus OCT 5000" still reaches the Zeiss page.
+ *
+ * The fallback deliberately consults only the table above rather than treating
+ * the first word of any name as a brand: that would invent a brand page from
+ * whatever a product happens to be called. A product with no manufacturer and
+ * no recognised company in its name simply has no brand, exactly as before.
+ */
+export function productBrand(product: { manufacturer?: string | null; name: string }): CanonicalBrand | null {
+  const fromField = canonicalBrand(product.manufacturer);
+  if (fromField) return fromField;
+
+  const rule = matchRule(product.name);
+  return rule ? { name: rule.name, slug: rule.slug } : null;
 }
