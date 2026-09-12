@@ -84,7 +84,7 @@ export function productDescription(product: SeoProduct): string {
   return `${truncate(core, Math.max(90, DESCRIPTION_BUDGET - suffix.length))}${suffix}`;
 }
 
-type SeoCategory = { name: string; description?: string | null };
+type SeoCategory = { name: string; description?: string | null; summary?: string | null };
 
 /** <title> for a category page, without the template suffix. */
 export function categoryTitle(category: SeoCategory): string {
@@ -94,6 +94,11 @@ export function categoryTitle(category: SeoCategory): string {
 /** Meta description for a category page. */
 export function categoryDescription(category: SeoCategory, productCount?: number): string {
   const count = productCount && productCount > 0 ? `Browse ${productCount} ${productCount === 1 ? "unit" : "units"} in stock.` : "";
+  // The editorial summary from src/content/categoryContent.ts is written for
+  // this purpose and says more than the database one-liner, so it wins.
+  if (category.summary?.trim()) {
+    return truncate(`${category.summary.trim()} ${count}`, DESCRIPTION_BUDGET + 20);
+  }
   if (category.description?.trim()) {
     return truncate(`${category.description.trim()} ${count} Warranty on every unit — request a quote or a private demo.`, DESCRIPTION_BUDGET + 20);
   }
