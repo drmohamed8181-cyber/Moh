@@ -31,7 +31,7 @@ import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
-import { canonicalBrand } from "@/lib/brands";
+import { productBrand } from "@/lib/brands";
 import { withEditorialContent } from "@/content/productContent";
 
 export const PRODUCTS_TAG = "products";
@@ -252,22 +252,28 @@ const publicProductWhere = {
   category: { slug: { notIn: HIDDEN_CATEGORY_SLUGS } },
 } as const;
 
-/** Manufacturers with at least one visible product, alphabetically. */
+/**
+ * Brands with at least one visible product, alphabetically.
+ *
+ * Reads name alongside manufacturer, rather than grouping on manufacturer in
+ * the database, because productBrand() needs the name to place a product whose
+ * manufacturer field is blank. The visible catalogue is well under a hundred
+ * rows, so counting them here costs nothing.
+ */
 export const getPublicBrands = unstable_cache(
   async (): Promise<PublicBrand[]> => {
     if (!prisma) throw new DatabaseUnavailableError();
-    const rows = await prisma.product.groupBy({
-      by: ["manufacturer"],
-      where: { ...publicProductWhere, manufacturer: { not: null } },
-      _count: { _all: true },
+    const rows = await prisma.product.findMany({
+      where: publicProductWhere,
+      select: { name: true, manufacturer: true },
     });
     const bySlug = new Map<string, PublicBrand>();
     for (const row of rows) {
-      const brand = canonicalBrand(row.manufacturer);
+      const brand = productBrand(row);
       if (!brand) continue;
       const existing = bySlug.get(brand.slug);
-      if (existing) existing.productCount += row._count._all;
-      else bySlug.set(brand.slug, { ...brand, productCount: row._count._all });
+      if (existing) existing.productCount += 1;
+      else bySlug.set(brand.slug, { ...brand, productCount: 1 });
     }
     return [...bySlug.values()].sort((a, b) => a.name.localeCompare(b.name));
   },
@@ -291,12 +297,12 @@ export const getProductsByBrand = unstable_cache(
   async (slug: string) => {
     if (!prisma) throw new DatabaseUnavailableError();
     const products = await prisma.product.findMany({
-      where: { ...publicProductWhere, manufacturer: { not: null } },
+      where: publicProductWhere,
       orderBy: [{ isFeatured: "desc" }, { name: "asc" }],
       select: { ...LISTING_PRODUCT_SELECT, category: { select: { name: true, slug: true } } },
     });
     return products
-      .filter((product) => canonicalBrand(product.manufacturer)?.slug === slug)
+      .filter((product) => productBrand(product)?.slug === slug)
       .map(withPublicPrice);
   },
   ["public-products-by-brand"],
