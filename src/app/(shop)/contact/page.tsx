@@ -5,7 +5,8 @@ import { safeDb } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Contact Us",
-  description: "Get in touch with MP MedPharma.",
+  description:
+    "Contact MP MedPharma in New Jersey, USA for ophthalmic equipment pricing, private demos, and offers on the used equipment you are replacing. Phone, email and contact form.",
   alternates: { canonical: "/contact" },
 };
 

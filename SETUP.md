@@ -67,6 +67,15 @@ Login with: dr.mohamed8181@gmail.com / Admin@123456
 3. Copy Cloud Name, API Key, API Secret
 4. Paste into .env.local
 
+## Search Engines & Analytics (optional)
+Set these in Vercel → Project → Environment Variables (see `.env.example`):
+- `GOOGLE_SITE_VERIFICATION` — Google Search Console HTML-tag value
+- `BING_SITE_VERIFICATION` — Bing Webmaster Tools meta-tag value
+- `NEXT_PUBLIC_GA_MEASUREMENT_ID` — Google Analytics 4 measurement ID (`G-…`)
+
+Nothing is emitted when they are unset. The full growth checklist is in
+`docs/EXPOSURE_PLAYBOOK.md`.
+
 ## Production Deployment (Vercel)
 1. Push code to GitHub
 2. Connect repo to Vercel

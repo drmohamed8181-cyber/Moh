@@ -7,7 +7,12 @@ import { getPublicCategories } from "@/lib/publicData";
 // category writes invalidate it via revalidateTag(CATEGORIES_TAG).
 export const revalidate = 3600;
 
-export const metadata: Metadata = { title: "Product Categories", alternates: { canonical: "/categories" } };
+export const metadata: Metadata = {
+  title: "Ophthalmic Equipment Categories – Lasers, Phaco, OCT & More",
+  description:
+    "Ophthalmic equipment by category at MP MedPharma: surgical and refractive lasers, phaco systems, OCT and imaging, slit lamps and microscopes. New and certified refurbished, with warranty.",
+  alternates: { canonical: "/categories" },
+};
 
 const defaults = [
   { id: "1", name: "Patient Monitoring", slug: "patient-monitoring", image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=500&q=80", description: "ECG monitors, patient monitors, vital signs equipment" },

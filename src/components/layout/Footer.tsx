@@ -113,6 +113,7 @@ export default function Footer({ settings }: { settings?: FooterSettings }) {
                 { label: "Home", href: "/" },
                 { label: "Products", href: "/products" },
                 { label: "Categories", href: "/categories" },
+                { label: "Brands", href: "/brands" },
                 { label: "Sell Your Product", href: "/sell-your-product" },
                 { label: "About Us", href: "/about" },
                 { label: "Contact", href: "/contact" },

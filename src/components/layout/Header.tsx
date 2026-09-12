@@ -24,6 +24,7 @@ const defaultNav = [
     ],
   },
   { id: "3", label: "Categories", href: "/categories", children: [] },
+  { id: "3b", label: "Brands", href: "/brands", children: [] },
   { id: "4", label: "Sell Your Product", href: "/sell-your-product", children: [] },
   { id: "5", label: "About Us", href: "/about", children: [] },
   { id: "6", label: "Contact", href: "/contact", children: [] },

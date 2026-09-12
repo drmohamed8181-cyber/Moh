@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import { safeDb } from "@/lib/prisma";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
 import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
+import { getPublicBrands } from "@/lib/publicData";
 import HeroSlider from "@/components/shop/HeroSlider";
 import CategoryGrid from "@/components/shop/CategoryGrid";
 import SpecialtiesSection from "@/components/shop/SpecialtiesSection";
 import FeaturedProducts from "@/components/shop/FeaturedProducts";
+import HomeIntro from "@/components/shop/HomeIntro";
 import AboutSection from "@/components/shop/AboutSection";
 import NewsletterBox from "@/components/ui/NewsletterBox";
 import { Truck, Shield, Award, Headphones } from "lucide-react";
@@ -14,11 +16,14 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 async function getHomeData() {
-  const [slides, categories, products, settingsRows] = await Promise.all([
+  const [slides, categories, products, settingsRows, brands] = await Promise.all([
     safeDb((db) => db.heroSlide.findMany({ where: { isActive: true }, orderBy: { order: "asc" } })),
     safeDb((db) => db.category.findMany({ where: { isActive: true, slug: { notIn: HIDDEN_CATEGORY_SLUGS } }, orderBy: { name: "asc" }, take: 6, include: { _count: { select: { products: true } } } })),
     safeDb((db) => db.product.findMany({ where: { isFeatured: true, isAvailable: true, category: { slug: { notIn: HIDDEN_CATEGORY_SLUGS } } }, take: 8, orderBy: { createdAt: "desc" }, select: { ...LISTING_PRODUCT_SELECT, category: { select: { name: true, slug: true } } } })),
     safeDb((db) => db.siteSetting.findMany()),
+    // Cached read; the brand strip is decoration, so a failure leaves it empty
+    // rather than taking the homepage down.
+    getPublicBrands().catch(() => []),
   ]);
 
   const s = Object.fromEntries((settingsRows ?? []).map((row) => [row.key, row.value]));
@@ -28,6 +33,7 @@ async function getHomeData() {
     categories: categories ?? [],
     products: (products ?? []).map(withPublicPrice),
     settings: s,
+    brands,
   };
 }
 
@@ -39,7 +45,7 @@ const trustFeatures = [
 ];
 
 export default async function HomePage() {
-  const { slides, categories, products, settings } = await getHomeData();
+  const { slides, categories, products, settings, brands } = await getHomeData();
 
   const heroSlides = slides.map((s) => ({
     id: s.id,
@@ -73,6 +79,7 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <HomeIntro brands={brands} />
       <SpecialtiesSection />
       <CategoryGrid categories={categories} />
       <FeaturedProducts products={products} />

@@ -8,6 +8,7 @@ import {
   getPublicCategorySlugs,
 } from "@/lib/publicData";
 import { jsonLdScript } from "@/lib/jsonLd";
+import { categoryDescription, categoryTitle } from "@/lib/seo";
 import ProductCard from "@/components/product/ProductCard";
 import { ChevronRight } from "lucide-react";
 
@@ -34,8 +35,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   const cat = await getCategoryBySlug(slug);
   if (!cat) notFound();
-  const name = cat.name;
-  const description = cat.description ?? undefined;
+  // Same cached read the page body makes, so this costs nothing extra.
+  const products = await getProductsInCategory(slug).catch(() => []);
+  const name = categoryTitle(cat);
+  const description = categoryDescription(cat, products.length);
   const rawImage = cat.image;
   const image = rawImage
     ? rawImage.startsWith("http")
