@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { safeDb } from "@/lib/prisma";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
+import { getPublicBrands } from "@/lib/publicData";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -11,11 +12,14 @@ export const metadata: Metadata = {
 };
 
 export default async function SitemapPage() {
-  const categories = await safeDb((db) => db.category.findMany({
-    where: { isActive: true, slug: { notIn: HIDDEN_CATEGORY_SLUGS } },
-    orderBy: { name: "asc" },
-    select: { name: true, slug: true },
-  })) ?? [];
+  const [categories, brands] = await Promise.all([
+    safeDb((db) => db.category.findMany({
+      where: { isActive: true, slug: { notIn: HIDDEN_CATEGORY_SLUGS } },
+      orderBy: { name: "asc" },
+      select: { name: true, slug: true },
+    })).then((rows) => rows ?? []),
+    getPublicBrands().catch(() => []),
+  ]);
 
   const sections: { title: string; links: { label: string; href: string }[] }[] = [
     {
@@ -23,6 +27,8 @@ export default async function SitemapPage() {
       links: [
         { label: "All Products", href: "/products" },
         { label: "Categories", href: "/categories" },
+        { label: "Brands", href: "/brands" },
+        { label: "Sell Your Product", href: "/sell-your-product" },
         { label: "Search", href: "/search" },
       ],
     },
@@ -94,6 +100,21 @@ export default async function SitemapPage() {
               ))}
             </ul>
           </div>
+
+          {brands.length > 0 && (
+            <div>
+              <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Brands</h2>
+              <ul className="space-y-2.5">
+                {brands.map((brand) => (
+                  <li key={brand.slug}>
+                    <Link href={`/brands/${brand.slug}`} className="text-sm text-gray-700 hover:text-primary-600 transition-colors">
+                      {brand.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </div>

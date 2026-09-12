@@ -31,6 +31,7 @@ import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
+import { slugify } from "@/lib/utils";
 
 export const PRODUCTS_TAG = "products";
 export const CATEGORIES_TAG = "categories";
@@ -220,6 +221,86 @@ export async function getPublicProductSlugs(): Promise<string[]> {
       select: { slug: true },
     });
     return products.map((product) => product.slug);
+  } catch {
+    return [];
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Brands
+//
+// There is no Brand table: the manufacturer is a free-text field on Product.
+// The brand pages are derived from it so that "Alcon", "Zeiss", "Ellex" each
+// get one crawlable, intent-matching landing page without a schema change.
+// Two spellings that slugify to the same thing ("Bausch + Lomb", "Bausch & Lomb")
+// collapse into one page; the first spelling seen becomes its display name.
+// ---------------------------------------------------------------------------
+
+export type PublicBrand = { name: string; slug: string; productCount: number };
+
+const publicProductWhere = {
+  isAvailable: true,
+  category: { slug: { notIn: HIDDEN_CATEGORY_SLUGS } },
+} as const;
+
+/** Manufacturers with at least one visible product, alphabetically. */
+export const getPublicBrands = unstable_cache(
+  async (): Promise<PublicBrand[]> => {
+    if (!prisma) throw new DatabaseUnavailableError();
+    const rows = await prisma.product.groupBy({
+      by: ["manufacturer"],
+      where: { ...publicProductWhere, manufacturer: { not: null } },
+      _count: { _all: true },
+    });
+    const bySlug = new Map<string, PublicBrand>();
+    for (const row of rows) {
+      const name = row.manufacturer?.trim();
+      if (!name) continue;
+      const slug = slugify(name);
+      if (!slug) continue;
+      const existing = bySlug.get(slug);
+      if (existing) existing.productCount += row._count._all;
+      else bySlug.set(slug, { name, slug, productCount: row._count._all });
+    }
+    return [...bySlug.values()].sort((a, b) => a.name.localeCompare(b.name));
+  },
+  ["public-brands"],
+  { tags: [PRODUCTS_TAG, CATEGORIES_TAG], revalidate: ONE_HOUR }
+);
+
+/** One brand by slug, or null if no visible product carries that manufacturer. */
+export async function getBrandBySlug(slug: string): Promise<PublicBrand | null> {
+  const brands = await getPublicBrands();
+  return brands.find((brand) => brand.slug === slug) ?? null;
+}
+
+/**
+ * Visible products whose manufacturer slugifies to `slug`, featured first.
+ * Filtered in memory rather than by `manufacturer = name` so spelling variants
+ * land on the same page; the visible catalogue is small enough for that.
+ * withPublicPrice() is applied inside the cache boundary — see getProductBySlug.
+ */
+export const getProductsByBrand = unstable_cache(
+  async (slug: string) => {
+    if (!prisma) throw new DatabaseUnavailableError();
+    const products = await prisma.product.findMany({
+      where: { ...publicProductWhere, manufacturer: { not: null } },
+      orderBy: [{ isFeatured: "desc" }, { name: "asc" }],
+      select: { ...LISTING_PRODUCT_SELECT, category: { select: { name: true, slug: true } } },
+    });
+    return products
+      .filter((product) => slugify(product.manufacturer ?? "") === slug)
+      .map(withPublicPrice);
+  },
+  ["public-products-by-brand"],
+  { tags: [PRODUCTS_TAG, CATEGORIES_TAG], revalidate: ONE_HOUR }
+);
+
+/** Slugs of every brand page, for generateStaticParams. Returns [] if the database is down (see getPublicProductSlugs). */
+export async function getPublicBrandSlugs(): Promise<string[]> {
+  try {
+    const brands = await getPublicBrands();
+    return brands.map((brand) => brand.slug);
   } catch {
     return [];
   }

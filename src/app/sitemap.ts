@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getSitemapEntries } from "@/lib/publicData";
+import { getPublicBrands, getSitemapEntries } from "@/lib/publicData";
 
 const BASE_URL = "https://www.mpmedpharma.com";
 
@@ -12,6 +12,7 @@ const STATIC_ROUTES: { path: string; changeFrequency: MetadataRoute.Sitemap[numb
   { path: "", changeFrequency: "weekly", priority: 1 },
   { path: "/products", changeFrequency: "daily", priority: 0.9 },
   { path: "/categories", changeFrequency: "weekly", priority: 0.8 },
+  { path: "/brands", changeFrequency: "weekly", priority: 0.8 },
   { path: "/about", changeFrequency: "monthly", priority: 0.6 },
   { path: "/contact", changeFrequency: "monthly", priority: 0.6 },
   { path: "/faq", changeFrequency: "monthly", priority: 0.5 },
@@ -23,7 +24,7 @@ const STATIC_ROUTES: { path: string; changeFrequency: MetadataRoute.Sitemap[numb
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const { categories, products } = await getSitemapEntries();
+  const [{ categories, products }, brands] = await Promise.all([getSitemapEntries(), getPublicBrands()]);
 
   const staticEntries: MetadataRoute.Sitemap = STATIC_ROUTES.map((route) => ({
     url: `${BASE_URL}${route.path}`,
@@ -51,5 +52,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       : {}),
   }));
 
-  return [...staticEntries, ...categoryEntries, ...productEntries];
+  const brandEntries: MetadataRoute.Sitemap = brands.map((brand) => ({
+    url: `${BASE_URL}/brands/${brand.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly",
+    priority: 0.7,
+  }));
+
+  return [...staticEntries, ...categoryEntries, ...brandEntries, ...productEntries];
 }

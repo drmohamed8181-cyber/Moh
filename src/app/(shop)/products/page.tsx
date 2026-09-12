@@ -18,8 +18,9 @@ import {
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
-  title: "All Products",
-  description: "Browse our complete range of premium medical equipment.",
+  title: "All Ophthalmic Equipment for Sale – New & Refurbished",
+  description:
+    "Browse every ophthalmic laser, phaco system, OCT, slit lamp and surgical microscope in stock at MP MedPharma. New and certified refurbished, with warranty. Request a quote or a private demo.",
   alternates: { canonical: "/products" },
 };
 

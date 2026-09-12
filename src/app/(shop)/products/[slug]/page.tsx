@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
 import { getProductBySlug, getRelatedProducts, getPublicProductSlugs } from "@/lib/publicData";
 import { jsonLdScript } from "@/lib/jsonLd";
+import { productDescription, productTitle } from "@/lib/seo";
 import ProductDetail from "@/components/product/ProductDetail";
 import ProductCard from "@/components/product/ProductCard";
 
@@ -28,8 +29,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
   if (!product || HIDDEN_CATEGORY_SLUGS.includes(product.category.slug)) notFound();
-  const title = product.seoTitle ?? product.name;
-  const description = product.seoDesc ?? product.shortDesc ?? undefined;
+  // Brand + model + purchase intent, not the bare product name — see src/lib/seo.ts.
+  const title = productTitle(product);
+  const description = productDescription(product);
   const image = product.images[0]
     ? product.images[0].startsWith("http")
       ? product.images[0]
