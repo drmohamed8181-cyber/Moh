@@ -9,6 +9,7 @@ import {
 } from "@/lib/publicData";
 import { jsonLdScript } from "@/lib/jsonLd";
 import { categoryDescription, categoryTitle } from "@/lib/seo";
+import { getCategoryContent } from "@/content/categoryContent";
 import ProductCard from "@/components/product/ProductCard";
 import { ChevronRight } from "lucide-react";
 
@@ -38,7 +39,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   // Same cached read the page body makes, so this costs nothing extra.
   const products = await getProductsInCategory(slug).catch(() => []);
   const name = categoryTitle(cat);
-  const description = categoryDescription(cat, products.length);
+  const description = categoryDescription({ ...cat, summary: getCategoryContent(slug)?.summary }, products.length);
   const rawImage = cat.image;
   const image = rawImage
     ? rawImage.startsWith("http")
@@ -78,6 +79,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
 
   // Already stripped of confidential pricing inside the cache boundary.
   const products = dbProducts ?? [];
+  const content = getCategoryContent(slug);
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
@@ -121,7 +123,11 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
             <span className="text-white">{category.name}</span>
           </nav>
           <h1 className="text-4xl font-bold mb-2">{category.name}</h1>
-          {category.description && <p className="text-blue-100 text-lg">{category.description}</p>}
+          {/* The editorial summary says more than the database one-liner; fall
+              back to whatever the admin has entered when there is no entry. */}
+          {(content?.summary ?? category.description) && (
+            <p className="text-blue-100 text-lg max-w-3xl">{content?.summary ?? category.description}</p>
+          )}
           <p className="text-blue-200 text-sm mt-3">{products.length} product{products.length !== 1 ? "s" : ""} available</p>
         </div>
       </div>
@@ -140,6 +146,45 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
+        )}
+
+        {content && (
+          <section className="mt-14 pt-10 border-t border-gray-200 max-w-3xl">
+            {/* Not lowercased: the catalogue is full of acronyms, and
+                "Choosing slt lasers" reads as a mistake. */}
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Choosing {category.name}</h2>
+            {content.sections.map((section) => (
+              <div key={section.heading} className="mb-8">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">{section.heading}</h3>
+                {section.paragraphs.map((paragraph) => (
+                  <p key={paragraph.slice(0, 40)} className="text-gray-700 leading-relaxed mb-3">
+                    {paragraph}
+                  </p>
+                ))}
+                {section.bullets && (
+                  <ul className="list-disc pl-6 space-y-2 text-gray-700 mt-3">
+                    {section.bullets.map((bullet) => (
+                      <li key={bullet.slice(0, 40)}>{bullet}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+            <div className="flex flex-wrap gap-3 mt-8">
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition-colors"
+              >
+                Request a quote or a demo
+              </Link>
+              <Link
+                href="/guides"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-white text-gray-800 font-semibold rounded-xl border border-gray-200 hover:border-primary-300 hover:text-primary-600 transition-colors"
+              >
+                Read the buying guides
+              </Link>
+            </div>
+          </section>
         )}
       </div>
     </div>
