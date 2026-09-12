@@ -32,10 +32,17 @@ type SeoProduct = {
   name: string;
   manufacturer?: string | null;
   shortDesc?: string | null;
+  description?: string | null;
   seoTitle?: string | null;
   seoDesc?: string | null;
   category?: { name: string } | null;
 };
+
+/** First sentence of `text`, or the whole thing if it has no sentence break. */
+function firstSentence(text: string): string {
+  const match = text.replace(/\s+/g, " ").trim().match(/^.*?[.!?](?=\s|$)/);
+  return match ? match[0] : text.trim();
+}
 
 /**
  * "Alcon Centurion Vision System" — the product name with the manufacturer in
@@ -64,7 +71,13 @@ export function productDescription(product: SeoProduct): string {
   // Category names keep their casing: "OCT & Imaging" must not become "oct & imaging".
   const category = product.category?.name?.trim();
   const suffix = ` From ${SITE_NAME}, US supplier of new & refurbished ${category ?? "ophthalmic equipment"}. Request pricing or a demo.`;
-  const core = product.shortDesc?.trim() || `${productDisplayName(product)}.`;
+  // Prefer the short description, then the opening sentence of the full one
+  // (every catalogue product has one via src/content/productContent.ts), and
+  // only fall back to restating the product name when neither exists.
+  const core =
+    product.shortDesc?.trim() ||
+    (product.description?.trim() ? firstSentence(product.description) : "") ||
+    `${productDisplayName(product)}.`;
   // The product's own words come first and are never cut below a readable
   // length; a snippet that runs a little past the budget is better than one
   // that trails off mid-phrase.

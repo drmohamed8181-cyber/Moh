@@ -32,6 +32,7 @@ import { prisma } from "@/lib/prisma";
 import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
 import { slugify } from "@/lib/utils";
+import { withEditorialContent } from "@/content/productContent";
 
 export const PRODUCTS_TAG = "products";
 export const CATEGORIES_TAG = "categories";
@@ -85,6 +86,12 @@ export async function getSiteSettings(): Promise<Record<string, string>> {
  * on disk, for every product including unpublished ones. Stripping it here means
  * the confidential value never enters the cache at all.
  *
+ * withEditorialContent() fills description/features/indications/specifications
+ * from src/content/productContent.ts when the database leaves them empty, so a
+ * product page always has text of its own. Admin-entered copy always wins; see
+ * that file. It runs inside the cache boundary too, so the merge happens once
+ * per cache entry rather than on every request.
+ *
  * Tagged with CATEGORIES_TAG as well as PRODUCTS_TAG because the payload embeds
  * the whole category row — renaming a category must invalidate these entries.
  */
@@ -95,7 +102,7 @@ export const getProductBySlug = unstable_cache(
       where: { slug },
       select: { ...LISTING_PRODUCT_SELECT, category: true },
     });
-    return product ? withPublicPrice(product) : null;
+    return product ? withEditorialContent(withPublicPrice(product)) : null;
   },
   ["public-product-by-slug"],
   { tags: [PRODUCTS_TAG, CATEGORIES_TAG], revalidate: ONE_HOUR }

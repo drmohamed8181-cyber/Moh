@@ -56,22 +56,22 @@ Nobody searches "premium medical equipment". They search
 `ellex tango slt yag refurbished`. The code now builds titles that way
 automatically, but the page still needs real text to rank.
 
-**Done for you:** `src/content/productContent.ts` holds a written description,
-feature list, indications and the safe specifications for every model in the
-catalogue (Alcon, Zeiss, Ellex, Iridex, Lumenis, J&J Vision, Bausch + Lomb,
-Ziemer, Endo Optiks, CSO). Load it into the live database once:
+**Done for you, and already live:** `src/content/productContent.ts` holds a
+written description, feature list, indications and the safe specifications for
+every model in the catalogue (Alcon, Zeiss, Ellex, Iridex, Lumenis, J&J Vision,
+Bausch + Lomb, Ziemer, Endo Optiks, CSO). Each product page uses it to fill any
+field left empty in the database, so nothing needs to be run and no product
+page says "No description available" any more. Anything you type in the admin
+always wins over it.
+
+If you would rather have the text sitting in the database where you can edit it
+in the admin, write it there once. This changes nothing a visitor sees:
 
 ```bash
 # from a machine with the production DATABASE_URL in .env.local
 npm run content:apply            # dry run: shows which products match
 npm run content:apply -- --apply # writes it; only empty fields are filled
 ```
-
-It never overwrites text you typed in the admin unless you add `--overwrite`.
-The public pages show the new text within an hour, or immediately after you
-save any product in the admin.
-Products it reports as unmatched need an entry in that file or text in the
-admin.
 
 Then, per product in `/admin/products`, improve on it where you know more:
 - **Full Description**: 150–300 words in your own words. Who uses it, what

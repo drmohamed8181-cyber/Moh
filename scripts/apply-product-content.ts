@@ -4,6 +4,10 @@
 //   npm run content:apply -- --apply writes it
 //   npm run content:apply -- --apply --overwrite   also replaces existing text
 //
+// Running this is OPTIONAL. The same content already reaches the public pages
+// as a fallback (see withEditorialContent in src/content/productContent.ts);
+// writing it to the database only makes the text editable in the admin.
+//
 // By default only empty fields are filled, so copy written by hand in the
 // admin is never lost. Writes go straight to the database, bypassing the
 // admin API's cache invalidation, and the Data Cache persists across deploys,
@@ -11,18 +15,11 @@
 // immediately after any product is saved in the admin (that expires the
 // products tag for the whole catalogue).
 import { PrismaClient, Prisma } from "@prisma/client";
-import { PRODUCT_CONTENT, type ProductContent } from "../src/content/productContent";
+import { findProductContent } from "../src/content/productContent";
 
 const args = new Set(process.argv.slice(2));
 const APPLY = args.has("--apply");
 const OVERWRITE = args.has("--overwrite");
-
-const normalise = (text: string) => text.toLowerCase().replace(/[^a-z0-9]/g, "");
-
-function findContent(name: string): ProductContent | undefined {
-  const key = normalise(name);
-  return PRODUCT_CONTENT.find((entry) => entry.match.every((keyword) => key.includes(normalise(keyword))));
-}
 
 const isEmptyJson = (value: Prisma.JsonValue | null) =>
   value == null || (typeof value === "object" && !Array.isArray(value) && Object.keys(value).length === 0);
@@ -40,7 +37,7 @@ async function main() {
     const unmatched: string[] = [];
 
     for (const product of products) {
-      const content = findContent(product.name);
+      const content = findProductContent(product.name);
       if (!content) {
         unmatched.push(product.name);
         continue;
