@@ -1,11 +1,19 @@
-// Editorial content for the catalogue, applied to the live database by
-// `npm run content:apply` (scripts/apply-product-content.ts).
+// Editorial content for the catalogue.
 //
 // Why a file and not the admin form: the admin form is one product at a time,
 // and most product pages were shipping with "No description available." A
 // page with no text of its own cannot rank for the model name buyers search,
 // however good its title is. This file is the whole catalogue's copy in one
 // place, matched to products by model keywords so it survives renames.
+//
+// It reaches the public pages two ways, and needs neither to be set up:
+//
+//   1. Automatically, as a fallback. withEditorialContent() below fills any
+//      field the database leaves empty, so deploying this file is enough for
+//      every product page to have text. Anything typed in the admin wins.
+//   2. Optionally, written into the database by `npm run content:apply`
+//      (scripts/apply-product-content.ts), which makes the text editable in
+//      the admin. Running it changes nothing a visitor sees.
 //
 // Rules for the copy: describe the device class, what it is used for and what
 // a buyer should check; state only widely documented facts; keep exact
@@ -305,3 +313,46 @@ export const PRODUCT_CONTENT: ProductContent[] = [
     indications: ["Anterior segment examination", "Contact-lens fitting", "Fundus examination with auxiliary lenses"],
   },
 ];
+
+const normalise = (text: string) => text.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+/**
+ * The entry whose every keyword appears in `name`, or undefined. Both sides are
+ * reduced to lowercase alphanumerics first, so "IQ 810" matches "IQ-810".
+ */
+export function findProductContent(name: string): ProductContent | undefined {
+  const key = normalise(name);
+  return PRODUCT_CONTENT.find((entry) => entry.match.every((keyword) => key.includes(normalise(keyword))));
+}
+
+type Fillable = {
+  name: string;
+  description?: string | null;
+  features?: string[];
+  indications?: string[];
+  specifications?: unknown;
+};
+
+/**
+ * Fills empty editorial fields from PRODUCT_CONTENT, leaving anything the admin
+ * has written untouched. Specification rows are merged, with the database's own
+ * rows taking precedence over the generic ones here: a per-unit serial number
+ * or configuration must never be overwritten by a model-level default.
+ */
+export function withEditorialContent<T extends Fillable>(product: T): T {
+  const content = findProductContent(product.name);
+  if (!content) return product;
+
+  const specifications = product.specifications as Record<string, string> | null | undefined;
+  const hasSpecifications = specifications != null && Object.keys(specifications).length > 0;
+
+  return {
+    ...product,
+    description: product.description?.trim() ? product.description : content.description,
+    features: product.features && product.features.length > 0 ? product.features : content.features ?? [],
+    indications: product.indications && product.indications.length > 0 ? product.indications : content.indications ?? [],
+    specifications: content.specifications
+      ? { ...content.specifications, ...(hasSpecifications ? specifications : {}) }
+      : product.specifications,
+  };
+}
