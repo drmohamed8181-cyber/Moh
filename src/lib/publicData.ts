@@ -31,7 +31,7 @@ import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
-import { slugify } from "@/lib/utils";
+import { canonicalBrand } from "@/lib/brands";
 import { withEditorialContent } from "@/content/productContent";
 
 export const PRODUCTS_TAG = "products";
@@ -239,8 +239,10 @@ export async function getPublicProductSlugs(): Promise<string[]> {
 // There is no Brand table: the manufacturer is a free-text field on Product.
 // The brand pages are derived from it so that "Alcon", "Zeiss", "Ellex" each
 // get one crawlable, intent-matching landing page without a schema change.
-// Two spellings that slugify to the same thing ("Bausch + Lomb", "Bausch & Lomb")
-// collapse into one page; the first spelling seen becomes its display name.
+//
+// Every spelling of a company folds onto one page, and which page that is comes
+// from canonicalBrand() in src/lib/brands.ts rather than from the spelling that
+// happens to be read first.
 // ---------------------------------------------------------------------------
 
 export type PublicBrand = { name: string; slug: string; productCount: number };
@@ -261,13 +263,11 @@ export const getPublicBrands = unstable_cache(
     });
     const bySlug = new Map<string, PublicBrand>();
     for (const row of rows) {
-      const name = row.manufacturer?.trim();
-      if (!name) continue;
-      const slug = slugify(name);
-      if (!slug) continue;
-      const existing = bySlug.get(slug);
+      const brand = canonicalBrand(row.manufacturer);
+      if (!brand) continue;
+      const existing = bySlug.get(brand.slug);
       if (existing) existing.productCount += row._count._all;
-      else bySlug.set(slug, { name, slug, productCount: row._count._all });
+      else bySlug.set(brand.slug, { ...brand, productCount: row._count._all });
     }
     return [...bySlug.values()].sort((a, b) => a.name.localeCompare(b.name));
   },
@@ -282,9 +282,9 @@ export async function getBrandBySlug(slug: string): Promise<PublicBrand | null> 
 }
 
 /**
- * Visible products whose manufacturer slugifies to `slug`, featured first.
- * Filtered in memory rather than by `manufacturer = name` so spelling variants
- * land on the same page; the visible catalogue is small enough for that.
+ * Visible products belonging to the brand `slug`, featured first. Filtered in
+ * memory rather than by `manufacturer = name` because one brand covers several
+ * spellings; the visible catalogue is small enough for that.
  * withPublicPrice() is applied inside the cache boundary — see getProductBySlug.
  */
 export const getProductsByBrand = unstable_cache(
@@ -296,7 +296,7 @@ export const getProductsByBrand = unstable_cache(
       select: { ...LISTING_PRODUCT_SELECT, category: { select: { name: true, slug: true } } },
     });
     return products
-      .filter((product) => slugify(product.manufacturer ?? "") === slug)
+      .filter((product) => canonicalBrand(product.manufacturer)?.slug === slug)
       .map(withPublicPrice);
   },
   ["public-products-by-brand"],
