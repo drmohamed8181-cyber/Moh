@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import type { PublicBrand } from "@/lib/publicData";
+import { GUIDES } from "@/content/guides";
 
 // Server-rendered copy for the homepage. The hero slides and their headline
 // come from the database and change with campaigns; this block is the stable,
@@ -63,6 +64,22 @@ export default function HomeIntro({ brands }: { brands: PublicBrand[] }) {
               )}
               <Link href="/brands" className="inline-flex items-center gap-1.5 mt-5 text-sm font-semibold text-primary-600 hover:underline">
                 All brands <ArrowRight size={14} />
+              </Link>
+            </div>
+
+            <div className="mt-6 bg-slate-50 rounded-2xl border border-slate-100 p-6">
+              <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Buying Guides</h3>
+              <ul className="space-y-2.5">
+                {GUIDES.slice(0, 3).map((guide) => (
+                  <li key={guide.slug}>
+                    <Link href={`/guides/${guide.slug}`} className="text-sm text-slate-700 hover:text-primary-600 transition-colors">
+                      {guide.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <Link href="/guides" className="inline-flex items-center gap-1.5 mt-5 text-sm font-semibold text-primary-600 hover:underline">
+                All guides <ArrowRight size={14} />
               </Link>
             </div>
           </div>

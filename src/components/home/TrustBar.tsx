@@ -1,11 +1,13 @@
 import { Shield, Truck, RotateCcw, Headphones, Award } from "lucide-react";
 
+// Claims here must match what the rest of the site says; see the note on
+// trustFeatures in src/app/(shop)/page.tsx.
 const items = [
-  { icon: Shield, title: "Certified Quality", desc: "ISO & FDA Approved" },
-  { icon: Truck, title: "Fast Shipping", desc: "2–5 Business Days" },
-  { icon: RotateCcw, title: "Easy Returns", desc: "30-Day Return Policy" },
-  { icon: Headphones, title: "24/7 Support", desc: "Technical Assistance" },
-  { icon: Award, title: "Warranty", desc: "Up to 2 Years Warranty" },
+  { icon: Award, title: "Since 2009", desc: "Ophthalmic & surgical equipment" },
+  { icon: Shield, title: "Service History", desc: "Documented on every unit" },
+  { icon: RotateCcw, title: "Warranty", desc: "New & certified refurbished" },
+  { icon: Headphones, title: "Private Demos", desc: "Before you buy" },
+  { icon: Truck, title: "We Buy Equipment", desc: "Transparent valuations" },
 ];
 
 export default function TrustBar() {

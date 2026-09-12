@@ -3,6 +3,7 @@ import Link from "next/link";
 import { safeDb } from "@/lib/prisma";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
 import { getPublicBrands } from "@/lib/publicData";
+import { GUIDES } from "@/content/guides";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -37,6 +38,13 @@ export default async function SitemapPage() {
       links: [
         { label: "About Us", href: "/about" },
         { label: "Contact", href: "/contact" },
+      ],
+    },
+    {
+      title: "Buying Guides",
+      links: [
+        { label: "All Guides", href: "/guides" },
+        ...GUIDES.map((guide) => ({ label: guide.title, href: `/guides/${guide.slug}` })),
       ],
     },
     {
