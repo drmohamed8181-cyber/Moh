@@ -5,7 +5,7 @@ export const DENTAL_CATEGORY_SLUGS = ["dental-lasers", "dental-chairs"];
 
 export const SPECIALTIES: { slug: string; name: string; comingSoon?: boolean }[] = [
   { slug: "ophthalmology", name: "Ophthalmology" },
-  { slug: "dental", name: "Dental", comingSoon: true },
+  { slug: "dental", name: "Dental" },
   { slug: "dermatology", name: "Dermatology", comingSoon: true },
 ];
 
@@ -13,13 +13,12 @@ export const SPECIALTIES: { slug: string; name: string; comingSoon?: boolean }[]
 // Still fully manageable in admin.
 //
 // The two lists can diverge (a dental category can be public while another
-// dental category is withheld). Right now both dental lines are withheld and
-// the Dental specialty shows as coming soon: the laser line until its
-// distributor agreement is signed, the chair line until Dr. Mohamed releases
-// it. Adding a slug here is all it takes to pull a category off the homepage,
-// the product and category listings, search, its direct URLs, the public
-// products API, the XML sitemap and the digest email.
-export const HIDDEN_CATEGORY_SLUGS = ["dental-lasers", "dental-chairs"];
+// dental category is withheld), and right now they do: Dental is live with the
+// chair line, while the laser line stays back until its distributor agreement
+// is signed. Adding a slug here is all it takes to pull a category off the
+// homepage, the product and category listings, search, its direct URLs, the
+// public products API, the XML sitemap and the digest email.
+export const HIDDEN_CATEGORY_SLUGS = ["dental-lasers"];
 
 // Dental categories a visitor can actually reach — what the Dental specialty
 // filter resolves to.
