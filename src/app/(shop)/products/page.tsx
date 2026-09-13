@@ -25,9 +25,13 @@ export const dynamic = "force-dynamic";
 
 const ITEMS_PER_PAGE = 12;
 
-const LISTING_TITLE = "All Ophthalmic Equipment for Sale – New & Refurbished";
+// Kept "Ophthalmic" in front because that is the term the catalogue ranks on,
+// but the listing stopped being ophthalmic-only when the dental chair line was
+// released: a page titled "All Ophthalmic Equipment" that returns dental chairs
+// misdescribes itself to both buyers and crawlers.
+const LISTING_TITLE = "All Ophthalmic & Dental Equipment for Sale – New & Refurbished";
 const LISTING_DESCRIPTION =
-  "Browse every ophthalmic laser, phaco system, OCT, slit lamp and surgical microscope in stock at MP MedPharma. New and certified refurbished, with warranty. Request a quote or a private demo.";
+  "Browse every ophthalmic laser, phaco system, OCT, slit lamp and surgical microscope in stock at MP MedPharma, plus our integrated dental chair units. New and certified refurbished, with warranty. Request a quote or a private demo.";
 
 /**
  * Canonical for the listing.
