@@ -70,7 +70,9 @@ export function productDescription(product: SeoProduct): string {
   if (product.seoDesc?.trim()) return product.seoDesc.trim();
   // Category names keep their casing: "OCT & Imaging" must not become "oct & imaging".
   const category = product.category?.name?.trim();
-  const suffix = ` From ${SITE_NAME}, US supplier of new & refurbished ${category ?? "ophthalmic equipment"}. Request pricing.`;
+  // The fallback is deliberately unspecialised: it only applies to a product
+  // with no category, and the catalogue is no longer ophthalmic-only.
+  const suffix = ` From ${SITE_NAME}, US supplier of new & refurbished ${category ?? "medical equipment"}. Request pricing.`;
   // Prefer the short description, then the opening sentence of the full one
   // (every catalogue product has one via src/content/productContent.ts), and
   // only fall back to restating the product name when neither exists.
@@ -117,7 +119,7 @@ export function brandTitle(brand: SeoBrand): string {
 
 /** Meta description for a brand page. `categories` are the category names the brand's products fall under. */
 export function brandDescription(brand: SeoBrand, categories: string[]): string {
-  const what = categories.length > 0 ? categories.slice(0, 4).join(", ") : "ophthalmic equipment";
+  const what = categories.length > 0 ? categories.slice(0, 4).join(", ") : "medical equipment";
   return truncate(
     `${brand.name} ${what} for sale at ${SITE_NAME}: ${brand.productCount} new and certified refurbished ${
       brand.productCount === 1 ? "unit" : "units"

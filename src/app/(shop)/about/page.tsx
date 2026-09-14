@@ -6,7 +6,7 @@ import TrustBar from "@/components/home/TrustBar";
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "MP MedPharma is a New Jersey, USA based supplier of new and certified refurbished ophthalmic and surgical equipment, serving hospitals and eye clinics since 2009 with warranty on every unit.",
+    "MP MedPharma is a New Jersey, USA based supplier of new and certified refurbished ophthalmic, surgical and dental equipment, serving hospitals and eye clinics since 2009 with warranty on every unit.",
   alternates: { canonical: "/about" },
 };
 

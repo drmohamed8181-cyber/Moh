@@ -17,15 +17,18 @@ const stats = [
 ];
 
 const points = [
-  "New and certified refurbished ophthalmic & surgical equipment",
+  "New and certified refurbished ophthalmic, surgical & dental equipment",
   "Documented service history and warranty on every unit",
   "White-glove delivery, installation and clinical training",
   "Fair, transparent offers on the equipment you are replacing",
 ];
 
 export default function AboutSection({
-  title = "Your Trusted Partner in Ophthalmic & Surgical Equipment",
-  description = "MP MedPharma has supplied hospitals and eye clinics since 2009 with new and certified refurbished ophthalmic and surgical equipment: phaco and vitrectomy systems, refractive, retina and glaucoma lasers, OCT and imaging, slit lamps and surgical microscopes. Every unit comes with documented service history and warranty coverage.",
+  title = "Your Trusted Partner in Ophthalmic, Surgical & Dental Equipment",
+  // The 2009 date belongs to the eye care line and stays attached to it: the
+  // dental range is new, and a sentence that reads as fifteen years of dental
+  // supply would be untrue.
+  description = "MP MedPharma has supplied hospitals and eye clinics since 2009 with new and certified refurbished ophthalmic and surgical equipment: phaco and vitrectomy systems, refractive, retina and glaucoma lasers, OCT and imaging, slit lamps and surgical microscopes. The catalogue now also carries integrated dental chair units for general and paediatric practice. Every unit comes with documented service history and warranty coverage.",
   image = "https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=700&q=80",
 }: AboutSectionProps) {
   return (

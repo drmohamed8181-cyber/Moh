@@ -18,11 +18,16 @@ const cormorant = Cormorant_Garamond({
 // They name what the business actually sells and the words buyers search for
 // ("refurbished", "ophthalmic", the device classes) rather than the generic
 // "premium medical equipment" the template shipped with.
-const DEFAULT_TITLE = "New & Refurbished Ophthalmic Equipment – Lasers, Phaco, OCT | MP MedPharma";
+//
+// Ophthalmic stays in front: it is the established line, it carries the
+// catalogue's search history, and dental is one category against eleven. The
+// title is shorter than the version that led with device classes because that
+// one ran past what Google displays and was being truncated anyway.
+const DEFAULT_TITLE = "New & Refurbished Ophthalmic & Dental Equipment | MP MedPharma";
 const DEFAULT_DESCRIPTION =
-  "New and certified refurbished ophthalmic equipment from a US supplier: excimer, femtosecond, SLT and YAG lasers, phaco systems, OCT and surgical microscopes from Alcon, Zeiss, Ellex, Lumenis and Iridex. Warranty on every unit.";
+  "New and certified refurbished ophthalmic equipment from a US supplier: excimer, femtosecond, SLT and YAG lasers, phaco systems, OCT and surgical microscopes from Alcon, Zeiss, Ellex, Lumenis and Iridex — plus integrated dental chair units. Warranty on every unit.";
 const DEFAULT_KEYWORDS =
-  "refurbished ophthalmic equipment, used ophthalmic lasers, phaco machine for sale, OCT for sale, excimer laser for sale, SLT YAG laser, ophthalmic equipment supplier USA, MP MedPharma";
+  "refurbished ophthalmic equipment, used ophthalmic lasers, phaco machine for sale, OCT for sale, excimer laser for sale, SLT YAG laser, dental chair unit for sale, dental operatory equipment, ophthalmic equipment supplier USA, MP MedPharma";
 
 // Address shown in the footer/contact defaults, mirrored here so the
 // Organization markup carries a location. Search engines treat a business
