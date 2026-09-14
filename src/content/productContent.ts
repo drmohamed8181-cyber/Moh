@@ -38,6 +38,32 @@ const OFFER =
   "Available from MP MedPharma as a new or certified refurbished unit with documented service history and warranty coverage. Pricing is quoted per unit according to configuration, included accessories and condition.";
 
 export const PRODUCT_CONTENT: ProductContent[] = [
+  // ------------------------------------------------------- Dental chair units
+  //
+  // These products already carry their description, features and specifications
+  // in the database, so in practice only `indications` is filled from here —
+  // withEditorialContent() leaves populated fields alone. The paediatric entry
+  // must stay above the general one: the first match wins, and the paediatric
+  // unit's name also contains "dental chair unit".
+  {
+    match: ["paediatricdentalchair"],
+    description: `A dental chair unit scaled and finished for children, for paediatric practice and child-friendly clinic workflows. The colourful styling is the point rather than decoration: an operatory that does not read as clinical measurably shortens the settling time at the start of an appointment with an anxious child.\n\n${OFFER}`,
+    indications: [
+      "Paediatric examination and restorative treatment",
+      "Preventive and fluoride treatment for children",
+      "Child-friendly operatories in general and specialist practice",
+    ],
+  },
+  {
+    match: ["dentalchairunit"],
+    description: `An integrated dental chair unit: the patient chair, delivery system, operating light, spittoon and assistant side supplied and installed as one platform for routine chair-side treatment.\n\nDelivery style is the specification that shapes daily work, since it is designed into the chassis rather than added later. Confirm handedness, the electrical supply and safety listing required where you practise, whether you are on central compressed air and suction, and exactly which tubings, syringes and accessories a quoted price includes. ${OFFER}`,
+    indications: [
+      "Routine dental examination and diagnosis",
+      "Restorative and prosthetic chair-side treatment",
+      "Four-handed dentistry with an assistant",
+      "General and specialist practice, hospital dentistry and training rooms",
+    ],
+  },
   // ---------------------------------------------------------------- Alcon
   {
     match: ["centurion"],

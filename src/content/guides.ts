@@ -230,6 +230,75 @@ export const GUIDES: Guide[] = [
       { label: "Contact us", href: "/contact" },
     ],
   },
+  {
+    slug: "how-to-choose-a-dental-chair-unit",
+    title: "How to Choose a Dental Chair Unit: A Practice Owner's Guide",
+    description:
+      "Delivery style, ergonomics, plumbing and electrical requirements, what is really included in a quoted price, and the questions to settle before a dental chair unit ships.",
+    publishedAt: "2026-09-14",
+    intro:
+      "A dental chair unit is the one purchase every appointment in the room depends on, and it stays for a decade or more. Most of the regret in this category comes not from picking the wrong brand but from settling the configuration questions too late. This guide covers the decisions in the order you should make them.",
+    sections: [
+      {
+        heading: "Start with delivery style, not with the chair",
+        paragraphs: [
+          "The patient chairs across this market are more alike than different. What changes how the room works is the delivery system — where the handpieces are presented to the operator — and that is designed into the chassis rather than bolted on afterwards.",
+          "Over-the-patient delivery puts instruments directly in reach and suits four-handed dentistry with a nurse. Side or swing-mounted delivery keeps the space in front of the patient open, which matters for anxious adults and for children who dislike equipment moving across their face. Cart-mounted delivery can be wheeled between rooms, which is the right answer for a practice still settling its layout or sharing equipment across surgeries.",
+          "Decide this against how your team actually works today. Retrofitting a different delivery style usually means a different unit.",
+        ],
+      },
+      {
+        heading: "The two measurements that decide comfort",
+        paragraphs: [
+          "Lowest seat height governs access. It determines whether an elderly patient, a wheelchair transfer or a small child can get into the chair without help, and it is the specification most often skipped in a brochure comparison.",
+          "Backrest thickness governs the operator. A slim backrest lets you bring your knees under the patient's head and work from a neutral seated posture; a thick one pushes you outward and into the reaching and twisting that accumulates into back and shoulder problems over a career. If you can see a unit in person, sit at it in your normal working position before looking at anything else.",
+        ],
+      },
+      {
+        heading: "Settle the services before you order",
+        paragraphs: [
+          "Installation problems are nearly always plumbing and electrical, and nearly always predictable.",
+        ],
+        bullets: [
+          "Confirm the voltage, frequency, plug standard and the safety listing required where you practise. On imported equipment, get this in writing before ordering rather than discovering it at commissioning.",
+          "Establish whether you are connecting to a central compressor and suction plant or need a self-contained bottle water supply and suction pump.",
+          "Check the floor: box-mounted units need the service outlet positioned before the unit arrives, and moving it later means cutting the floor.",
+          "Ask what commissioning includes, who performs it, and whether the price quoted is delivered and installed or delivered only.",
+        ],
+      },
+      {
+        heading: "Read what the quoted price actually contains",
+        paragraphs: [
+          "Two quotes for the same unit routinely differ by a wide margin because of what sits underneath the headline figure. The items most often excluded are the ones you cannot work without.",
+        ],
+        bullets: [
+          "Handpiece tubings, and how many of each type.",
+          "Three-way syringes, and whether they are heated.",
+          "Scaler, curing light and intraoral camera — frequently listed as options.",
+          "The operator's and assistant's stools.",
+          "Shipping, customs handling, installation and the first service visit.",
+        ],
+      },
+      {
+        heading: "Warranty, parts and the long view",
+        paragraphs: [
+          "A chair unit is a ten-to-fifteen-year purchase, so the supply of parts matters more than the opening price. Ask how spare parts are ordered, what the typical lead time is, and who attends when the unit stops working. A cheaper unit that takes three weeks to get an upholstery panel or a control board for is not cheaper.",
+          "Ask about upholstery separately. It is the first thing to wear, it is replaced at least once in the life of the chair, and whether a replacement set can still be bought in year eight tells you a lot about how long the platform will be supported.",
+        ],
+      },
+      {
+        heading: "How MP MedPharma handles it",
+        paragraphs: [
+          "Our dental chair units are new and are quoted per unit according to configuration, delivery style and the accessories you need, so the quote reflects the room rather than a list price. Tell us how your team works and how the surgery is plumbed and we will specify against that. Warranty coverage applies to every unit we supply.",
+        ],
+      },
+    ],
+    related: [
+      { label: "Browse dental chair units", href: "/categories/dental-chairs" },
+      { label: "All equipment", href: "/products" },
+      { label: "Contact us", href: "/contact" },
+    ],
+  },
 ];
 
 export function getGuide(slug: string): Guide | undefined {

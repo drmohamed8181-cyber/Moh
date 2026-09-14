@@ -31,6 +31,49 @@ const WARRANTY_NOTE =
 
 export const CATEGORY_CONTENT: CategoryContent[] = [
   {
+    slug: "dental-chairs",
+    summary:
+      "Integrated dental chair units for general, paediatric and multi-chair practice: the patient chair, delivery system, operating light, spittoon and assistant side supplied and installed as one platform.",
+    sections: [
+      {
+        heading: "Delivery style is the decision you live with",
+        paragraphs: [
+          "An integrated unit bundles the patient chair with everything that hangs off it, and the choice that shapes daily work most is where the handpieces sit. Over-the-patient delivery puts instruments within the operator's immediate reach and suits four-handed dentistry. Side-mounted delivery keeps the approach to the patient clear and is usually preferred for nervous and paediatric patients. Cart-mounted delivery moves between rooms and is the flexible option for a practice that is still changing its layout.",
+          "Changing your mind later is not a simple swap. Delivery style is designed into the chassis and the plumbing, so specify it against how your team actually works rather than what looks tidiest in a brochure photograph.",
+        ],
+      },
+      {
+        heading: "Ergonomics for the patient and the operator",
+        paragraphs: [
+          "Two measurements do most of the work. The lowest seat height determines how easily elderly patients, wheelchair transfers and children get in and out. The backrest's thickness behind the patient's head determines how close the operator can bring their knees, which is what decides whether a long appointment is worked in a neutral posture or a twisted one.",
+          "Programmable chair positions matter more than they sound. Recalling a treatment position and a rinse position at one touch removes a repeated adjustment from every appointment, and over a full list that is time back rather than a convenience.",
+        ],
+      },
+      {
+        heading: "What to check before ordering",
+        paragraphs: [
+          "Most of what separates a good installation from a troublesome one is settled before the unit ships.",
+        ],
+        bullets: [
+          "Handedness: whether the unit converts between left- and right-handed working, and whether that needs parts or only an adjustment.",
+          "The electrical supply, plug standard and whether the unit carries the safety listing your jurisdiction requires. Confirm this in writing before ordering, particularly on imported equipment.",
+          "Water and suction: whether you are on a central compressor and suction plant or need a self-contained bottle and pump.",
+          "Upholstery: seamless, alcohol-tolerant material lasts longer under real disinfection routines than stitched panels.",
+          "Which handpiece tubings, syringes, scaler and curing light are actually included, since these are commonly quoted separately.",
+          "Installation and service: who commissions the unit, what the response time is, and how spare parts are obtained.",
+        ],
+      },
+      {
+        heading: "Buying for a paediatric room",
+        paragraphs: [
+          "A children's unit is not only a smaller chair. The point of the styling is to make the operatory feel unlike a clinical room, which measurably reduces anxiety in young patients and shortens the settling time at the start of an appointment.",
+          "Practices treating a mixed age range usually do better with one standard unit that reaches a genuinely low seat position than with a dedicated paediatric chair that sits idle between children's lists. A dedicated unit earns its room when paediatric work is a scheduled, recurring part of the week.",
+          WARRANTY_NOTE,
+        ],
+      },
+    ],
+  },
+  {
     slug: "surgical-microscopes",
     summary:
       "Ophthalmic surgical microscopes for cataract, retina, cornea and glaucoma procedures, from established platforms with apochromatic optics, coaxial red-reflex illumination and motorised focus, zoom and XY positioning.",
