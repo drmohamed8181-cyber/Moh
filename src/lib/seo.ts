@@ -70,7 +70,7 @@ export function productDescription(product: SeoProduct): string {
   if (product.seoDesc?.trim()) return product.seoDesc.trim();
   // Category names keep their casing: "OCT & Imaging" must not become "oct & imaging".
   const category = product.category?.name?.trim();
-  const suffix = ` From ${SITE_NAME}, US supplier of new & refurbished ${category ?? "ophthalmic equipment"}. Request pricing or a demo.`;
+  const suffix = ` From ${SITE_NAME}, US supplier of new & refurbished ${category ?? "ophthalmic equipment"}. Request pricing.`;
   // Prefer the short description, then the opening sentence of the full one
   // (every catalogue product has one via src/content/productContent.ts), and
   // only fall back to restating the product name when neither exists.
@@ -100,10 +100,10 @@ export function categoryDescription(category: SeoCategory, productCount?: number
     return truncate(`${category.summary.trim()} ${count}`, DESCRIPTION_BUDGET + 20);
   }
   if (category.description?.trim()) {
-    return truncate(`${category.description.trim()} ${count} Warranty on every unit — request a quote or a private demo.`, DESCRIPTION_BUDGET + 20);
+    return truncate(`${category.description.trim()} ${count} Warranty on every unit — request a quote.`, DESCRIPTION_BUDGET + 20);
   }
   return truncate(
-    `${category.name.trim()} from ${SITE_NAME}: new and certified refurbished units from leading manufacturers, each with warranty. ${count} Request a quote or a private demo.`,
+    `${category.name.trim()} from ${SITE_NAME}: new and certified refurbished units from leading manufacturers, each with warranty. ${count} Request a quote.`,
     DESCRIPTION_BUDGET + 20
   );
 }
@@ -121,7 +121,7 @@ export function brandDescription(brand: SeoBrand, categories: string[]): string 
   return truncate(
     `${brand.name} ${what} for sale at ${SITE_NAME}: ${brand.productCount} new and certified refurbished ${
       brand.productCount === 1 ? "unit" : "units"
-    } with warranty, from a US supplier. Request a quote or a private demo.`,
+    } with warranty, from a US supplier. Request a quote.`,
     DESCRIPTION_BUDGET + 20
   );
 }

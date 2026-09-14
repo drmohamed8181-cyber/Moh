@@ -37,7 +37,7 @@ export default function TermsPage() {
         <section>
           <h2 className="text-xl font-bold text-gray-900 mb-3">Orders &amp; Quotes</h2>
           <p className="text-gray-600 leading-relaxed">
-            Submitting an inquiry or demo request does not constitute a binding order. Orders are confirmed only
+            Submitting an inquiry does not constitute a binding order. Orders are confirmed only
             after a formal quote has been issued and accepted in writing by both parties.
           </p>
         </section>

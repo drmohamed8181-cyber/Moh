@@ -65,13 +65,12 @@ export const GUIDES: Guide[] = [
           "Who performed the calibration, and can I see the report?",
           "What does the warranty cover, for how long, and who services the unit locally?",
           "Are consumables, handpieces, footswitches and software licences included?",
-          "Can I see the unit running, in person or on a live video demo, before paying?",
         ],
       },
       {
         heading: "How MP MedPharma handles it",
         paragraphs: [
-          "Every unit we list ships with its documented service history and warranty coverage, and we arrange a private demo before purchase on request. Pricing is quoted per unit because condition, configuration and included accessories differ. If you are replacing equipment, we also make offers on the device you are retiring.",
+          "Every unit we list ships with its documented service history and warranty coverage. Pricing is quoted per unit because condition, configuration and included accessories differ. If you are replacing equipment, we also make offers on the device you are retiring.",
         ],
       },
     ],
@@ -130,14 +129,14 @@ export const GUIDES: Guide[] = [
       {
         heading: "Seeing it work",
         paragraphs: [
-          "Ask to see the laser fire on test material, and to see the fluence and beam-profile checks the platform performs at start-up. MP MedPharma arranges private demos on request and provides the service documentation for every unit we sell, so those checks can be made before the purchase, not after delivery.",
+          "Ask to see the fluence and beam-profile checks the platform performs at start-up. MP MedPharma provides the service documentation for every unit we sell, so those checks can be reviewed before the purchase, not after delivery.",
         ],
       },
     ],
     related: [
       { label: "Alcon equipment", href: "/brands/alcon" },
       { label: "Browse all equipment", href: "/products" },
-      { label: "Request a private demo", href: "/contact" },
+      { label: "Contact us", href: "/contact" },
     ],
   },
   {
@@ -172,7 +171,7 @@ export const GUIDES: Guide[] = [
         heading: "Which to buy",
         paragraphs: [
           "Choose the Centurion if chamber stability at high vacuum, dense-nucleus efficiency and a current consumable ecosystem matter more than purchase price. Choose the Infiniti if you want a proven torsional platform at a lower entry cost, your case mix is routine, and you have reliable access to service and consumables for it.",
-          "Either way, insist on the documented service history, the included handpieces and a demo before you buy. Both are available from MP MedPharma as certified refurbished units when in stock, with warranty coverage.",
+          "Either way, insist on the documented service history and the included handpieces before you buy. Both are available from MP MedPharma as certified refurbished units when in stock, with warranty coverage.",
         ],
       },
     ],

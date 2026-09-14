@@ -35,7 +35,7 @@ export type ProductContent = {
 };
 
 const OFFER =
-  "Available from MP MedPharma as a new or certified refurbished unit with documented service history and warranty coverage. Pricing is quoted per unit according to configuration, included accessories and condition; a private demo can be arranged before purchase.";
+  "Available from MP MedPharma as a new or certified refurbished unit with documented service history and warranty coverage. Pricing is quoted per unit according to configuration, included accessories and condition.";
 
 export const PRODUCT_CONTENT: ProductContent[] = [
   // ---------------------------------------------------------------- Alcon

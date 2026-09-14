@@ -19,7 +19,7 @@ const stats = [
 const points = [
   "New and certified refurbished ophthalmic & surgical equipment",
   "Documented service history and warranty on every unit",
-  "Private demos arranged before you buy",
+  "White-glove delivery, installation and clinical training",
   "Fair, transparent offers on the equipment you are replacing",
 ];
 

@@ -6,7 +6,7 @@ const items = [
   { icon: Award, title: "Since 2009", desc: "Ophthalmic & surgical equipment" },
   { icon: Shield, title: "Service History", desc: "Documented on every unit" },
   { icon: RotateCcw, title: "Warranty", desc: "New & certified refurbished" },
-  { icon: Headphones, title: "Private Demos", desc: "Before you buy" },
+  { icon: Headphones, title: "Installation & Training", desc: "White-glove delivery" },
   { icon: Truck, title: "We Buy Equipment", desc: "Transparent valuations" },
 ];
 

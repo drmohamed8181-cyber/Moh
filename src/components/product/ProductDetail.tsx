@@ -5,9 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { Mail, Heart, Shield, Truck, RotateCcw, ChevronRight, ZoomIn, CheckCircle2, Calendar } from "lucide-react";
+import { Mail, Heart, Shield, Truck, RotateCcw, ChevronRight, ZoomIn, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
-import RequestDemoModal from "./RequestDemoModal";
 import { buildInquiryHref, formatPrice } from "@/lib/utils";
 import { useWishlistStore } from "@/store/wishlistStore";
 
@@ -38,7 +37,6 @@ interface Product {
 export default function ProductDetail({ product }: { product: Product }) {
   const [selectedImage, setSelectedImage] = useState(0);
   const [activeTab, setActiveTab] = useState<"desc" | "specs" | "features" | "accessories" | "indications" | "evidence">("desc");
-  const [demoOpen, setDemoOpen] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
   const wishlisted = useWishlistStore((s) => s.isWishlisted(product.id));
@@ -171,13 +169,6 @@ export default function ProductDetail({ product }: { product: Product }) {
               </button>
             </div>
 
-            <button
-              onClick={() => setDemoOpen(true)}
-              className="w-full flex items-center justify-center gap-2.5 py-3.5 mb-5 rounded-lg font-semibold text-sm tracking-wide border border-gold-500/60 text-gray-900 bg-white hover:bg-gold-50 hover:border-gold-500 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"
-            >
-              <Calendar size={16} className="text-gold-600" /> Request a Private Demo
-            </button>
-
             {/* Trust signals */}
             <div className="grid grid-cols-3 gap-3 p-4 bg-gray-50 rounded-xl">
               {[
@@ -287,12 +278,6 @@ export default function ProductDetail({ product }: { product: Product }) {
           </div>
         </div>
       </div>
-
-      <RequestDemoModal
-        open={demoOpen}
-        onClose={() => setDemoOpen(false)}
-        product={{ name: product.name, slug: product.slug, images: product.images, category: product.category?.name }}
-      />
     </div>
   );
 }

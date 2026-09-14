@@ -8,7 +8,7 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: "Contact Us",
   description:
-    "Contact MP MedPharma in New Jersey, USA for ophthalmic equipment pricing, private demos, and offers on the used equipment you are replacing. Phone, email and contact form.",
+    "Contact MP MedPharma in New Jersey, USA for ophthalmic equipment pricing and offers on the used equipment you are replacing. Phone, email and contact form.",
   alternates: { canonical: "/contact" },
 };
 

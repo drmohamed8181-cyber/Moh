@@ -175,7 +175,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                 href="/contact"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition-colors"
               >
-                Request a quote or a demo
+                Request a quote
               </Link>
               <Link
                 href="/guides"

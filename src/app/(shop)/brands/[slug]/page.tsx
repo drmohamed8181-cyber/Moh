@@ -100,7 +100,7 @@ export default async function BrandPage({ params }: Props) {
           </nav>
           <h1 className="text-4xl font-bold mb-3">{brand.name} Equipment</h1>
           <p className="text-blue-100 text-lg max-w-3xl">
-            New and certified refurbished {brand.name} {categories.length > 0 ? categories.join(", ") : "equipment"} from MP MedPharma, with documented service history and warranty on every unit. Request pricing or a private demo on any product below.
+            New and certified refurbished {brand.name} {categories.length > 0 ? categories.join(", ") : "equipment"} from MP MedPharma, with documented service history and warranty on every unit. Request pricing on any product below.
           </p>
           <p className="text-blue-200 text-sm mt-3">
             {products.length} {products.length === 1 ? "product" : "products"} available

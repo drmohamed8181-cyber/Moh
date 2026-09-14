@@ -47,7 +47,7 @@ async function getHomeData() {
 const trustFeatures = [
   { icon: Shield, title: "Documented Service History", description: "Every unit ships with its service records" },
   { icon: Award, title: "Warranty on Every Unit", description: "New and certified refurbished equipment" },
-  { icon: Headphones, title: "Private Demos", description: "See the unit running before you buy" },
+  { icon: Headphones, title: "Installation & Training", description: "White-glove delivery and clinical training" },
   { icon: Truck, title: "We Buy Used Equipment", description: "Fair, transparent offers on the device you retire" },
 ];
 

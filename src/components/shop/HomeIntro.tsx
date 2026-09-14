@@ -24,8 +24,8 @@ export default function HomeIntro({ brands }: { brands: PublicBrand[] }) {
               and surgical microscopes from the manufacturers surgeons already trust.
             </p>
             <p className="text-slate-600 leading-relaxed mb-6">
-              Every unit ships with documented service history and warranty coverage. Prices are quoted on request, private demos
-              can be arranged before you buy, and we make fair, transparent offers on the equipment you are replacing.
+              Every unit ships with documented service history and warranty coverage. Prices are quoted on request, and we make
+              fair, transparent offers on the equipment you are replacing.
             </p>
             <div className="flex flex-wrap gap-3">
               <Link

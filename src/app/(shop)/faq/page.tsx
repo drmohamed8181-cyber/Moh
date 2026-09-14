@@ -22,10 +22,6 @@ const faqs = [
     a: "We offer both new and certified pre-owned equipment depending on the product. Availability and condition are noted in each inquiry response, and every unit goes through our quality inspection before it ships.",
   },
   {
-    q: "Can I request a demo before purchasing?",
-    a: "Yes. Many products include a \"Request a Private Demo\" option on their product page. You can also request a demonstration directly through our Contact form.",
-  },
-  {
     q: "Do you provide installation and training?",
     a: "Yes, white-glove delivery, installation, and clinical training are available for applicable equipment. Ask your MP MedPharma representative when requesting your quote.",
   },

@@ -20,7 +20,7 @@ export default function PrivacyPage() {
         <section>
           <h2 className="text-xl font-bold text-gray-900 mb-3">Information We Collect</h2>
           <p className="text-gray-600 leading-relaxed">
-            When you create an account, submit a product inquiry, request a demo, or contact us, we collect the
+            When you create an account, submit a product inquiry, or contact us, we collect the
             information you provide directly — such as your name, email address, phone number, organization, and
             the content of your message. If you create an account, we also store your order and wishlist history
             so you can track it under My Account.
@@ -30,8 +30,8 @@ export default function PrivacyPage() {
         <section>
           <h2 className="text-xl font-bold text-gray-900 mb-3">How We Use Your Information</h2>
           <p className="text-gray-600 leading-relaxed">
-            We use the information you provide to respond to inquiries, prepare quotes, process orders, schedule
-            demonstrations, provide customer support, and — where you&apos;ve opted in — send occasional product
+            We use the information you provide to respond to inquiries, prepare quotes, process orders,
+            provide customer support, and — where you&apos;ve opted in — send occasional product
             updates or newsletters. We do not sell your personal information to third parties.
           </p>
         </section>
