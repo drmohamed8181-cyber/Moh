@@ -27,6 +27,7 @@ interface Product {
   clinicalEvidence: string[];
   isAvailable: boolean;
   stockQty: number;
+  isSold?: boolean;
   manufacturer?: string | null;
   warranty?: string | null;
   weight?: number | null;
@@ -56,6 +57,7 @@ export default function ProductDetail({ product }: { product: Product }) {
     slug: product.slug,
     sku: product.sku,
     category: product.category?.name,
+    similar: product.isSold,
   });
 
   return (
@@ -121,9 +123,9 @@ export default function ProductDetail({ product }: { product: Product }) {
             )}
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mt-2 mb-3">{product.name}</h1>
 
-            <span className={`inline-flex items-center gap-1.5 text-sm font-medium mb-4 ${product.isAvailable ? "text-green-600" : "text-gray-400"}`}>
+            <span className={`inline-flex items-center gap-1.5 text-sm font-medium mb-4 ${product.isAvailable && !product.isSold ? "text-green-600" : "text-gray-500"}`}>
               <CheckCircle2 size={15} />
-              {product.isAvailable ? "In Inventory" : "Currently Unavailable"}
+              {product.isSold ? "Sold – inquire for similar" : product.isAvailable ? "In Inventory" : "Currently Unavailable"}
             </span>
 
             {product.shortDesc && (
@@ -141,7 +143,9 @@ export default function ProductDetail({ product }: { product: Product }) {
             <div className="flex items-center gap-4 mb-5 p-5 bg-gray-50 rounded-xl">
               <div className="flex-1">
                 <p className="text-[11px] text-gray-400 uppercase tracking-wide font-medium mb-0.5">Pricing</p>
-                {product.publicPrice != null ? (
+                {product.isSold ? (
+                  <p className="text-lg font-semibold text-gray-500">Sold</p>
+                ) : product.publicPrice != null ? (
                   <>
                     {product.previousPublicPrice != null && (
                       <p className="text-sm text-gray-400 line-through">{formatPrice(product.previousPublicPrice)}</p>
@@ -156,7 +160,7 @@ export default function ProductDetail({ product }: { product: Product }) {
                 href={inquiryHref}
                 className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-semibold bg-primary-600 text-white hover:bg-primary-700 transition-all"
               >
-                <Mail size={18} /> Inquire Now
+                <Mail size={18} /> {product.isSold ? "Inquire for Similar" : "Inquire Now"}
               </Link>
               <button
                 onClick={handleWishlistClick}

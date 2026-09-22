@@ -74,9 +74,12 @@ function equipmentFormat(p: DigestProduct): string {
 }
 
 function availabilityLabel(p: DigestProduct): { label: string; dotColor: string } {
-  if (!p.isAvailable || p.stock <= 0) return { label: "Currently Unavailable", dotColor: "#9CA3AF" };
+  if (!p.isAvailable) return { label: "Currently Unavailable", dotColor: "#9CA3AF" };
+  // A quantity of 0 is the default for equipment nobody counted, not a sold
+  // unit; sold units are filtered out before the digest is built.
+  if (p.stock > 1) return { label: `${p.stock} Units Available`, dotColor: "#3F8F5F" };
   if (p.stock === 1) return { label: "1 Unit Available", dotColor: "#3F8F5F" };
-  return { label: `${p.stock} Units Available`, dotColor: "#3F8F5F" };
+  return { label: "Available", dotColor: "#3F8F5F" };
 }
 
 function productUrl(baseUrl: string, p: DigestProduct): string {

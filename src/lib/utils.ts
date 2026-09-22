@@ -50,13 +50,19 @@ export function buildInquiryHref(product: {
   slug?: string;
   sku?: string | null;
   category?: string | null;
+  /** The unit is sold: ask for a comparable one instead. */
+  similar?: boolean;
 }) {
-  const subject = `Inquiry: ${product.name}`;
-  const lines = ["I'm interested in the following product:", "", `Product: ${product.name}`];
+  const subject = product.similar ? `Inquiry: similar to ${product.name}` : `Inquiry: ${product.name}`;
+  const lines = [
+    product.similar ? "I'm looking for a unit similar to this sold product:" : "I'm interested in the following product:",
+    "",
+    `Product: ${product.name}`,
+  ];
   if (product.sku) lines.push(`SKU: ${product.sku}`);
   if (product.category) lines.push(`Category: ${product.category}`);
   if (product.slug) lines.push(`Link: /products/${product.slug}`);
-  lines.push("", "Please send me more details and pricing.");
+  lines.push("", product.similar ? "Please let me know what comparable units you can offer." : "Please send me more details and pricing.");
 
   const params = new URLSearchParams({ subject, message: lines.join("\n") });
   if (product.slug) params.set("product", product.slug);
