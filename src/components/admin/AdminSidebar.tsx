@@ -6,7 +6,7 @@ import { signOut } from "next-auth/react";
 import {
   LayoutDashboard, Package, Tags, ShoppingBag, Users,
   MessageSquare, Image, Home, Settings, Search,
-  LogOut, ChevronRight, Globe, Calendar, PackageSearch,
+  LogOut, ChevronRight, Globe, Calendar, PackageSearch, KeyRound,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LogoMark } from "@/components/ui/Logo";
@@ -24,6 +24,7 @@ const navItems = [
   { label: "Homepage", href: "/admin/homepage", icon: Home },
   { label: "SEO", href: "/admin/seo", icon: Search },
   { label: "Settings", href: "/admin/settings", icon: Settings },
+  { label: "Change Password", href: "/admin/password", icon: KeyRound },
 ];
 
 export default function AdminSidebar() {

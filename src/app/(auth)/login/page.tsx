@@ -18,7 +18,8 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     const res = await signIn("credentials", { email, password, redirect: false });
-    if (res?.ok) {
+    // next-auth v5 reports rejected credentials as ok: true with an error set.
+    if (res?.ok && !res.error) {
       toast.success("Welcome back!");
       // getSession() immediately after signIn() can race the session cookie
       // being applied, returning a stale/anonymous session — retry once.
