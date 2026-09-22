@@ -6,8 +6,13 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("Seeding database...");
 
-  // Admin user
-  const adminPassword = await bcrypt.hash("Admin@123456", 12);
+  // Admin user. The password comes from the environment so it never lives in
+  // the repository; an existing admin is left untouched (see `update: {}`).
+  const seedPassword = process.env.SEED_ADMIN_PASSWORD;
+  if (!seedPassword || seedPassword.length < 12) {
+    throw new Error("Set SEED_ADMIN_PASSWORD (at least 12 characters) in .env.local before seeding.");
+  }
+  const adminPassword = await bcrypt.hash(seedPassword, 12);
   const admin = await prisma.user.upsert({
     where: { email: "dr.mohamed8181@gmail.com" },
     update: {},

@@ -7,6 +7,7 @@ Edit `.env.local` and fill in:
 - `DATABASE_URL` — your PostgreSQL connection string (Supabase recommended)
 - `NEXTAUTH_SECRET` — run `openssl rand -base64 32` to generate
 - `CLOUDINARY_*` — your Cloudinary credentials (for image uploads)
+- `SEED_ADMIN_PASSWORD` — password for the first admin account (12+ characters, only used by the seed step)
 
 ### 2. Push Database Schema
 ```bash
@@ -19,7 +20,8 @@ npx prisma db push
 npm run db:seed
 ```
 This creates:
-- **Admin account:** dr.mohamed8181@gmail.com / Admin@123456
+- **Admin account:** dr.mohamed8181@gmail.com, with the password from `SEED_ADMIN_PASSWORD`
+  (an existing admin account is never overwritten)
 - 6 product categories
 - 5 featured products
 - 3 hero slides
@@ -33,7 +35,8 @@ Open http://localhost:3000
 
 ### 5. Access Admin Dashboard
 Go to http://localhost:3000/admin  
-Login with: dr.mohamed8181@gmail.com / Admin@123456
+Log in with the admin email and your `SEED_ADMIN_PASSWORD`. Change it from the
+account settings afterwards if you like.
 
 ---
 
@@ -83,9 +86,9 @@ Nothing is emitted when they are unset. The full growth checklist is in
 4. Deploy
 
 ## Tech Stack
-- **Framework:** Next.js 15 (App Router)
+- **Framework:** Next.js 16 (App Router)
 - **Language:** TypeScript
-- **Styling:** Tailwind CSS
+- **Styling:** Tailwind CSS 4
 - **Database:** PostgreSQL via Prisma ORM
 - **Auth:** NextAuth v5
 - **Images:** Cloudinary
