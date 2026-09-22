@@ -94,9 +94,11 @@ export default async function ProductPage({ params }: Props) {
             url: `https://www.mpmedpharma.com/products/${slug}`,
             priceCurrency: "USD",
             price: publicPrice,
-            availability: product.isAvailable
-              ? "https://schema.org/InStock"
-              : "https://schema.org/OutOfStock",
+            availability: product.isSold
+              ? "https://schema.org/SoldOut"
+              : product.isAvailable
+                ? "https://schema.org/InStock"
+                : "https://schema.org/OutOfStock",
             seller: { "@type": "Organization", name: "MP MedPharma" },
           },
         }

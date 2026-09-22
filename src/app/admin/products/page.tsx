@@ -9,8 +9,28 @@ import { Plus, Pencil, Package } from "lucide-react";
 import DeleteProductButton from "@/components/admin/DeleteProductButton";
 import PublishPriceToggle from "@/components/admin/PublishPriceToggle";
 import EditableRetailPrice from "@/components/admin/EditableRetailPrice";
+import { PARTNER_STOCK_UPDATED } from "@/content/partnerStock";
+import { partnerListLoaded, partnerStockStatus } from "@/lib/partnerStock";
 
 export const metadata: Metadata = { title: "Products – Admin" };
+
+// Ophthalmology stock follows the partner's weekly list (src/lib/partnerStock.ts);
+// everything else follows the quantity typed in the product form.
+function StockBadge({ product }: { product: { slug: string; stockQty: number; category: { slug: string } | null } }) {
+  const badge = (className: string, label: string, title?: string) => (
+    <span title={title} className={`text-xs font-medium px-2.5 py-1 rounded-full whitespace-nowrap ${className}`}>{label}</span>
+  );
+  switch (partnerStockStatus(product)) {
+    case "sold":
+      return badge("bg-red-100 text-red-700", "Sold", "Not in the partner's current list; shown as \"Sold – inquire for similar\"");
+    case "listed":
+      return badge("bg-green-100 text-green-700", "In stock", "In the partner's current list");
+    case "unchecked":
+      return badge("bg-gray-100 text-gray-600", "Awaiting list", "No partner list provided yet");
+  }
+  if (product.stockQty === 0) return badge("bg-red-100 text-red-700", "Out of Stock");
+  return badge(product.stockQty <= 5 ? "bg-yellow-100 text-yellow-700" : "bg-green-100 text-green-700", `${product.stockQty} in stock`);
+}
 
 export default async function AdminProductsPage() {
   const products = await safeDb((db) => db.product.findMany({ orderBy: { createdAt: "desc" }, select: { ...ADMIN_PRODUCT_SELECT, category: true } })) ?? [];
@@ -21,6 +41,11 @@ export default async function AdminProductsPage() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Products</h1>
           <p className="text-gray-500 text-sm">{products.length} products total</p>
+          <p className="text-gray-400 text-xs mt-1">
+            {partnerListLoaded
+              ? `Ophthalmology stock from the partner list${PARTNER_STOCK_UPDATED ? ` of ${PARTNER_STOCK_UPDATED}` : ""}: ${products.filter((p) => partnerStockStatus(p) === "sold").length} sold`
+              : "Ophthalmology stock: awaiting the partner's weekly list"}
+          </p>
         </div>
         <Link href="/admin/products/new" className="flex items-center gap-2 px-5 py-2.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 transition-colors">
           <Plus size={16} /> Add Product
@@ -78,13 +103,7 @@ export default async function AdminProductsPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${
-                        p.stockQty === 0 ? "bg-red-100 text-red-700"
-                        : p.stockQty <= 5 ? "bg-yellow-100 text-yellow-700"
-                        : "bg-green-100 text-green-700"
-                      }`}>
-                        {p.stockQty === 0 ? "Out of Stock" : `${p.stockQty} in stock`}
-                      </span>
+                      <StockBadge product={p} />
                     </td>
                     <td className="px-6 py-4">
                       <span className={`text-xs px-2.5 py-1 rounded-full ${p.isAvailable ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-600"}`}>

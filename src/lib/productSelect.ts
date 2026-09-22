@@ -1,3 +1,5 @@
+import { isSold } from "@/lib/partnerStock";
+
 // Fields safe to expose on public/customer-facing pages. Deliberately
 // excludes dealerPrice/retailPrice — confidential distributor pricing that
 // must never reach an unauthenticated browser (client components/JSON
@@ -61,13 +63,26 @@ export const LISTING_PRODUCT_SELECT = {
 // publicPrice/previousPublicPrice — both null unless the admin has
 // explicitly published the price — so the raw fields never get serialized
 // into a page passed to a client component for an unpublished product.
-export function withPublicPrice<T extends { retailPrice: number | null; previousRetailPrice: number | null; retailPricePublic: boolean }>(
+//
+// Every public product passes through here, so it also adds isSold (see
+// src/lib/partnerStock.ts), which the cards, the product page and its
+// structured data read.
+export function withPublicPrice<
+  T extends {
+    slug: string;
+    category?: { slug: string } | null;
+    retailPrice: number | null;
+    previousRetailPrice: number | null;
+    retailPricePublic: boolean;
+  },
+>(
   product: T
-): Omit<T, "retailPrice" | "previousRetailPrice" | "retailPricePublic"> & { publicPrice: number | null; previousPublicPrice: number | null } {
+): Omit<T, "retailPrice" | "previousRetailPrice" | "retailPricePublic"> & { publicPrice: number | null; previousPublicPrice: number | null; isSold: boolean } {
   const { retailPrice, previousRetailPrice, retailPricePublic, ...rest } = product;
   return {
     ...rest,
     publicPrice: retailPricePublic ? retailPrice : null,
     previousPublicPrice: retailPricePublic ? previousRetailPrice : null,
+    isSold: isSold(product),
   };
 }

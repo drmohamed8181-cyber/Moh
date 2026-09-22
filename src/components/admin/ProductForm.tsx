@@ -51,7 +51,7 @@ export default function ProductForm({ categories, product }: Props) {
     description: product?.description ?? "",
     isAvailable: product?.isAvailable ?? true,
     isFeatured: product?.isFeatured ?? false,
-    stockQty: product ? String(product.stockQty) : "0",
+    stockQty: product ? String(product.stockQty) : "1",
     weight: product?.weight ?? "",
     dimensions: product?.dimensions ?? "",
     warranty: product?.warranty ?? "",

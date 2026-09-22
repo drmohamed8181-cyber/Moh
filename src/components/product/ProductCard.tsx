@@ -19,6 +19,7 @@ interface Product {
   category?: { name: string } | null;
   isAvailable: boolean;
   stockQty: number;
+  isSold?: boolean;
   publicPrice?: number | null;
   previousPublicPrice?: number | null;
 }
@@ -64,7 +65,11 @@ export default function ProductCard({ product }: { product: Product }) {
 
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-1.5">
-            {!product.isAvailable && (
+            {product.isSold ? (
+              <span className="bg-gray-800 text-white text-xs font-medium px-2 py-1 rounded-lg">
+                Sold
+              </span>
+            ) : !product.isAvailable && (
               <span className="bg-gray-800 text-white text-xs font-medium px-2 py-1 rounded-lg">
                 Unavailable
               </span>
@@ -105,7 +110,9 @@ export default function ProductCard({ product }: { product: Product }) {
       <div className="flex items-center justify-between gap-2 px-4 pb-4 pt-4 border-t border-gray-50 mt-auto">
         <div>
           <p className="text-[10px] text-gray-400 uppercase tracking-wide font-medium">Pricing</p>
-          {product.publicPrice != null ? (
+          {product.isSold ? (
+            <p className="text-sm font-semibold text-gray-500">Sold</p>
+          ) : product.publicPrice != null ? (
             <>
               {product.previousPublicPrice != null && (
                 <p className="text-xs text-gray-400 line-through">{formatPrice(product.previousPublicPrice)}</p>
@@ -117,10 +124,10 @@ export default function ProductCard({ product }: { product: Product }) {
           )}
         </div>
         <Link
-          href={buildInquiryHref({ name: product.name, slug: product.slug, category: product.category?.name })}
+          href={buildInquiryHref({ name: product.name, slug: product.slug, category: product.category?.name, similar: product.isSold })}
           className="inline-flex items-center gap-1.5 bg-primary-600 text-white text-xs font-semibold px-3.5 py-2 rounded-full hover:bg-primary-700 active:scale-95 transition-all whitespace-nowrap"
         >
-          <Mail size={12} /> Inquire
+          <Mail size={12} /> {product.isSold ? "Inquire for Similar" : "Inquire"}
         </Link>
       </div>
     </div>

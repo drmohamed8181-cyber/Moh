@@ -8,6 +8,7 @@ import { jsonLdScript } from "@/lib/jsonLd";
 import ProductCard from "@/components/product/ProductCard";
 import ProductsSortSelect from "@/components/shop/ProductsSortSelect";
 import InStockFilter from "@/components/shop/InStockFilter";
+import { isSold, partnerListLoaded } from "@/lib/partnerStock";
 import { SlidersHorizontal } from "lucide-react";
 import {
   DENTAL_CATEGORY_SLUGS,
@@ -105,7 +106,16 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
   else where.category = { slug: { notIn: HIDDEN_CATEGORY_SLUGS } };
   if (sp.featured === "true") where.isFeatured = true;
   if (sp.q) where.name = { contains: sp.q, mode: "insensitive" };
-  if (sp.inStock === "true") where.isAvailable = true;
+  if (sp.inStock === "true") {
+    where.isAvailable = true;
+    // Sold is decided by the partner list, not a column, so the sold slugs are
+    // worked out here and excluded by name.
+    if (partnerListLoaded) {
+      const rows = await safeDb((db) => db.product.findMany({ select: { slug: true, category: { select: { slug: true } } } }));
+      if (!rows) throw new Error("Product catalogue unavailable");
+      where.slug = { notIn: rows.filter(isSold).map((row) => row.slug) };
+    }
+  }
 
   const orderBy: Prisma.ProductOrderByWithRelationInput =
     sp.sort === "price-asc" ? { price: "asc" }

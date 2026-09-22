@@ -4,6 +4,7 @@ import { sendMail } from "@/lib/mail";
 import { buildProductDigestEmail, type DigestProduct } from "@/lib/productDigest";
 import { createUnsubscribeToken } from "@/lib/unsubscribe";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
+import { isSold } from "@/lib/partnerStock";
 
 const SETTING_KEY = "lastProductDigestAt";
 const DEFAULT_LOOKBACK_MS = 14 * 24 * 60 * 60 * 1000; // biweekly
@@ -23,7 +24,7 @@ const DIGEST_SELECT = {
   specifications: true,
   createdAt: true,
   updatedAt: true,
-  category: { select: { name: true } },
+  category: { select: { name: true, slug: true } },
 } as const;
 
 function toDigestProduct(p: {
@@ -38,7 +39,7 @@ function toDigestProduct(p: {
   stockQty: number;
   isFeatured: boolean;
   specifications: unknown;
-  category: { name: string } | null;
+  category: { name: string; slug: string } | null;
 }): DigestProduct {
   return {
     name: p.name,
@@ -90,8 +91,10 @@ export async function GET(req: NextRequest) {
     ),
   ]);
 
-  const newProducts = (newRows ?? []).map(toDigestProduct);
-  const updatedProducts = (updatedRows ?? []).map(toDigestProduct);
+  // Sold units (see src/lib/partnerStock.ts) have no place in a mailing about
+  // what is available.
+  const newProducts = (newRows ?? []).filter((p) => !isSold(p)).map(toDigestProduct);
+  const updatedProducts = (updatedRows ?? []).filter((p) => !isSold(p)).map(toDigestProduct);
 
   if (newProducts.length === 0 && updatedProducts.length === 0) {
     await safeDb((db) => db.siteSetting.upsert({
