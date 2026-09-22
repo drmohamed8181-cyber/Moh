@@ -28,7 +28,7 @@ async function main() {
   const db = new PrismaClient();
   try {
     const products = await db.product.findMany({
-      select: { id: true, name: true, slug: true, description: true, features: true, indications: true, specifications: true },
+      select: { id: true, name: true, slug: true, seoTitle: true, seoDesc: true, description: true, features: true, indications: true, specifications: true },
       orderBy: { name: "asc" },
     });
 
@@ -45,6 +45,8 @@ async function main() {
       matched += 1;
 
       const data: Prisma.ProductUpdateInput = {};
+      if (content.seoTitle && (OVERWRITE || !product.seoTitle?.trim())) data.seoTitle = content.seoTitle;
+      if (content.seoDesc && (OVERWRITE || !product.seoDesc?.trim())) data.seoDesc = content.seoDesc;
       if (OVERWRITE || !product.description?.trim()) data.description = content.description;
       if (content.features && (OVERWRITE || product.features.length === 0)) data.features = content.features;
       if (content.indications && (OVERWRITE || product.indications.length === 0)) data.indications = content.indications;
