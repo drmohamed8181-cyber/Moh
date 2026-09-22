@@ -59,6 +59,13 @@ export default function ProductForm({ categories, product }: Props) {
     seoDesc: product?.seoDesc ?? "",
   });
 
+  const inputClass = "w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm";
+  const [missingFields, setMissingFields] = useState<string[]>([]);
+  const fieldClass = (key: string) =>
+    missingFields.includes(key) && String(form[key as keyof typeof form] ?? "").trim() === ""
+      ? `${inputClass} border-red-400 ring-2 ring-red-200`
+      : inputClass;
+
   const handleNameChange = (name: string) => {
     setForm((f) => ({ ...f, name, slug: product ? f.slug : slugify(name) }));
   };
@@ -93,8 +100,19 @@ export default function ProductForm({ categories, product }: Props) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name || !form.sku || !form.categoryId || !form.price) {
-      toast.error("Please fill all required fields");
+    const required: { key: keyof typeof form; label: string }[] = [
+      { key: "name", label: "Product Name" },
+      { key: "slug", label: "Slug" },
+      { key: "sku", label: "SKU" },
+      { key: "categoryId", label: "Category" },
+      { key: "price", label: "Price (USD)" },
+    ];
+    // 0 is a valid price, so only treat blank values as missing
+    const missing = required.filter(({ key }) => String(form[key] ?? "").trim() === "");
+    setMissingFields(missing.map(({ key }) => key));
+    if (missing.length) {
+      toast.error(`Please fill required fields: ${missing.map(({ label }) => label).join(", ")}`);
+      document.getElementById(`product-${String(missing[0].key)}`)?.focus();
       return;
     }
     setLoading(true);
@@ -142,8 +160,6 @@ export default function ProductForm({ categories, product }: Props) {
     }
   };
 
-  const inputClass = "w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm";
-
   return (
     <form onSubmit={handleSubmit}>
       <div className="grid lg:grid-cols-3 gap-6">
@@ -152,19 +168,19 @@ export default function ProductForm({ categories, product }: Props) {
           <div className="bg-white rounded-2xl border p-6 space-y-5">
             <h2 className="font-semibold text-gray-900">Basic Information</h2>
             <Field label="Product Name" required>
-              <input type="text" value={form.name} onChange={(e) => handleNameChange(e.target.value)} className={inputClass} placeholder="e.g. Digital Blood Pressure Monitor" required />
+              <input id="product-name" type="text" value={form.name} onChange={(e) => handleNameChange(e.target.value)} className={fieldClass("name")} placeholder="e.g. Digital Blood Pressure Monitor" required />
             </Field>
             <div className="grid sm:grid-cols-2 gap-4">
               <Field label="Slug" required>
-                <input type="text" value={form.slug} onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value }))} className={inputClass} required />
+                <input id="product-slug" type="text" value={form.slug} onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value }))} className={fieldClass("slug")} required />
               </Field>
               <Field label="SKU" required>
-                <input type="text" value={form.sku} onChange={(e) => setForm((f) => ({ ...f, sku: e.target.value }))} className={inputClass} required />
+                <input id="product-sku" type="text" value={form.sku} onChange={(e) => setForm((f) => ({ ...f, sku: e.target.value }))} className={fieldClass("sku")} required />
               </Field>
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               <Field label="Category" required>
-                <select value={form.categoryId} onChange={(e) => setForm((f) => ({ ...f, categoryId: e.target.value }))} className={inputClass} required>
+                <select id="product-categoryId" value={form.categoryId} onChange={(e) => setForm((f) => ({ ...f, categoryId: e.target.value }))} className={fieldClass("categoryId")} required>
                   <option value="">Select category</option>
                   {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
                 </select>
@@ -311,7 +327,7 @@ export default function ProductForm({ categories, product }: Props) {
           <div className="bg-white rounded-2xl border p-6 space-y-4">
             <h2 className="font-semibold text-gray-900">Pricing</h2>
             <Field label="Price (USD)" required>
-              <input type="number" step="0.01" value={form.price} onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))} className={inputClass} placeholder="0.00" required />
+              <input id="product-price" type="number" step="0.01" value={form.price} onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))} className={fieldClass("price")} placeholder="0.00" required />
             </Field>
             <Field label="Discount Price">
               <input type="number" step="0.01" value={form.discountPrice} onChange={(e) => setForm((f) => ({ ...f, discountPrice: e.target.value }))} className={inputClass} placeholder="Leave empty for no discount" />
