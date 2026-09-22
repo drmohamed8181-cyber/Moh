@@ -28,16 +28,26 @@ async function main() {
   const db = new PrismaClient();
   try {
     const products = await db.product.findMany({
-      select: { id: true, name: true, slug: true, seoTitle: true, seoDesc: true, description: true, features: true, indications: true, specifications: true },
+      select: { id: true, name: true, slug: true, manufacturer: true, category: { select: { name: true } }, seoTitle: true, seoDesc: true, description: true, features: true, indications: true, specifications: true },
       orderBy: { name: "asc" },
     });
 
     let matched = 0;
     let changed = 0;
     const unmatched: string[] = [];
+    // Products that will still have no hand-written SEO copy after this run:
+    // those with no content entry, and those matched only by a generic entry
+    // (the dental chairs) that deliberately carries none.
+    const missingSeo: string[] = [];
+    const noteMissingSeo = (product: (typeof products)[number], seoTitle?: string, seoDesc?: string) => {
+      if ((product.seoTitle?.trim() || seoTitle) && (product.seoDesc?.trim() || seoDesc)) return;
+      const category = product.category?.name ?? "no category";
+      missingSeo.push(`${product.name} | ${product.manufacturer ?? "no manufacturer"} | ${category} | /products/${product.slug}`);
+    };
 
     for (const product of products) {
       const content = findProductContent(product.name);
+      noteMissingSeo(product, content?.seoTitle, content?.seoDesc);
       if (!content) {
         unmatched.push(product.name);
         continue;
@@ -70,6 +80,12 @@ async function main() {
     if (unmatched.length > 0) {
       console.log(`\nNo content entry for ${unmatched.length}:\n  ${unmatched.join("\n  ")}`);
       console.log("\nAdd a match entry to src/content/productContent.ts for each, or write them in the admin.");
+    }
+    if (missingSeo.length > 0) {
+      console.log(`\nStill without SEO title/description (${missingSeo.length}) — name | manufacturer | category | page:`);
+      console.log(`  ${missingSeo.join("\n  ")}`);
+    } else {
+      console.log("\nEvery product has an SEO title and description.");
     }
     if (!APPLY) console.log("\nDry run. Re-run with --apply to write.");
     else if (changed > 0) console.log("\nPublic pages refresh within an hour, or at once after you save any product in the admin.");
