@@ -6,7 +6,7 @@ import { signOut } from "next-auth/react";
 import {
   LayoutDashboard, Package, Tags, ShoppingBag, Users,
   MessageSquare, Image, Home, Settings, Search,
-  LogOut, ChevronRight, Globe, Calendar, PackageSearch,
+  LogOut, ChevronRight, Globe, Calendar, PackageSearch, KeyRound,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LogoMark } from "@/components/ui/Logo";
@@ -72,6 +72,12 @@ export default function AdminSidebar() {
           className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-400 hover:text-white hover:bg-gray-800 transition-colors"
         >
           <Globe size={17} /> View Site
+        </Link>
+        <Link
+          href="/account/settings"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-400 hover:text-white hover:bg-gray-800 transition-colors"
+        >
+          <KeyRound size={17} /> Change Password
         </Link>
         <button
           onClick={() => signOut({ callbackUrl: "/login" })}
