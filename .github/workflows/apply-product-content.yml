@@ -6,8 +6,10 @@ name: Apply product content
 # hand from the Actions tab: Actions → Apply product content → Run workflow.
 #
 # Leave "apply" unticked first: that is a dry run which changes nothing and
-# lists what would be written and which products still have no SEO copy.
-# Only empty fields are filled, so text typed in the admin is never replaced.
+# lists what would be written. Products with no hand-written SEO copy get a
+# title and description generated from their own name, manufacturer, category
+# and description. Only empty fields are filled, so text typed in the admin is
+# never replaced.
 #
 # Needs the repository secret DATABASE_URL (Settings → Secrets and variables →
 # Actions). DIRECT_URL is optional and falls back to DATABASE_URL.
