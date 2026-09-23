@@ -9,6 +9,8 @@ import { Plus, Pencil, Package } from "lucide-react";
 import DeleteProductButton from "@/components/admin/DeleteProductButton";
 import PublishPriceToggle from "@/components/admin/PublishPriceToggle";
 import EditableRetailPrice from "@/components/admin/EditableRetailPrice";
+import ProductSearchBar from "@/components/admin/ProductSearchBar";
+import { productSearchRank } from "@/lib/productSearch";
 import { PARTNER_STOCK_UPDATED } from "@/content/partnerStock";
 import { partnerListLoaded, partnerStockStatus } from "@/lib/partnerStock";
 
@@ -32,15 +34,20 @@ function StockBadge({ product }: { product: { slug: string; stockQty: number; ca
   return badge(product.stockQty <= 5 ? "bg-yellow-100 text-yellow-700" : "bg-green-100 text-green-700", `${product.stockQty} in stock`);
 }
 
-export default async function AdminProductsPage() {
+export default async function AdminProductsPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
+  const q = (await searchParams).q?.trim() ?? "";
   const products = await safeDb((db) => db.product.findMany({ orderBy: { createdAt: "desc" }, select: { ...ADMIN_PRODUCT_SELECT, category: true } })) ?? [];
+  const suggestions = products.map((p) => ({ id: p.id, name: p.name, sku: p.sku, image: p.images[0] ?? null, category: p.category?.name ?? null }));
+  const shown = q ? products.filter((p) => productSearchRank({ name: p.name, sku: p.sku, category: p.category?.name ?? null }, q) >= 0) : products;
 
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Products</h1>
-          <p className="text-gray-500 text-sm">{products.length} products total</p>
+          <p className="text-gray-500 text-sm">
+            {q ? `${shown.length} of ${products.length} products matching "${q}"` : `${products.length} products total`}
+          </p>
           <p className="text-gray-400 text-xs mt-1">
             {partnerListLoaded
               ? `Ophthalmology stock from the partner list${PARTNER_STOCK_UPDATED ? ` of ${PARTNER_STOCK_UPDATED}` : ""}: ${products.filter((p) => partnerStockStatus(p) === "sold").length} sold`
@@ -52,8 +59,12 @@ export default async function AdminProductsPage() {
         </Link>
       </div>
 
+      {products.length > 0 && <ProductSearchBar products={suggestions} />}
+
       <div className="bg-white rounded-2xl border overflow-hidden">
-        {products.length === 0 ? (
+        {products.length > 0 && shown.length === 0 ? (
+          <div className="p-12 text-center text-sm text-gray-500">No products match &ldquo;{q}&rdquo;.</div>
+        ) : products.length === 0 ? (
           <div className="p-16 text-center">
             <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <Package size={28} className="text-gray-400" />
@@ -75,7 +86,7 @@ export default async function AdminProductsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y">
-                {products.map((p) => (
+                {shown.map((p) => (
                   <tr key={p.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
