@@ -38,7 +38,7 @@ function StockBadge({ product }: { product: { slug: string; stockQty: number; ca
 
 export default async function AdminProductsPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const q = (await searchParams).q?.trim() ?? "";
-  const products = await safeDb((db) => db.product.findMany({ orderBy: { createdAt: "desc" }, select: { ...ADMIN_PRODUCT_SELECT, category: true } })) ?? [];
+  const products = await safeDb((db) => db.product.findMany({ orderBy: { name: "asc" }, select: { ...ADMIN_PRODUCT_SELECT, category: true } })) ?? [];
   const heroSetting = await safeDb((db) => db.siteSetting.findUnique({ where: { key: HERO_PRODUCTS_KEY } }));
   const heroIds = new Set(parseHeroProductIds(heroSetting?.value));
   const suggestions = products.map((p) => ({ id: p.id, name: p.name, sku: p.sku, image: p.images[0] ?? null, category: p.category?.name ?? null }));
