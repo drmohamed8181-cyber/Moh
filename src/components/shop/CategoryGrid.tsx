@@ -11,21 +11,14 @@ interface Category {
   _count?: { products: number };
 }
 
-const defaultCategories = [
-  { id: "1", name: "Patient Monitoring", slug: "patient-monitoring", image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&q=80", description: "Vital signs & monitoring" },
-  { id: "2", name: "Diagnostic Equipment", slug: "diagnostic-equipment", image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&q=80", description: "ECG, ultrasound & more" },
-  { id: "3", name: "Laboratory Equipment", slug: "laboratory-equipment", image: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=400&q=80", description: "Analysis & testing tools" },
-  { id: "4", name: "Surgical Instruments", slug: "surgical-instruments", image: "https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=400&q=80", description: "Precision surgical tools" },
-  { id: "5", name: "Hospital Furniture", slug: "hospital-furniture", image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&q=80", description: "Beds, chairs & cabinets" },
-  { id: "6", name: "Home Healthcare", slug: "home-healthcare", image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&q=80", description: "Devices for home use" },
-];
-
 interface CategoryGridProps {
   categories?: Category[];
 }
 
 export default function CategoryGrid({ categories }: CategoryGridProps) {
-  const items = (categories && categories.length > 0) ? categories : defaultCategories;
+  // Hidden rather than padded with placeholders when there are no categories.
+  const items = categories ?? [];
+  if (items.length === 0) return null;
 
   return (
     <section className="py-16 bg-slate-50">
