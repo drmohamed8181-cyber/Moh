@@ -55,7 +55,6 @@ function eyebrowFor(title: string) {
 
 export default function HeroSlider({ slides = defaultSlides }: HeroSliderProps) {
   const [current, setCurrent] = useState(0);
-  const [paused, setPaused] = useState(false);
   const [firstRender, setFirstRender] = useState(true);
   const touchStartX = useRef(0);
 
@@ -74,11 +73,15 @@ export default function HeroSlider({ slides = defaultSlides }: HeroSliderProps) 
   const next = useCallback(() => goTo(current + 1), [current, goTo]);
   const prev = useCallback(() => goTo(current - 1), [current, goTo]);
 
+  // Always advance. It used to pause on hover, but the hero fills the first
+  // screen, so the cursor almost always rests on it and it never moved; on
+  // phones a tap counts as a hover that never ends. Any manual change (arrow,
+  // dot, swipe) changes `next`, which restarts the full interval.
   useEffect(() => {
-    if (paused) return;
+    if (activeSlides.length < 2) return;
     const id = setInterval(next, 6500);
     return () => clearInterval(id);
-  }, [next, paused]);
+  }, [next, activeSlides.length]);
 
   const onTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
@@ -91,8 +94,6 @@ export default function HeroSlider({ slides = defaultSlides }: HeroSliderProps) 
   return (
     <section
       className="relative isolate overflow-hidden bg-[#0a0f14] min-h-[600px] sm:min-h-[660px] lg:min-h-[720px] flex items-center py-16 lg:py-0"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
