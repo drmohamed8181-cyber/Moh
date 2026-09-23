@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import {
   getFeaturedProducts,
+  getHeroProducts,
   getHeroSlides,
   getHomeCategories,
   getPublicBrands,
@@ -27,7 +28,8 @@ export const revalidate = 3600;
 export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 async function getHomeData() {
-  const [slides, categories, products, settings, brands] = await Promise.all([
+  const [heroProducts, slides, categories, products, settings, brands] = await Promise.all([
+    getHeroProducts(),
     getHeroSlides(),
     getHomeCategories(),
     getFeaturedProducts(),
@@ -38,7 +40,7 @@ async function getHomeData() {
     getPublicBrands().catch(() => []),
   ]);
 
-  return { slides, categories, products, settings, brands };
+  return { heroProducts, slides, categories, products, settings, brands };
 }
 
 // Only claims the business actually makes elsewhere on the site (see /about
@@ -52,9 +54,11 @@ const trustFeatures = [
 ];
 
 export default async function HomePage() {
-  const { slides, categories, products, settings, brands } = await getHomeData();
+  const { heroProducts, slides, categories, products, settings, brands } = await getHomeData();
 
-  const heroSlides = slides.map((s) => ({
+  // Products chosen in Admin → Products take over the hero; the hand-made
+  // slides from Admin → Homepage are the fallback when none are chosen.
+  const heroSlides = heroProducts.length > 0 ? heroProducts : slides.map((s) => ({
     id: s.id,
     title: s.title,
     description: s.description ?? "",

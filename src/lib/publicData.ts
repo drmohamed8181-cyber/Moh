@@ -33,6 +33,7 @@ import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
 import { productBrand } from "@/lib/brands";
 import { withEditorialContent } from "@/content/productContent";
+import { HERO_PRODUCTS_KEY, parseHeroProductIds } from "@/lib/heroProducts";
 
 export const PRODUCTS_TAG = "products";
 export const CATEGORIES_TAG = "categories";
@@ -259,6 +260,55 @@ export async function getPublicProductSlugs(): Promise<string[]> {
 // ---------------------------------------------------------------------------
 
 export const HERO_SLIDES_TAG = "hero-slides";
+
+export type HeroProductSlide = {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  images: string[];
+  features: string[];
+  buttonText: string;
+  buttonLink: string;
+};
+
+/**
+ * Products the admin put on the homepage hero (Admin → Products → Homepage),
+ * as ready-to-render slides in the chosen order. Built from the live product,
+ * so editing a product updates its slide. Only public, available products with
+ * a photo are used, and only the fields the slide shows leave this function —
+ * never prices.
+ */
+export const getHeroProducts = unstable_cache(
+  async (): Promise<HeroProductSlide[]> => {
+    if (!prisma) throw new DatabaseUnavailableError();
+    const setting = await prisma.siteSetting.findUnique({ where: { key: HERO_PRODUCTS_KEY } });
+    const ids = parseHeroProductIds(setting?.value);
+    if (ids.length === 0) return [];
+    const products = await prisma.product.findMany({
+      where: { id: { in: ids }, isAvailable: true, category: { slug: { notIn: HIDDEN_CATEGORY_SLUGS } } },
+      select: { ...LISTING_PRODUCT_SELECT, category: true },
+    });
+    const byId = new Map(products.map((p) => [p.id, withEditorialContent(withPublicPrice(p))]));
+    return ids.flatMap((id) => {
+      const p = byId.get(id);
+      if (!p || p.images.length === 0) return [];
+      const summary = p.shortDesc?.trim() || p.description?.split(/(?<=\.)\s/)[0]?.trim() || "";
+      return [{
+        id: p.id,
+        title: p.name,
+        description: summary,
+        image: p.images[0],
+        images: p.images.slice(0, 5),
+        features: p.features.filter((f) => f.trim()).slice(0, 4),
+        buttonText: "View Product",
+        buttonLink: `/products/${p.slug}`,
+      }];
+    });
+  },
+  ["home-hero-products"],
+  { tags: [PRODUCTS_TAG, CATEGORIES_TAG, SITE_SETTINGS_TAG], revalidate: ONE_HOUR }
+);
 
 /** Active hero slides, in display order. */
 export const getHeroSlides = unstable_cache(
