@@ -46,6 +46,15 @@ export type ProductContent = {
 const OFFER =
   "Available from MP MedPharma as a new or certified refurbished unit with documented service history and warranty coverage. Pricing is quoted per unit according to configuration, included accessories and condition.";
 
+const DENTAL_CHAIR_DESCRIPTION = `An integrated dental chair unit: the patient chair, delivery system, operating light, spittoon and assistant side supplied and installed as one platform for routine chair-side treatment.\n\nDelivery style is the specification that shapes daily work, since it is designed into the chassis rather than added later. Confirm handedness, the electrical supply and safety listing required where you practise, whether you are on central compressed air and suction, and exactly which tubings, syringes and accessories a quoted price includes. ${OFFER}`;
+
+const DENTAL_CHAIR_INDICATIONS = [
+  "Routine dental examination and diagnosis",
+  "Restorative and prosthetic chair-side treatment",
+  "Four-handed dentistry with an assistant",
+  "General and specialist practice, hospital dentistry and training rooms",
+];
+
 export const PRODUCT_CONTENT: ProductContent[] = [
   // ------------------------------------------------------- Dental chair units
   //
@@ -56,6 +65,8 @@ export const PRODUCT_CONTENT: ProductContent[] = [
   // unit's name also contains "dental chair unit".
   {
     match: ["paediatricdentalchair"],
+    seoTitle: "Paediatric Dental Chair Unit for Children",
+    seoDesc: "Child-friendly dental chair unit with colourful themed styling, LED light with built-in monitor, delivery console and assistant side. Request a quote.",
     description: `A dental chair unit scaled and finished for children, for paediatric practice and child-friendly clinic workflows. The colourful styling is the point rather than decoration: an operatory that does not read as clinical measurably shortens the settling time at the start of an appointment with an anxious child.\n\n${OFFER}`,
     indications: [
       "Paediatric examination and restorative treatment",
@@ -63,15 +74,61 @@ export const PRODUCT_CONTENT: ProductContent[] = [
       "Child-friendly operatories in general and specialist practice",
     ],
   },
+  // One entry per model so each page gets its own search title; the R3
+  // variants must stay above plain R3, since their names also contain "r3".
+  {
+    match: ["dentalchair", "r3", "hanging"],
+    seoTitle: "R3 Dental Chair Unit, Hanging Delivery",
+    seoDesc: "R3 dental chair unit with hanging-hose delivery, assistant side, cuspidor and LED operating light, for four-handed general practice. Request a quote.",
+    description: DENTAL_CHAIR_DESCRIPTION,
+    indications: DENTAL_CHAIR_INDICATIONS,
+  },
+  {
+    match: ["dentalchair", "r3", "floor"],
+    seoTitle: "R3 Floor-Mounted Dental Chair, Touch Screen",
+    seoDesc: "Floor-mounted R3 dental chair unit with touch-screen control panel, contoured backrest, LED operating light and assistant side. Request a quote.",
+    description: DENTAL_CHAIR_DESCRIPTION,
+    indications: DENTAL_CHAIR_INDICATIONS,
+  },
+  {
+    match: ["dentalchair", "r3"],
+    seoTitle: "R3 Dental Chair Unit, Full Treatment Centre",
+    seoDesc: "R3 integrated dental chair unit: delivery console, assistant side, cuspidor and LED operating light on one platform for chair-side treatment. Request a quote.",
+    description: DENTAL_CHAIR_DESCRIPTION,
+    indications: DENTAL_CHAIR_INDICATIONS,
+  },
+  {
+    match: ["dentalchair", "r1"],
+    seoTitle: "R1 Dental Chair Unit, Top-Mounted Delivery",
+    seoDesc: "R1 integrated dental chair unit with top-mounted delivery, LED operating light and assistant side, in a choice of upholstery colours. Request a quote.",
+    description: DENTAL_CHAIR_DESCRIPTION,
+    indications: DENTAL_CHAIR_INDICATIONS,
+  },
+  {
+    match: ["dentalchair", "r2"],
+    seoTitle: "R2 Dental Chair Unit with Instrument Tray",
+    seoDesc: "R2 integrated dental chair unit with top-mounted delivery, a wide instrument tray with display mount and LED operating light. Request a quote.",
+    description: DENTAL_CHAIR_DESCRIPTION,
+    indications: DENTAL_CHAIR_INDICATIONS,
+  },
+  {
+    match: ["dentalchair", "r4"],
+    seoTitle: "R4 Dental Chair Unit with LED Operating Light",
+    seoDesc: "R4 integrated dental chair unit with multi-LED operating light, delivery console, assistant side and cuspidor for routine chair-side work. Request a quote.",
+    description: DENTAL_CHAIR_DESCRIPTION,
+    indications: DENTAL_CHAIR_INDICATIONS,
+  },
+  {
+    match: ["dentalchair", "r5"],
+    seoTitle: "R5 Dental Chair Unit, Multi-LED Light",
+    seoDesc: "R5 integrated dental chair unit with multi-LED operating light, top-mounted delivery console and assistant side for general practice. Request a quote.",
+    description: DENTAL_CHAIR_DESCRIPTION,
+    indications: DENTAL_CHAIR_INDICATIONS,
+  },
   {
     match: ["dentalchairunit"],
-    description: `An integrated dental chair unit: the patient chair, delivery system, operating light, spittoon and assistant side supplied and installed as one platform for routine chair-side treatment.\n\nDelivery style is the specification that shapes daily work, since it is designed into the chassis rather than added later. Confirm handedness, the electrical supply and safety listing required where you practise, whether you are on central compressed air and suction, and exactly which tubings, syringes and accessories a quoted price includes. ${OFFER}`,
-    indications: [
-      "Routine dental examination and diagnosis",
-      "Restorative and prosthetic chair-side treatment",
-      "Four-handed dentistry with an assistant",
-      "General and specialist practice, hospital dentistry and training rooms",
-    ],
+    description: DENTAL_CHAIR_DESCRIPTION,
+    indications: DENTAL_CHAIR_INDICATIONS,
   },
   // ---------------------------------------------------------------- Alcon
   {
