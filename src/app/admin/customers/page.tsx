@@ -59,6 +59,13 @@ export default async function AdminCustomersPage({ searchParams }: { searchParam
     },
   })) ?? [];
 
+  // Lightweight list of every customer for the search dropdown.
+  const allCustomers = await safeDb((db) => db.user.findMany({
+    where: { role: "CUSTOMER" },
+    select: { id: true, name: true, email: true, organization: true, image: true },
+    orderBy: { name: "asc" },
+  })) ?? [];
+
   const sorted = [...customers].sort((a, b) => {
     let result = 0;
     if (sort === "name") {
@@ -80,7 +87,7 @@ export default async function AdminCustomersPage({ searchParams }: { searchParam
         </p>
       </div>
 
-      <CustomerSearchBar />
+      <CustomerSearchBar customers={allCustomers} />
 
       <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">

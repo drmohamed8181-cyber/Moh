@@ -1,10 +1,33 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { Search, X } from "lucide-react";
+import { X } from "lucide-react";
+import SearchSuggestInput from "@/components/ui/SearchSuggestInput";
 
-export default function CustomerSearchBar() {
+export type CustomerSuggestion = {
+  id: string;
+  name: string | null;
+  email: string;
+  organization: string | null;
+  image: string | null;
+};
+
+const MAX_SUGGESTIONS = 8;
+
+// Names starting with the typed text first, then a word in the name, then any
+// name/email/organization match. -1 = no match.
+function rank(c: CustomerSuggestion, q: string) {
+  const name = (c.name ?? "").toLowerCase();
+  if (name.startsWith(q)) return 0;
+  if (name.split(/\s+/).some((w) => w.startsWith(q))) return 1;
+  if (c.email.toLowerCase().startsWith(q)) return 2;
+  if (c.organization?.toLowerCase().includes(q)) return 3;
+  if (name.includes(q) || c.email.toLowerCase().includes(q)) return 4;
+  return -1;
+}
+
+export default function CustomerSearchBar({ customers }: { customers: CustomerSuggestion[] }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -36,6 +59,36 @@ export default function CustomerSearchBar() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
+  const matches = useMemo(() => {
+    const q = value.trim().toLowerCase();
+    if (!q) return [];
+    return customers
+      .map((c) => ({ c, r: rank(c, q) }))
+      .filter((x) => x.r >= 0)
+      .sort((a, b) => a.r - b.r || (a.c.name ?? a.c.email).localeCompare(b.c.name ?? b.c.email))
+      .map((x) => x.c);
+  }, [customers, value]);
+
+  const suggestions = matches.slice(0, MAX_SUGGESTIONS).map((c) => ({
+    id: c.id,
+    title: c.name ?? c.email,
+    subtitle: [c.email, c.organization].filter(Boolean).join(" · "),
+    image: c.image,
+    roundThumb: true,
+    fallback: <span className="text-sm font-semibold text-blue-600">{(c.name ?? c.email)[0]?.toUpperCase()}</span>,
+  }));
+
+  // Picking a customer narrows the table to just them (emails are unique).
+  const selectCustomer = (id: string) => {
+    const c = customers.find((x) => x.id === id);
+    if (!c) return;
+    setValue(c.email);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("q", c.email);
+    lastPushed.current = c.email;
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const next = value.trim();
@@ -56,16 +109,15 @@ export default function CustomerSearchBar() {
 
   return (
     <form onSubmit={handleSubmit} className="flex items-center gap-2 mb-4">
-      <div className="relative flex-1 max-w-sm">
-        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-        <input
-          type="text"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder="Search name, email, organization, phone, address..."
-          className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-        />
-      </div>
+      <SearchSuggestInput
+        className="flex-1 max-w-md"
+        value={value}
+        onChange={setValue}
+        suggestions={suggestions}
+        onSelect={(s) => selectCustomer(s.id)}
+        noun="customers"
+        placeholder="Search name, email, organization, phone, address..."
+      />
       <button type="submit" className="px-5 py-2.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 transition-colors">
         Search
       </button>

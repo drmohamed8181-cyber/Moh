@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSession, signOut } from "next-auth/react";
 import {
@@ -12,6 +11,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useWishlistStore } from "@/store/wishlistStore";
 import { LogoMark } from "@/components/ui/Logo";
+import SiteSearchBox from "@/components/shop/SiteSearchBox";
 
 const defaultNav = [
   { id: "1", label: "Home", href: "/", children: [] },
@@ -48,7 +48,6 @@ export default function Header({ settings }: { settings?: HeaderSettings }) {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const { data: session } = useSession();
-  const router = useRouter();
   const loadWishlist = useWishlistStore((s) => s.load);
   const resetWishlist = useWishlistStore((s) => s.reset);
 
@@ -62,13 +61,6 @@ export default function Header({ settings }: { settings?: HeaderSettings }) {
     if (session?.user) loadWishlist();
     else resetWishlist();
   }, [session, loadWishlist, resetWishlist]);
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
-    }
-  };
 
   return (
     <>
@@ -281,19 +273,12 @@ export default function Header({ settings }: { settings?: HeaderSettings }) {
         <div className="fixed inset-0 z-[60] bg-black/50 flex items-start justify-center pt-24 px-4"
           onClick={(e) => e.target === e.currentTarget && setSearchOpen(false)}>
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl p-6 animate-slide-up">
-            <form onSubmit={handleSearch} className="flex gap-3">
-              <input
-                autoFocus
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search products, categories, brands..."
-                className="flex-1 px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-800"
-              />
-              <button type="submit" className="px-6 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-colors font-medium">
-                Search
-              </button>
-            </form>
+            <SiteSearchBox
+              autoFocus
+              value={searchQuery}
+              onValueChange={setSearchQuery}
+              onNavigate={() => setSearchOpen(false)}
+            />
             <div className="mt-4 flex flex-wrap gap-2">
               <span className="text-xs text-gray-500">Popular:</span>
               {["Blood Pressure Monitor", "Pulse Oximeter", "ECG Machine", "Nebulizer"].map((term) => (
