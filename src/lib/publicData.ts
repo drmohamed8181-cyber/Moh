@@ -137,6 +137,16 @@ export const getPublicCategories = unstable_cache(
   { tags: [CATEGORIES_TAG], revalidate: ONE_HOUR }
 );
 
+/** Name + slug of each public category for the header search's quick links; [] without a database. */
+export async function getSearchCategoryLinks(): Promise<{ name: string; slug: string }[]> {
+  try {
+    const categories = await getPublicCategories();
+    return categories.map((c) => ({ name: c.name, slug: c.slug }));
+  } catch {
+    return [];
+  }
+}
+
 /** A single category by slug, or null if there is no such category. */
 export const getCategoryBySlug = unstable_cache(
   async (slug: string) => {
