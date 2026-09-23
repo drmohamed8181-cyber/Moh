@@ -1,7 +1,7 @@
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
-import { getSiteSettings } from "@/lib/publicData";
+import { getSiteSettings, getSearchCategoryLinks } from "@/lib/publicData";
 
 // Deliberately not `force-dynamic`. This layout wraps the whole public shop, so
 // forcing it dynamic forced every page under it — including all the product
@@ -11,11 +11,11 @@ import { getSiteSettings } from "@/lib/publicData";
 // which is a client component and resolves in the browser.
 
 export default async function ShopLayout({ children }: { children: React.ReactNode }) {
-  const settings = await getSiteSettings();
+  const [settings, categories] = await Promise.all([getSiteSettings(), getSearchCategoryLinks()]);
 
   return (
     <>
-      <Header settings={settings} />
+      <Header settings={settings} categories={categories} />
       <main className="min-h-screen">{children}</main>
       <Footer settings={settings} />
       <WhatsAppButton />

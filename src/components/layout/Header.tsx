@@ -36,7 +36,7 @@ type HeaderSettings = {
   email?: string;
 };
 
-export default function Header({ settings }: { settings?: HeaderSettings }) {
+export default function Header({ settings, categories = [] }: { settings?: HeaderSettings; categories?: { name: string; slug: string }[] }) {
   const phone = settings?.phone || "929-349-8569";
   const email = settings?.email || "info@mpmedpharma.com";
   const phoneHref = `tel:${phone.replace(/[^\d+]/g, "")}`;
@@ -279,18 +279,21 @@ export default function Header({ settings }: { settings?: HeaderSettings }) {
               onValueChange={setSearchQuery}
               onNavigate={() => setSearchOpen(false)}
             />
-            <div className="mt-4 flex flex-wrap gap-2">
-              <span className="text-xs text-gray-500">Popular:</span>
-              {["Blood Pressure Monitor", "Pulse Oximeter", "ECG Machine", "Nebulizer"].map((term) => (
-                <button
-                  key={term}
-                  onClick={() => { setSearchQuery(term); }}
-                  className="text-xs px-3 py-1 bg-gray-100 text-gray-600 rounded-full hover:bg-primary-50 hover:text-primary-600 transition-colors"
-                >
-                  {term}
-                </button>
-              ))}
-            </div>
+            {categories.length > 0 && (
+              <div className="mt-4 flex flex-wrap items-center gap-2">
+                <span className="text-xs text-gray-500">Browse:</span>
+                {categories.map((c) => (
+                  <Link
+                    key={c.slug}
+                    href={`/categories/${c.slug}`}
+                    onClick={() => setSearchOpen(false)}
+                    className="text-xs px-3 py-1 bg-gray-100 text-gray-600 rounded-full hover:bg-primary-50 hover:text-primary-600 transition-colors"
+                  >
+                    {c.name}
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}

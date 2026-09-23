@@ -182,7 +182,7 @@ export default function ProductForm({ categories, product, prefilled = [] }: Pro
           <div className="bg-white rounded-2xl border p-6 space-y-5">
             <h2 className="font-semibold text-gray-900">Basic Information</h2>
             <Field label="Product Name" required>
-              <input id="product-name" type="text" value={form.name} onChange={(e) => handleNameChange(e.target.value)} className={fieldClass("name")} placeholder="e.g. Digital Blood Pressure Monitor" required />
+              <input id="product-name" type="text" value={form.name} onChange={(e) => handleNameChange(e.target.value)} className={fieldClass("name")} placeholder="e.g. Dental Treatment Chair" required />
             </Field>
             <div className="grid sm:grid-cols-2 gap-4">
               <Field label="Slug" required>

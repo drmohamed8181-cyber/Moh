@@ -351,7 +351,7 @@ export default function SellProductForm() {
 
             <div>
               <label className={fieldLabel}>Product Name *</label>
-              <input value={product.productName} onChange={(e) => setP("productName", e.target.value)} placeholder="e.g. Digital ECG Machine" className={inputClass} required />
+              <input value={product.productName} onChange={(e) => setP("productName", e.target.value)} placeholder="e.g. Slit Lamp" className={inputClass} required />
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4">
