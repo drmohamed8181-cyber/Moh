@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Image from "next/image";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, GripVertical, Eye, EyeOff, X, Save } from "lucide-react";
+import { Plus, Pencil, Trash2, GripVertical, Eye, EyeOff, X, Save, Check } from "lucide-react";
+import SearchSuggestInput from "@/components/ui/SearchSuggestInput";
+import { productSearchRank } from "@/lib/productSearch";
 
 interface Slide {
   id: string;
@@ -16,24 +18,69 @@ interface Slide {
   isActive: boolean;
 }
 
+interface PickableProduct {
+  id: string;
+  name: string;
+  slug: string;
+  sku: string;
+  shortDesc: string | null;
+  images: string[];
+  category: { name: string } | null;
+}
+
 const emptySlide = { title: "", description: "", image: "", buttonText: "Shop Now", buttonLink: "/products" };
 
-export default function HomepageManager({ slides: initialSlides }: { slides: Slide[] }) {
+export default function HomepageManager({ slides: initialSlides, products = [] }: { slides: Slide[]; products?: PickableProduct[] }) {
   const [slides, setSlides] = useState<Slide[]>(initialSlides);
   const [editing, setEditing] = useState<Slide | null>(null);
   const [form, setForm] = useState(emptySlide);
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [productQuery, setProductQuery] = useState("");
+  const [picked, setPicked] = useState<PickableProduct | null>(null);
+
+  const productMatches = useMemo(() => {
+    const q = productQuery.trim();
+    if (!q) return [];
+    return products
+      .map((p) => ({ p, r: productSearchRank({ name: p.name, sku: p.sku, category: p.category?.name ?? null }, q) }))
+      .filter((x) => x.r >= 0)
+      .sort((a, b) => a.r - b.r || a.p.name.localeCompare(b.p.name))
+      .slice(0, 8)
+      .map((x) => x.p);
+  }, [products, productQuery]);
+
+  // Fill the whole slide from a product; every field stays editable after.
+  const pickProduct = (id: string) => {
+    const p = products.find((x) => x.id === id);
+    if (!p) return;
+    setPicked(p);
+    setProductQuery("");
+    setForm({
+      title: p.name,
+      description: p.shortDesc ?? "",
+      image: p.images[0] ?? "",
+      buttonText: "View Product",
+      buttonLink: `/products/${p.slug}`,
+    });
+  };
+
+  const resetPicker = () => {
+    setProductQuery("");
+    setPicked(null);
+  };
 
   const openNew = () => {
     setEditing(null);
     setForm(emptySlide);
+    resetPicker();
     setShowModal(true);
   };
 
   const openEdit = (slide: Slide) => {
     setEditing(slide);
     setForm({ title: slide.title, description: slide.description ?? "", image: slide.image, buttonText: slide.buttonText ?? "", buttonLink: slide.buttonLink ?? "" });
+    resetPicker();
     setShowModal(true);
   };
 
@@ -46,7 +93,8 @@ export default function HomepageManager({ slides: initialSlides }: { slides: Sli
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, order: slides.length }),
+        // Only new slides go to the end; editing must keep a slide's place.
+        body: JSON.stringify(editing ? form : { ...form, order: slides.length }),
       });
       if (res.ok) {
         const saved = await res.json();
@@ -139,14 +187,39 @@ export default function HomepageManager({ slides: initialSlides }: { slides: Sli
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[calc(100vh-2rem)] flex flex-col">
             <div className="flex items-center justify-between p-6 border-b">
               <h3 className="font-bold text-gray-900">{editing ? "Edit Slide" : "New Slide"}</h3>
               <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-gray-600">
                 <X size={20} />
               </button>
             </div>
-            <div className="p-6 space-y-4">
+            <div className="p-6 space-y-4 overflow-y-auto">
+              {products.length > 0 && (
+                <div className="rounded-xl bg-primary-50/60 border border-primary-100 p-4">
+                  <label className="block text-sm font-semibold text-gray-800 mb-1">Choose a product to feature</label>
+                  <p className="text-xs text-gray-500 mb-2.5">Fills in the title, description, picture and link below. You can still edit any of them.</p>
+                  <SearchSuggestInput
+                    value={productQuery}
+                    onChange={setProductQuery}
+                    suggestions={productMatches.map((p) => ({
+                      id: p.id,
+                      title: p.name,
+                      subtitle: `SKU: ${p.sku}${p.category ? ` · ${p.category.name}` : ""}`,
+                      image: p.images[0] ?? null,
+                    }))}
+                    onSelect={(sg) => pickProduct(sg.id)}
+                    noun="products"
+                    placeholder="Type a product name..."
+                    inputClassName="py-2.5 text-sm bg-white"
+                  />
+                  {picked && (
+                    <p className="flex items-center gap-1.5 text-xs text-green-700 mt-2">
+                      <Check size={13} /> Filled from <span className="font-semibold">{picked.name}</span>
+                    </p>
+                  )}
+                </div>
+              )}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">Title *</label>
                 <input type="text" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className={inputClass} placeholder="Slide title" />
@@ -156,11 +229,28 @@ export default function HomepageManager({ slides: initialSlides }: { slides: Sli
                 <textarea rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className={inputClass + " resize-none"} placeholder="Short description..." />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Image URL *</label>
-                <input type="url" value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} className={inputClass} placeholder="https://..." />
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Image *</label>
+                {picked && picked.images.length > 1 && (
+                  <div className="mb-2">
+                    <p className="text-xs text-gray-500 mb-1.5">Pick which photo of this product to show:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {picked.images.map((img) => (
+                        <button
+                          key={img}
+                          type="button"
+                          onClick={() => setForm({ ...form, image: img })}
+                          className={`relative w-16 h-16 rounded-lg overflow-hidden bg-gray-100 border-2 ${form.image === img ? "border-primary-600" : "border-transparent hover:border-gray-300"}`}
+                        >
+                          <Image src={img} alt="" fill sizes="64px" className="object-contain p-1" />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <input type="text" value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} className={inputClass} placeholder="https://... or pick a product above" />
                 {form.image && (
-                  <div className="relative h-24 bg-gray-100 rounded-xl overflow-hidden mt-2">
-                    <Image src={form.image} alt="Preview" fill className="object-cover" />
+                  <div className="relative h-32 bg-gray-100 rounded-xl overflow-hidden mt-2">
+                    <Image src={form.image} alt="Preview" fill className="object-contain p-2" />
                   </div>
                 )}
               </div>
