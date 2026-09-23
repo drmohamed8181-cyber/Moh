@@ -65,8 +65,8 @@ export const PRODUCT_CONTENT: ProductContent[] = [
   // unit's name also contains "dental chair unit".
   {
     match: ["paediatricdentalchair"],
-    seoTitle: "Paediatric Dental Chair Unit for Children",
-    seoDesc: "Child-friendly dental chair unit with colourful themed styling, LED light with built-in monitor, delivery console and assistant side. Request a quote.",
+    seoTitle: "Pediatric Dental Chair Unit for Sale",
+    seoDesc: "Pediatric dental chair unit with colorful, child-friendly styling, delivery console and assistant side, for children's dental practices. Request a price quote.",
     description: `A dental chair unit scaled and finished for children, for paediatric practice and child-friendly clinic workflows. The colourful styling is the point rather than decoration: an operatory that does not read as clinical measurably shortens the settling time at the start of an appointment with an anxious child.\n\n${OFFER}`,
     indications: [
       "Paediatric examination and restorative treatment",
@@ -78,50 +78,50 @@ export const PRODUCT_CONTENT: ProductContent[] = [
   // variants must stay above plain R3, since their names also contain "r3".
   {
     match: ["dentalchair", "r3", "hanging"],
-    seoTitle: "R3 Dental Chair Unit, Hanging Delivery",
-    seoDesc: "R3 dental chair unit with hanging-hose delivery, assistant side, cuspidor and LED operating light, for four-handed general practice. Request a quote.",
+    seoTitle: "R3 Dental Chair, Hanging Delivery, for Sale",
+    seoDesc: "R3 dental chair unit with hanging-hose delivery, LED operating light and assistant side, for general dental practice. Request a price quote from MP MedPharma.",
     description: DENTAL_CHAIR_DESCRIPTION,
     indications: DENTAL_CHAIR_INDICATIONS,
   },
   {
     match: ["dentalchair", "r3", "floor"],
-    seoTitle: "R3 Floor-Mounted Dental Chair, Touch Screen",
-    seoDesc: "Floor-mounted R3 dental chair unit with touch-screen control panel, contoured backrest, LED operating light and assistant side. Request a quote.",
+    seoTitle: "R3 Floor-Mounted Dental Chair for Sale",
+    seoDesc: "Floor-mounted R3 dental chair unit with touch-screen control panel, LED operating light and assistant side. Request a price quote from MP MedPharma.",
     description: DENTAL_CHAIR_DESCRIPTION,
     indications: DENTAL_CHAIR_INDICATIONS,
   },
   {
     match: ["dentalchair", "r3"],
-    seoTitle: "R3 Dental Chair Unit, Full Treatment Centre",
-    seoDesc: "R3 integrated dental chair unit: delivery console, assistant side, cuspidor and LED operating light on one platform for chair-side treatment. Request a quote.",
+    seoTitle: "R3 Dental Chair Unit for Sale",
+    seoDesc: "R3 dental chair unit with delivery console, LED operating light and assistant side, for chair-side treatment. Request a price quote from MP MedPharma.",
     description: DENTAL_CHAIR_DESCRIPTION,
     indications: DENTAL_CHAIR_INDICATIONS,
   },
   {
     match: ["dentalchair", "r1"],
-    seoTitle: "R1 Dental Chair Unit, Top-Mounted Delivery",
-    seoDesc: "R1 integrated dental chair unit with top-mounted delivery, LED operating light and assistant side, in a choice of upholstery colours. Request a quote.",
+    seoTitle: "R1 Dental Chair Unit for Sale, Top-Mounted",
+    seoDesc: "R1 dental chair unit with top-mounted delivery, LED operating light and assistant side, for general dental practice. Request a price quote from MP MedPharma.",
     description: DENTAL_CHAIR_DESCRIPTION,
     indications: DENTAL_CHAIR_INDICATIONS,
   },
   {
     match: ["dentalchair", "r2"],
-    seoTitle: "R2 Dental Chair Unit with Instrument Tray",
-    seoDesc: "R2 integrated dental chair unit with top-mounted delivery, a wide instrument tray with display mount and LED operating light. Request a quote.",
+    seoTitle: "R2 Dental Chair with Instrument Tray for Sale",
+    seoDesc: "R2 dental chair unit with top-mounted delivery, instrument tray, LED operating light and assistant side. Request a price quote from MP MedPharma.",
     description: DENTAL_CHAIR_DESCRIPTION,
     indications: DENTAL_CHAIR_INDICATIONS,
   },
   {
     match: ["dentalchair", "r4"],
-    seoTitle: "R4 Dental Chair Unit with LED Operating Light",
-    seoDesc: "R4 integrated dental chair unit with multi-LED operating light, delivery console, assistant side and cuspidor for routine chair-side work. Request a quote.",
+    seoTitle: "R4 Dental Chair Unit for Sale",
+    seoDesc: "R4 dental chair unit with delivery console, LED operating light and assistant side, for routine dental treatment. Request a price quote from MP MedPharma.",
     description: DENTAL_CHAIR_DESCRIPTION,
     indications: DENTAL_CHAIR_INDICATIONS,
   },
   {
     match: ["dentalchair", "r5"],
-    seoTitle: "R5 Dental Chair Unit, Multi-LED Light",
-    seoDesc: "R5 integrated dental chair unit with multi-LED operating light, top-mounted delivery console and assistant side for general practice. Request a quote.",
+    seoTitle: "R5 Dental Chair Unit with LED Light for Sale",
+    seoDesc: "R5 dental chair unit with delivery console, LED operating light and assistant side, for general dental practice. Request a price quote from MP MedPharma.",
     description: DENTAL_CHAIR_DESCRIPTION,
     indications: DENTAL_CHAIR_INDICATIONS,
   },
@@ -154,7 +154,7 @@ export const PRODUCT_CONTENT: ProductContent[] = [
   },
   {
     match: ["constellation"],
-    seoTitle: "Alcon Constellation Vitrectomy System",
+    seoTitle: "Alcon Constellation Vision System for Sale",
     seoDesc: "Alcon Constellation Vision System for sale: high-speed vitrectomy, IOP compensation and phaco in one console. New or refurbished, with warranty. Get a quote.",
     description: `The Alcon Constellation Vision System is a combined vitreoretinal and anterior segment surgical platform. It integrates high-speed vitrectomy with duty-cycle control, intraocular pressure compensation, an integrated laser option and phacoemulsification in one console, so retina and cataract procedures can be performed on the same system.\n\nWhen buying a pre-owned Constellation, check which modules are fitted (laser, phaco, illumination), the vitrectomy probe gauges supported by the installed software, and the service history of the console and light sources. ${OFFER}`,
     features: ["High-speed vitrectomy with duty-cycle control", "Intraocular pressure compensation", "Integrated phaco and optional laser module", "Xenon illumination"],
@@ -162,7 +162,7 @@ export const PRODUCT_CONTENT: ProductContent[] = [
   },
   {
     match: ["luxor"],
-    seoTitle: "Alcon LuxOR LX3 Surgical Microscope",
+    seoTitle: "Alcon LuxOR LX3 Microscope for Sale",
     seoDesc: "Alcon LuxOR LX3 ophthalmic surgical microscope for sale, known for a wide, stable red reflex in cataract surgery. Refurbished with warranty. Request pricing.",
     description: `The Alcon LuxOR LX3 is an ophthalmic surgical microscope designed for cataract and anterior segment surgery. Its illumination system is built to give a wide, stable red reflex that stays visible with eye movement and decentration, which surgeons value during capsulorhexis and cortex removal. It is offered on floor stands with motorised focus, zoom and XY positioning and can be fitted with assistant scopes and video documentation.\n\nOn a pre-owned microscope check the optics for haze or delamination, the stand's motorised movements, the light source hours and any video or recording equipment included. ${OFFER}`,
     features: ["Wide, stable red reflex illumination", "Motorised focus, zoom and XY", "Floor stand with counterbalanced arm", "Options for assistant scope and video"],
@@ -170,7 +170,7 @@ export const PRODUCT_CONTENT: ProductContent[] = [
   },
   {
     match: ["ex500"],
-    seoTitle: "Alcon WaveLight EX500 Excimer Laser",
+    seoTitle: "Alcon WaveLight EX500 Laser for Sale",
     seoDesc: "Alcon WaveLight EX500 excimer laser for sale: 500 Hz LASIK and PRK with eye tracking and topography-guided profiles. Refurbished with warranty. Get a quote.",
     description: `The Alcon WaveLight EX500 is an excimer laser for refractive surgery, operating at a 500 Hz pulse rate with eye tracking and a range of treatment profiles including wavefront-optimised and topography-guided ablations. It is normally used together with WaveLight diagnostic devices such as the Topolyzer VARIO and can be paired with a WaveLight femtosecond laser for a complete LASIK suite.\n\nA used excimer laser should be assessed on its shot count, optics and gas service history, the treatment licences that transfer with it, and the room conditions it requires; see our guide on buying a used excimer laser. ${OFFER}`,
     features: ["500 Hz excimer ablation", "Eye tracking with cyclotorsion compensation options", "Wavefront-optimised and topography-guided treatments", "Integration with WaveLight diagnostics"],
@@ -179,8 +179,8 @@ export const PRODUCT_CONTENT: ProductContent[] = [
   },
   {
     match: ["wavelight", "400"],
-    seoTitle: "Alcon WaveLight 400 Hz Excimer Laser",
-    seoDesc: "Refurbished Alcon WaveLight 400 Hz (Allegretto) excimer laser for LASIK and surface ablation, with eye tracking and wavefront-optimised profiles. Request a quote.",
+    seoTitle: "Alcon WaveLight 400 Hz Laser for Sale",
+    seoDesc: "Refurbished Alcon WaveLight 400 Hz (Allegretto) excimer laser for LASIK and surface ablation, with eye tracking and wavefront-optimized profiles. Get a quote.",
     description: `The Alcon WaveLight 400 Hz excimer laser is the predecessor to the EX500 and remains a capable refractive platform for LASIK and surface ablation, with eye tracking and wavefront-optimised treatment profiles. Its lower pulse rate means slightly longer ablation times than the EX500, while its consumables and service infrastructure are well established.\n\nBuyers should verify the shot count, optics and gas service dates, and which treatment licences are active on the unit. ${OFFER}`,
     features: ["400 Hz excimer ablation", "Active eye tracking", "Wavefront-optimised treatment profiles"],
     indications: ["LASIK", "PRK and surface ablation"],
@@ -189,7 +189,7 @@ export const PRODUCT_CONTENT: ProductContent[] = [
   {
     match: ["topolyzer"],
     seoTitle: "Alcon WaveLight Topolyzer VARIO for Sale",
-    seoDesc: "Alcon WaveLight Topolyzer VARIO corneal topographer for sale, for topography-guided refractive planning and keratoconus screening. Warranty included. Get a quote.",
+    seoDesc: "Alcon WaveLight Topolyzer VARIO corneal topographer for sale, for topography-guided refractive planning and keratoconus screening. Warranty included.",
     description: `The Alcon WaveLight Topolyzer VARIO is a corneal topographer and pupillometer used to plan refractive treatments on WaveLight excimer lasers. It captures corneal curvature, keratometry and pupil data and exports treatment plans for topography-guided ablation, and it is also used for corneal screening and contact-lens fitting.\n\nConfirm that the software version is compatible with the laser it will be paired with, and that the export licence is included. ${OFFER}`,
     features: ["Placido-based corneal topography", "Pupillometry under different lighting conditions", "Export of topography-guided treatment plans to WaveLight lasers"],
     indications: ["Refractive surgery planning", "Keratoconus and corneal screening", "Contact-lens fitting"],
@@ -224,24 +224,24 @@ export const PRODUCT_CONTENT: ProductContent[] = [
   },
   {
     match: ["clarus", "700"],
-    seoTitle: "Zeiss Clarus 700 Widefield Fundus Camera",
-    seoDesc: "Zeiss Clarus 700 for sale: true-colour 200° ultra-widefield fundus imaging with fluorescein angiography, FAF and infrared. Refurbished with warranty. Get a quote.",
+    seoTitle: "Zeiss Clarus 700 Fundus Camera for Sale",
+    seoDesc: "Zeiss Clarus 700 for sale: true-color 200° ultra-widefield fundus imaging with angiography, FAF and infrared. Refurbished with warranty. Get a quote.",
     description: `The Zeiss Clarus 700 is an ultra-widefield fundus imaging system that captures true-colour images across a 200-degree field of view in a single capture, with fluorescein angiography in addition to the colour, autofluorescence and infrared modes of the Clarus 500. It is used in retina, diabetic eye disease and general screening workflows where peripheral pathology matters.\n\nConfirm the imaging modes licensed on the unit, the software version and the condition of the optics and the review workstation. ${OFFER}`,
     features: ["Ultra-widefield true-colour imaging", "Fluorescein angiography", "Fundus autofluorescence and infrared imaging", "Montage imaging beyond 200 degrees"],
     indications: ["Diabetic retinopathy screening and monitoring", "Retinal detachment and peripheral retinal disease", "Age-related macular degeneration", "Fluorescein angiography"],
   },
   {
     match: ["clarus", "500"],
-    seoTitle: "Zeiss Clarus 500 Widefield Fundus Camera",
-    seoDesc: "Zeiss Clarus 500 ultra-widefield fundus camera for sale: true-colour 200° images plus autofluorescence and infrared. Refurbished with warranty. Request a quote.",
+    seoTitle: "Zeiss Clarus 500 Fundus Camera for Sale",
+    seoDesc: "Zeiss Clarus 500 ultra-widefield fundus camera for sale: true-color 200° images plus autofluorescence and infrared. Refurbished with warranty. Get a quote.",
     description: `The Zeiss Clarus 500 is an ultra-widefield fundus camera that produces true-colour images across a 200-degree field in a single capture, together with fundus autofluorescence and infrared modes. It suits retina, diabetic eye disease and screening clinics that want widefield coverage with natural colour rendering.\n\nOn a pre-owned unit, check the optics, the imaging modes licensed, and the included workstation and table. ${OFFER}`,
     features: ["Ultra-widefield true-colour imaging", "Fundus autofluorescence", "Infrared imaging", "Montage imaging"],
     indications: ["Diabetic retinopathy screening", "Peripheral retinal disease", "Macular disease documentation"],
   },
   {
     match: ["visante"],
-    seoTitle: "Zeiss Visante Anterior Segment OCT",
-    seoDesc: "Zeiss Visante OCT for sale: 1310 nm anterior segment imaging for pachymetry maps, angle assessment and refractive planning. Refurbished with warranty. Get a quote.",
+    seoTitle: "Zeiss Visante Anterior Segment OCT for Sale",
+    seoDesc: "Zeiss Visante OCT for sale: 1310 nm anterior segment imaging for pachymetry maps, angle assessment and refractive planning. Refurbished with warranty.",
     description: `The Zeiss Visante OCT is an anterior segment optical coherence tomography system operating at 1310 nm, a wavelength chosen for imaging the cornea, anterior chamber angle and lens through opaque or pigmented tissue. It is used for corneal pachymetry maps, angle assessment in glaucoma, and planning for refractive and phakic-lens procedures.\n\nCheck the software version, the condition of the scanning unit and the included computer, and confirm the calibration status. ${OFFER}`,
     features: ["1310 nm anterior segment OCT", "Corneal pachymetry mapping", "Anterior chamber angle and depth measurement", "Phakic IOL and refractive surgery planning"],
     indications: ["Anterior chamber angle assessment", "Corneal thickness mapping", "Refractive and phakic-lens surgery planning", "Post-operative flap and graft assessment"],
@@ -249,7 +249,7 @@ export const PRODUCT_CONTENT: ProductContent[] = [
   },
   {
     match: ["visu", "160"],
-    seoTitle: "Zeiss OPMI VISU 160 Surgical Microscope",
+    seoTitle: "Zeiss OPMI VISU 160 Microscope for Sale",
     seoDesc: "Zeiss OPMI VISU 160 ophthalmic surgical microscope for sale, with apochromatic optics and a strong red reflex for cataract surgery. Refurbished with warranty.",
     description: `The Zeiss OPMI VISU 160 is an ophthalmic surgical microscope widely used for cataract and anterior segment surgery. It offers apochromatic optics, coaxial illumination for a good red reflex, motorised focus and zoom, and a floor stand with XY positioning; assistant scopes and video adapters are available.\n\nAssess the optics for haze, the stand's motorised functions and the illumination hours. ${OFFER}`,
     features: ["Zeiss apochromatic optics", "Coaxial illumination for red reflex", "Motorised focus and zoom", "Floor stand with XY coupling"],
@@ -294,7 +294,7 @@ export const PRODUCT_CONTENT: ProductContent[] = [
   },
   {
     match: ["solitaire"],
-    seoTitle: "Ellex Solitaire 532 nm Retinal Laser",
+    seoTitle: "Ellex Solitaire Retinal Laser for Sale",
     seoDesc: "Ellex Solitaire 532 nm green photocoagulator for sale, for panretinal and focal photocoagulation and tear repair. Refurbished with warranty. Request a quote.",
     description: `The Ellex Solitaire is a 532 nm green photocoagulator for retina and glaucoma treatment, delivered through a slit-lamp and optionally a laser indirect ophthalmoscope. It is used for panretinal and focal photocoagulation, retinal tear repair and laser trabeculoplasty, and its solid-state design keeps it compact and low-maintenance.\n\nOn a used photocoagulator, check the output power calibration, the delivery devices included (slit-lamp adapter, indirect ophthalmoscope, endoprobe) and the fibre condition. ${OFFER}`,
     features: ["532 nm solid-state photocoagulation", "Slit-lamp and laser indirect ophthalmoscope delivery options", "Adjustable spot size and duration"],
@@ -349,7 +349,7 @@ export const PRODUCT_CONTENT: ProductContent[] = [
   // ---------------------------------------------------------------- Lumenis
   {
     match: ["selecta", "duet"],
-    seoTitle: "Lumenis Selecta Duet SLT/YAG Laser",
+    seoTitle: "Lumenis Selecta Duet SLT/YAG for Sale",
     seoDesc: "Lumenis Selecta Duet combined SLT and Nd:YAG laser for sale: glaucoma SLT plus capsulotomy and iridotomy in one platform. Refurbished with warranty.",
     description: `The Lumenis Selecta Duet is a combined SLT and YAG laser system, pairing a 532 nm selective laser trabeculoplasty mode with a 1064 nm Nd:YAG for capsulotomy and iridotomy in one slit-lamp-mounted platform. It lets a practice treat open-angle glaucoma and posterior capsule opacification with a single device.\n\nOn a pre-owned unit check energy calibration in both modes, aiming beam alignment and the slit-lamp optics. ${OFFER}`,
     features: ["SLT and YAG in one system", "Slit-lamp delivery", "Selectable energy and spot for each mode"],
@@ -368,7 +368,7 @@ export const PRODUCT_CONTENT: ProductContent[] = [
   // ---------------------------------------------------------------- Johnson & Johnson Vision / AMO
   {
     match: ["idesign"],
-    seoTitle: "J&J iDesign Wavefront Aberrometer",
+    seoTitle: "J&J iDesign Aberrometer for Sale",
     seoDesc: "Johnson & Johnson Vision iDesign aberrometer for sale, for wavefront-guided LASIK planning on the VISX STAR S4 IR. Refurbished with warranty. Request a quote.",
     description: `The Johnson & Johnson Vision iDesign is a wavefront aberrometer and diagnostic station used to plan wavefront-guided LASIK on the VISX STAR S4 IR excimer laser. It measures higher-order aberrations, corneal topography, keratometry, pupillometry and autorefraction in one capture and exports the treatment plan to the laser.\n\nConfirm the software version is compatible with the laser it will serve and that the export licence transfers. ${OFFER}`,
     features: ["High-resolution wavefront aberrometry", "Corneal topography and keratometry", "Pupillometry and autorefraction", "Wavefront-guided treatment export to VISX lasers"],
@@ -377,7 +377,7 @@ export const PRODUCT_CONTENT: ProductContent[] = [
   {
     match: ["visx"],
     seoTitle: "VISX STAR S4 IR Excimer Laser for Sale",
-    seoDesc: "AMO VISX STAR S4 IR excimer laser for sale: variable spot scanning, eye tracking and iris registration for LASIK and PRK. Refurbished with warranty. Get a quote.",
+    seoDesc: "AMO VISX STAR S4 IR excimer laser for sale: variable spot scanning, eye tracking and iris registration for LASIK and PRK. Refurbished with warranty.",
     description: `The AMO VISX STAR S4 IR is an excimer laser for LASIK and surface ablation with variable spot scanning, active eye tracking and iris registration to compensate for cyclotorsion between the diagnostic capture and treatment. Paired with the WaveScan or iDesign aberrometer it delivers wavefront-guided treatments, and it has one of the largest installed bases of any refractive laser.\n\nAs with any used excimer, assess shot count, optics and gas service history, active treatment licences and room requirements; see our used excimer laser checklist. ${OFFER}`,
     features: ["Variable spot scanning excimer", "Iris registration and active eye tracking", "Wavefront-guided treatment with WaveScan or iDesign"],
     indications: ["LASIK", "PRK and surface ablation", "Wavefront-guided refractive treatment"],
@@ -394,7 +394,7 @@ export const PRODUCT_CONTENT: ProductContent[] = [
   },
   {
     match: ["whitestar"],
-    seoTitle: "J&J WhiteStar Signature Phaco System",
+    seoTitle: "J&J WhiteStar Signature Phaco for Sale",
     seoDesc: "Johnson & Johnson Vision WhiteStar Signature phaco system for sale, with peristaltic and venturi fluidics and Ellips ultrasound. Refurbished with warranty.",
     description: `The Johnson & Johnson Vision WhiteStar Signature phacoemulsification system supports both peristaltic and venturi fluidics, letting the surgeon switch between them within a case, and uses WhiteStar micropulse ultrasound with Ellips transversal motion to improve followability and reduce thermal load. It is used across cataract case mixes, from routine to dense nuclei.\n\nConfirm the included handpieces, the fluidics modules fitted and the software version when comparing units. ${OFFER}`,
     features: ["Dual peristaltic and venturi fluidics", "WhiteStar micropulse ultrasound", "Ellips transversal ultrasound"],
@@ -435,7 +435,7 @@ export const PRODUCT_CONTENT: ProductContent[] = [
   },
   {
     match: ["zyoptix"],
-    seoTitle: "Bausch + Lomb Zyoptix XP Microkeratome",
+    seoTitle: "Bausch + Lomb Zyoptix XP for Sale",
     seoDesc: "Bausch + Lomb Zyoptix XP microkeratome for sale, a cost-effective option for LASIK flap creation. Refurbished and tested, with warranty. Request a quote.",
     description: `The Bausch + Lomb Zyoptix XP is a mechanical microkeratome for LASIK flap creation, used with disposable heads and blades. Mechanical microkeratomes remain a cost-effective flap-creation option for practices without a femtosecond laser.\n\nCheck the motor and drive unit condition, the heads and rings included, and the availability of consumable blades for the model. ${OFFER}`,
     features: ["Mechanical LASIK flap creation", "Interchangeable heads for flap thickness", "Disposable blade system"],
@@ -443,7 +443,7 @@ export const PRODUCT_CONTENT: ProductContent[] = [
   },
   {
     match: ["hansatome"],
-    seoTitle: "Bausch + Lomb Hansatome Microkeratome",
+    seoTitle: "Bausch + Lomb Hansatome for Sale",
     seoDesc: "Bausch + Lomb Hansatome microkeratome for sale, for superior-hinge LASIK flaps with interchangeable heads and rings. Refurbished with warranty. Get a quote.",
     description: `The Bausch + Lomb Hansatome is a widely used mechanical microkeratome for LASIK flap creation with a superior hinge, operated with disposable blades and interchangeable heads and suction rings. It has one of the largest installed bases of any microkeratome.\n\nAssess the motor, the console, the suction rings and heads included, and confirm blade availability. ${OFFER}`,
     features: ["Superior-hinge flap creation", "Interchangeable heads and suction rings", "Disposable blades"],
@@ -451,7 +451,7 @@ export const PRODUCT_CONTENT: ProductContent[] = [
   },
   {
     match: ["orbscan"],
-    seoTitle: "Bausch + Lomb Orbscan IIz Topographer",
+    seoTitle: "Bausch + Lomb Orbscan IIz for Sale",
     seoDesc: "Bausch + Lomb Orbscan IIz corneal topographer for sale: pachymetry and elevation maps for refractive screening and keratoconus. Refurbished with warranty.",
     description: `The Bausch + Lomb Orbscan IIz combines slit-scanning corneal tomography with Placido topography to map the anterior and posterior corneal surfaces, corneal thickness and anterior chamber depth. It is used for refractive surgery screening, keratoconus detection and corneal disease follow-up.\n\nVerify calibration, the software version and the included workstation. ${OFFER}`,
     features: ["Anterior and posterior corneal elevation maps", "Full-corneal pachymetry", "Placido topography", "Anterior chamber depth measurement"],
