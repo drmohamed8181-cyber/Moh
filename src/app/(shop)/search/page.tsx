@@ -5,6 +5,7 @@ import { safeDb } from "@/lib/prisma";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
 import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
 import ProductCard from "@/components/product/ProductCard";
+import SiteSearchBox from "@/components/shop/SiteSearchBox";
 import { Search } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -39,6 +40,9 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
         <h1 className="text-2xl font-bold text-gray-900 mb-2">
           {q ? `Results for "${q}"` : "Search Products"}
         </h1>
+        <div className="max-w-2xl mb-6">
+          <SiteSearchBox key={q} initialQuery={q} />
+        </div>
         <p className="text-gray-500 text-sm mb-8">
           {products && products.length > 0 ? `${products.length} products found` : q ? "No products found" : "Enter a search term"}
         </p>
