@@ -9,7 +9,12 @@ import type { Product } from "@prisma/client";
 import { slugify } from "@/lib/utils";
 
 interface Category { id: string; name: string; }
-interface Props { categories: Category[]; product?: Product; }
+interface Props {
+  categories: Category[];
+  product?: Product;
+  /** Fields shown from the site's written content because the database has none yet. */
+  prefilled?: string[];
+}
 
 function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
   return (
@@ -22,7 +27,7 @@ function Field({ label, required, children }: { label: string; required?: boolea
   );
 }
 
-export default function ProductForm({ categories, product }: Props) {
+export default function ProductForm({ categories, product, prefilled = [] }: Props) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState<string[]>(product?.images ?? []);
@@ -162,6 +167,15 @@ export default function ProductForm({ categories, product }: Props) {
 
   return (
     <form onSubmit={handleSubmit}>
+      {prefilled.length > 0 && (
+        <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+          <p className="font-semibold">Filled in from the text visitors already see on this product&apos;s page</p>
+          <p className="mt-1">
+            {prefilled.join(", ")} {prefilled.length === 1 ? "was" : "were"} empty in the database, so the site has been
+            showing its built-in text. Review or edit it below, then click Save to keep it here.
+          </p>
+        </div>
+      )}
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Main */}
         <div className="lg:col-span-2 space-y-6">
