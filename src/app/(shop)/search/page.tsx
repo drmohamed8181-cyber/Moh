@@ -30,6 +30,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
       ],
     },
     select: { ...LISTING_PRODUCT_SELECT, category: true },
+    orderBy: { name: "asc" },
     take: 24,
   })) : null;
   const products = dbProducts ? dbProducts.map(withPublicPrice) : null;

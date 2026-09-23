@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
 
     const products = await safeDb((db) => db.product.findMany({
       where, skip: (page - 1) * limit, take: limit,
-      select: { ...LISTING_PRODUCT_SELECT, category: true }, orderBy: { isFeatured: "desc" },
+      select: { ...LISTING_PRODUCT_SELECT, category: true }, orderBy: { name: "asc" },
     }));
     const total = await safeDb((db) => db.product.count({ where }));
 
