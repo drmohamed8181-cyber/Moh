@@ -17,16 +17,17 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
 
   if (!stored) notFound();
 
-  // Product pages fill empty editorial fields from src/content/productContent.ts.
-  // Show the admin the same text, so what they edit is what visitors see; saving
-  // the form writes it to the database.
-  const product = withEditorialContent(stored);
-  const storedSpecKeys = Object.keys((stored.specifications as Record<string, string> | null) ?? {});
+  // Product pages fall back to SEO copy from src/content/productContent.ts when
+  // the database has none. Show the admin that copy so what they edit is what
+  // search engines get; saving the form writes it. Only the SEO fields are
+  // filled here; descriptions and the other editorial fields stay as stored.
+  const editorial = withEditorialContent(stored);
+  const product = {
+    ...stored,
+    seoTitle: isEmpty(stored.seoTitle) ? editorial.seoTitle : stored.seoTitle,
+    seoDesc: isEmpty(stored.seoDesc) ? editorial.seoDesc : stored.seoDesc,
+  };
   const prefilled = [
-    isEmpty(stored.description) && !isEmpty(product.description) && "Full Description",
-    isEmpty(stored.indications) && !isEmpty(product.indications) && "Indications",
-    isEmpty(stored.features) && !isEmpty(product.features) && "Features",
-    Object.keys((product.specifications as Record<string, string> | null) ?? {}).length > storedSpecKeys.length && "Specifications",
     isEmpty(stored.seoTitle) && !isEmpty(product.seoTitle) && "SEO Title",
     isEmpty(stored.seoDesc) && !isEmpty(product.seoDesc) && "SEO Description",
   ].filter((f): f is string => Boolean(f));

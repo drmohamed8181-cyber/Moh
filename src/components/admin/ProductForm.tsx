@@ -12,7 +12,7 @@ interface Category { id: string; name: string; }
 interface Props {
   categories: Category[];
   product?: Product;
-  /** Fields shown from the site's written content because the database has none yet. */
+  /** SEO fields shown from the site's written content because the database has none yet. */
   prefilled?: string[];
 }
 
@@ -169,10 +169,10 @@ export default function ProductForm({ categories, product, prefilled = [] }: Pro
     <form onSubmit={handleSubmit}>
       {prefilled.length > 0 && (
         <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-          <p className="font-semibold">Filled in from the text visitors already see on this product&apos;s page</p>
+          <p className="font-semibold">SEO text filled in from what search engines already see for this product</p>
           <p className="mt-1">
-            {prefilled.join(", ")} {prefilled.length === 1 ? "was" : "were"} empty in the database, so the site has been
-            showing its built-in text. Review or edit it below, then click Save to keep it here.
+            {prefilled.join(" and ")} {prefilled.length === 1 ? "was" : "were"} empty in the database, so the site has been
+            using its built-in text. Review or edit it in the SEO section below, then click Save to keep it here.
           </p>
         </div>
       )}
