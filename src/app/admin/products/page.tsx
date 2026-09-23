@@ -10,6 +10,8 @@ import DeleteProductButton from "@/components/admin/DeleteProductButton";
 import PublishPriceToggle from "@/components/admin/PublishPriceToggle";
 import EditableRetailPrice from "@/components/admin/EditableRetailPrice";
 import ProductSearchBar from "@/components/admin/ProductSearchBar";
+import HeroProductToggle from "@/components/admin/HeroProductToggle";
+import { HERO_PRODUCTS_KEY, parseHeroProductIds } from "@/lib/heroProducts";
 import { productSearchRank } from "@/lib/productSearch";
 import { PARTNER_STOCK_UPDATED } from "@/content/partnerStock";
 import { partnerListLoaded, partnerStockStatus } from "@/lib/partnerStock";
@@ -37,6 +39,8 @@ function StockBadge({ product }: { product: { slug: string; stockQty: number; ca
 export default async function AdminProductsPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const q = (await searchParams).q?.trim() ?? "";
   const products = await safeDb((db) => db.product.findMany({ orderBy: { createdAt: "desc" }, select: { ...ADMIN_PRODUCT_SELECT, category: true } })) ?? [];
+  const heroSetting = await safeDb((db) => db.siteSetting.findUnique({ where: { key: HERO_PRODUCTS_KEY } }));
+  const heroIds = new Set(parseHeroProductIds(heroSetting?.value));
   const suggestions = products.map((p) => ({ id: p.id, name: p.name, sku: p.sku, image: p.images[0] ?? null, category: p.category?.name ?? null }));
   const shown = q ? products.filter((p) => productSearchRank({ name: p.name, sku: p.sku, category: p.category?.name ?? null }, q) >= 0) : products;
 
@@ -117,9 +121,12 @@ export default async function AdminProductsPage({ searchParams }: { searchParams
                       <StockBadge product={p} />
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`text-xs px-2.5 py-1 rounded-full ${p.isAvailable ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-600"}`}>
-                        {p.isAvailable ? "Active" : "Hidden"}
-                      </span>
+                      <div className="flex flex-col items-start gap-1.5">
+                        <span className={`text-xs px-2.5 py-1 rounded-full ${p.isAvailable ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-600"}`}>
+                          {p.isAvailable ? "Active" : "Hidden"}
+                        </span>
+                        <HeroProductToggle id={p.id} inHero={heroIds.has(p.id)} hasImage={p.images.length > 0} />
+                      </div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">

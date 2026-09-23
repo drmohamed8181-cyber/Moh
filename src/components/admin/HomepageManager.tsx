@@ -146,8 +146,8 @@ export default function HomepageManager({ slides: initialSlides, products = [] }
       <div className="bg-white rounded-2xl border">
         <div className="flex items-center justify-between p-6 border-b">
           <div>
-            <h2 className="font-bold text-gray-900">Hero Slides</h2>
-            <p className="text-sm text-gray-500">{slides.length} slide{slides.length !== 1 ? "s" : ""}</p>
+            <h2 className="font-bold text-gray-900">Hand-made slides</h2>
+            <p className="text-sm text-gray-500">{slides.length} slide{slides.length !== 1 ? "s" : ""} · shown only when no products are chosen above</p>
           </div>
           <button onClick={openNew} className="flex items-center gap-2 px-5 py-2.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700">
             <Plus size={16} /> Add Slide

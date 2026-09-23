@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, ArrowUpRight, Sparkles } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowUpRight, Sparkles, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Slide {
@@ -14,6 +14,9 @@ interface Slide {
   image: string;
   buttonText: string;
   buttonLink: string;
+  // Set for slides built from a product (Admin → Products → Homepage).
+  images?: string[];
+  features?: string[];
 }
 
 // Shown only when no slides are set up in Admin → Homepage. Built from the
@@ -66,11 +69,16 @@ function eyebrowFor(title: string) {
 
 export default function HeroSlider({ slides = defaultSlides }: HeroSliderProps) {
   const [current, setCurrent] = useState(0);
+  // Which of the current product's photos is shown; back to the first on every slide change.
+  const [photo, setPhoto] = useState({ slide: 0, index: 0 });
   const [firstRender, setFirstRender] = useState(true);
   const touchStartX = useRef(0);
 
   const activeSlides = slides.length > 0 ? slides : defaultSlides;
   const slide = activeSlides[current];
+  const photos = slide.images && slide.images.length > 0 ? slide.images : [slide.image];
+  const photoIndex = photo.slide === current && photo.index < photos.length ? photo.index : 0;
+  const shownImage = photos[photoIndex];
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time mount flag to drop image priority after first paint.
@@ -160,9 +168,20 @@ export default function HeroSlider({ slides = defaultSlides }: HeroSliderProps) 
                   {slide.title}
                 </h1>
 
-                <p className="text-white/55 text-base sm:text-lg leading-relaxed mb-10 max-w-lg font-light">
+                <p className={cn("text-white/55 text-base sm:text-lg leading-relaxed max-w-lg font-light", slide.features?.length ? "mb-6" : "mb-10")}>
                   {slide.description}
                 </p>
+
+                {slide.features && slide.features.length > 0 && (
+                  <ul className="space-y-2 mb-10 max-w-lg">
+                    {slide.features.map((f) => (
+                      <li key={f} className="flex items-start gap-2.5 text-sm text-white/70">
+                        <Check size={15} className="text-gold-400 mt-0.5 flex-shrink-0" />
+                        <span className="line-clamp-1">{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </motion.div>
             </AnimatePresence>
 
@@ -202,7 +221,7 @@ export default function HeroSlider({ slides = defaultSlides }: HeroSliderProps) 
               <div className="relative w-full h-full bg-gradient-to-br from-white/[0.06] to-white/[0.02] backdrop-blur-sm overflow-hidden">
                 <AnimatePresence mode="wait">
                   <motion.div
-                    key={slide.id}
+                    key={`${slide.id}-${photoIndex}`}
                     initial={{ opacity: 0, scale: 1.03 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.98 }}
@@ -210,7 +229,7 @@ export default function HeroSlider({ slides = defaultSlides }: HeroSliderProps) 
                     className="absolute inset-0"
                   >
                     <Image
-                      src={slide.image}
+                      src={shownImage}
                       alt={slide.title}
                       fill
                       priority={firstRender}
@@ -220,6 +239,26 @@ export default function HeroSlider({ slides = defaultSlides }: HeroSliderProps) 
                   </motion.div>
                 </AnimatePresence>
               </div>
+
+              {photos.length > 1 && (
+                <div className="absolute -bottom-10 left-0 right-0 flex justify-center gap-2 z-10">
+                  {photos.map((img, i) => (
+                    <button
+                      key={img}
+                      type="button"
+                      onClick={() => setPhoto({ slide: current, index: i })}
+                      aria-label={`Show photo ${i + 1}`}
+                      aria-current={i === photoIndex}
+                      className={cn(
+                        "relative w-12 h-12 bg-white/[0.06] border transition-colors",
+                        i === photoIndex ? "border-gold-400" : "border-white/10 hover:border-white/40"
+                      )}
+                    >
+                      <Image src={img} alt="" fill sizes="48px" className="object-contain p-1" />
+                    </button>
+                  ))}
+                </div>
+              )}
 
               <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between">
                 <span className="inline-flex items-center gap-1.5 bg-[#0a0f14]/80 backdrop-blur-md text-gold-300 text-[10px] font-semibold tracking-[0.15em] uppercase px-3 py-2 border border-gold-500/20">
