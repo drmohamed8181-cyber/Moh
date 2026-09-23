@@ -21,7 +21,7 @@ export default function ProductsSortSelect() {
       onChange={handleChange}
       className="text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
     >
-      <option value="">Sort: Featured</option>
+      <option value="">Sort: Name (A–Z)</option>
       <option value="price-asc">Price: Low to High</option>
       <option value="price-desc">Price: High to Low</option>
       <option value="newest">Newest First</option>

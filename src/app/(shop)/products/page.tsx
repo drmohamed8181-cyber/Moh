@@ -121,7 +121,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
     sp.sort === "price-asc" ? { price: "asc" }
     : sp.sort === "price-desc" ? { price: "desc" }
     : sp.sort === "newest" ? { createdAt: "desc" }
-    : { isFeatured: "desc" };
+    : { name: "asc" };
 
   // Anything that narrows or reorders the catalogue makes this a one-off
   // query. The bare listing is the same for everyone, so it comes from the

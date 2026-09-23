@@ -30,7 +30,7 @@
 import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
-import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
+import { HIDDEN_CATEGORY_SLUGS, PUBLIC_DENTAL_CATEGORY_SLUGS } from "@/lib/specialties";
 import { productBrand } from "@/lib/brands";
 import { withEditorialContent } from "@/content/productContent";
 import { HERO_PRODUCTS_KEY, parseHeroProductIds } from "@/lib/heroProducts";
@@ -115,7 +115,7 @@ export const getRelatedProducts = unstable_cache(
     if (!prisma) throw new DatabaseUnavailableError();
     const products = await prisma.product.findMany({
       where: { categoryId, id: { not: excludeProductId }, isAvailable: true },
-      orderBy: { isFeatured: "desc" },
+      orderBy: { name: "asc" },
       take: 4,
       select: { ...LISTING_PRODUCT_SELECT, category: true },
     });
@@ -167,7 +167,7 @@ export const getProductsInCategory = unstable_cache(
     if (!prisma) throw new DatabaseUnavailableError();
     const products = await prisma.product.findMany({
       where: { category: { slug }, isAvailable: true },
-      orderBy: { isFeatured: "desc" },
+      orderBy: { name: "asc" },
       select: { ...LISTING_PRODUCT_SELECT, category: true },
     });
     return products.map(withPublicPrice);
@@ -339,17 +339,41 @@ export const getHomeCategories = unstable_cache(
   { tags: [CATEGORIES_TAG, PRODUCTS_TAG], revalidate: ONE_HOUR }
 );
 
-/** Featured, available products for the homepage rail. */
+/**
+ * Featured, available products for the homepage rail, alphabetically.
+ *
+ * Dental products are always included, featured flag or not, so the rail
+ * shows both live specialties. They get their own share of the eight slots
+ * (up to DENTAL_FEATURED_SLOTS) rather than competing with the ophthalmic
+ * picks, which would otherwise crowd them out.
+ */
+const FEATURED_LIMIT = 8;
+const DENTAL_FEATURED_SLOTS = 2;
+
 export const getFeaturedProducts = unstable_cache(
   async () => {
     if (!prisma) throw new DatabaseUnavailableError();
-    const products = await prisma.product.findMany({
-      where: { isFeatured: true, isAvailable: true, category: { slug: { notIn: HIDDEN_CATEGORY_SLUGS } } },
-      take: 8,
-      orderBy: { createdAt: "desc" },
-      select: { ...LISTING_PRODUCT_SELECT, category: { select: { name: true, slug: true } } },
+    const select = { ...LISTING_PRODUCT_SELECT, category: { select: { name: true, slug: true } } };
+    const dental = await prisma.product.findMany({
+      where: { isAvailable: true, category: { slug: { in: PUBLIC_DENTAL_CATEGORY_SLUGS } } },
+      orderBy: [{ isFeatured: "desc" }, { name: "asc" }],
+      take: DENTAL_FEATURED_SLOTS,
+      select,
     });
-    return products.map(withPublicPrice);
+    const others = await prisma.product.findMany({
+      where: {
+        isFeatured: true,
+        isAvailable: true,
+        id: { notIn: dental.map((p) => p.id) },
+        category: { slug: { notIn: HIDDEN_CATEGORY_SLUGS } },
+      },
+      orderBy: { createdAt: "desc" },
+      take: FEATURED_LIMIT - dental.length,
+      select,
+    });
+    return [...dental, ...others]
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(withPublicPrice);
   },
   ["home-featured-products"],
   { tags: [PRODUCTS_TAG, CATEGORIES_TAG], revalidate: ONE_HOUR }
@@ -367,7 +391,7 @@ export const getDefaultProductListing = unstable_cache(
     const [products, total] = await Promise.all([
       prisma.product.findMany({
         where,
-        orderBy: { isFeatured: "desc" },
+        orderBy: { name: "asc" },
         skip: (page - 1) * pageSize,
         take: pageSize,
         select: { ...LISTING_PRODUCT_SELECT, category: true },
@@ -435,7 +459,7 @@ export async function getBrandBySlug(slug: string): Promise<PublicBrand | null> 
 }
 
 /**
- * Visible products belonging to the brand `slug`, featured first. Filtered in
+ * Visible products belonging to the brand `slug`, alphabetically. Filtered in
  * memory rather than by `manufacturer = name` because one brand covers several
  * spellings; the visible catalogue is small enough for that.
  * withPublicPrice() is applied inside the cache boundary — see getProductBySlug.
@@ -445,7 +469,7 @@ export const getProductsByBrand = unstable_cache(
     if (!prisma) throw new DatabaseUnavailableError();
     const products = await prisma.product.findMany({
       where: publicProductWhere,
-      orderBy: [{ isFeatured: "desc" }, { name: "asc" }],
+      orderBy: { name: "asc" },
       select: { ...LISTING_PRODUCT_SELECT, category: { select: { name: true, slug: true } } },
     });
     return products
