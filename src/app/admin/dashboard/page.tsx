@@ -39,10 +39,10 @@ export default async function AdminDashboard() {
   const [stats, recentOrders] = await Promise.all([getStats(), getRecentOrders()]);
 
   const statCards = [
-    { label: "Total Revenue", value: formatPrice(stats.revenue), icon: DollarSign, color: "text-green-600", bg: "bg-green-50" },
-    { label: "Total Orders", value: stats.orders.toLocaleString(), icon: ShoppingBag, color: "text-blue-600", bg: "bg-blue-50" },
-    { label: "Products", value: stats.products.toLocaleString(), icon: Package, color: "text-purple-600", bg: "bg-purple-50" },
-    { label: "Customers", value: stats.customers.toLocaleString(), icon: Users, color: "text-primary-600", bg: "bg-primary-50" },
+    { label: "Total Revenue", value: formatPrice(stats.revenue), icon: DollarSign, color: "text-green-600", bg: "bg-green-50", href: "/admin/orders" },
+    { label: "Total Orders", value: stats.orders.toLocaleString(), icon: ShoppingBag, color: "text-blue-600", bg: "bg-blue-50", href: "/admin/orders" },
+    { label: "Products", value: stats.products.toLocaleString(), icon: Package, color: "text-purple-600", bg: "bg-purple-50", href: "/admin/products" },
+    { label: "Customers", value: stats.customers.toLocaleString(), icon: Users, color: "text-primary-600", bg: "bg-primary-50", href: "/admin/customers" },
   ];
 
   return (
@@ -58,14 +58,18 @@ export default async function AdminDashboard() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
-        {statCards.map(({ label, value, icon: Icon, color, bg }) => (
-          <div key={label} className="bg-white rounded-2xl border p-5 hover:shadow-card transition-shadow">
+        {statCards.map(({ label, value, icon: Icon, color, bg, href }) => (
+          <Link
+            key={label}
+            href={href}
+            className="block bg-white rounded-2xl border p-5 hover:shadow-card hover:border-primary-200 transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+          >
             <div className={`w-11 h-11 ${bg} ${color} rounded-xl flex items-center justify-center mb-4`}>
               <Icon size={20} />
             </div>
             <p className="text-2xl font-bold text-gray-900 mb-1">{value}</p>
             <p className="text-sm text-gray-500">{label}</p>
-          </div>
+          </Link>
         ))}
       </div>
 
