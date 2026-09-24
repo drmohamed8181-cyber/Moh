@@ -186,6 +186,19 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
+                        handleDelete(msg);
+                      }}
+                      disabled={deleting === msg.id}
+                      aria-label={`Delete message from ${msg.name}`}
+                      title="Delete message"
+                      className="p-1 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-60"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
                         handleToggle(msg);
                       }}
                       aria-expanded={isOpen}
