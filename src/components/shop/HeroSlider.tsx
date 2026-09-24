@@ -159,12 +159,16 @@ export default function HeroSlider({ slides = defaultSlides }: HeroSliderProps) 
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
               >
+                {/* The whole copy block opens the device page on click or tap.
+                    Out of the tab order: the button below is the keyboard route
+                    to the same page, so keyboard users don't tab through it twice. */}
+                <Link href={slide.buttonLink} tabIndex={-1} className="group/copy block">
                 <p className="inline-flex items-center gap-2 text-gold-400 text-xs font-semibold tracking-[0.2em] uppercase mb-5">
                   <Sparkles size={13} />
                   {eyebrowFor(slide.title)}
                 </p>
 
-                <h1 className="font-display text-4xl sm:text-5xl lg:text-[3.4rem] font-semibold text-white leading-[1.08] tracking-tight mb-6 text-balance">
+                <h1 className="font-display text-4xl sm:text-5xl lg:text-[3.4rem] font-semibold text-white leading-[1.08] tracking-tight mb-6 text-balance transition-colors group-hover/copy:text-gold-300">
                   {slide.title}
                 </h1>
 
@@ -182,6 +186,7 @@ export default function HeroSlider({ slides = defaultSlides }: HeroSliderProps) 
                     ))}
                   </ul>
                 )}
+                </Link>
               </motion.div>
             </AnimatePresence>
 
@@ -218,7 +223,12 @@ export default function HeroSlider({ slides = defaultSlides }: HeroSliderProps) 
               <div className="absolute -top-4 -left-4 w-16 h-16 border-t border-l border-gold-400/50" aria-hidden />
               <div className="absolute -bottom-4 -right-4 w-16 h-16 border-b border-r border-gold-400/50" aria-hidden />
 
-              <div className="relative w-full h-full bg-gradient-to-br from-white/[0.06] to-white/[0.02] backdrop-blur-sm overflow-hidden">
+              {/* The photo opens the device page too; its alt text names the link. */}
+              <Link
+                href={slide.buttonLink}
+                tabIndex={-1}
+                className="group/photo relative block w-full h-full bg-gradient-to-br from-white/[0.06] to-white/[0.02] backdrop-blur-sm overflow-hidden"
+              >
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={`${slide.id}-${photoIndex}`}
@@ -234,11 +244,11 @@ export default function HeroSlider({ slides = defaultSlides }: HeroSliderProps) 
                       fill
                       priority={firstRender}
                       sizes="(min-width: 1024px) 420px, 90vw"
-                      className="object-contain p-8 drop-shadow-[0_30px_60px_rgba(0,0,0,0.5)]"
+                      className="object-contain p-8 drop-shadow-[0_30px_60px_rgba(0,0,0,0.5)] transition-transform duration-500 group-hover/photo:scale-[1.03]"
                     />
                   </motion.div>
                 </AnimatePresence>
-              </div>
+              </Link>
 
               {photos.length > 1 && (
                 <div className="absolute -bottom-10 left-0 right-0 flex justify-center gap-2 z-10">
@@ -260,7 +270,7 @@ export default function HeroSlider({ slides = defaultSlides }: HeroSliderProps) 
                 </div>
               )}
 
-              <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between">
+              <div className="pointer-events-none absolute bottom-5 left-5 right-5 flex items-center justify-between">
                 <span className="inline-flex items-center gap-1.5 bg-[#0a0f14]/80 backdrop-blur-md text-gold-300 text-[10px] font-semibold tracking-[0.15em] uppercase px-3 py-2 border border-gold-500/20">
                   In Inventory
                 </span>
