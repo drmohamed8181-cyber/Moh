@@ -3,9 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import Link from "next/link";
-import { Mail, MailOpen, MessageSquare, Send, ChevronDown, CheckCircle2, Copy, ExternalLink, Trash2, UserRound, AlarmClock } from "lucide-react";
+import { Mail, MailOpen, MessageSquare, Send, ChevronDown, CheckCircle2, Copy, ExternalLink, Trash2, UserRound, AlarmClock, Forward } from "lucide-react";
 import { cn, formatDate } from "@/lib/utils";
 import { DAY_MS, FOLLOW_UP_DAYS } from "@/lib/leads";
+import ComposeMessageDialog, { type ComposeRecipient, type SentMessage } from "@/components/admin/ComposeMessageDialog";
 
 interface ContactMessage {
   id: string;
@@ -20,6 +21,7 @@ interface ContactMessage {
   message: string;
   isRead: boolean;
   reply: string | null;
+  sentByAdmin: boolean;
   leadStatus: LeadStatus;
   statusUpdatedAt: string | null;
   createdAt: string;
@@ -117,7 +119,7 @@ function detailFields(msg: ContactMessage) {
     { label: "Workplace", value: msg.organization, href: null },
     { label: "Address", value: msg.address, href: null },
     { label: "Work Location", value: msg.workLocation, href: null },
-    { label: "Received", value: formatDateTime(msg.createdAt), href: null },
+    { label: msg.sentByAdmin ? "Sent" : "Received", value: formatDateTime(msg.createdAt), href: null },
   ];
 }
 
@@ -129,7 +131,7 @@ function allDetailsText(msg: ContactMessage) {
   return lines.join("\n");
 }
 
-export default function MessagesList({ initialMessages }: { initialMessages: ContactMessage[] }) {
+export default function MessagesList({ initialMessages, customers }: { initialMessages: ContactMessage[]; customers: ComposeRecipient[] }) {
   const [messages, setMessages] = useState(initialMessages);
   const [openId, setOpenId] = useState<string | null>(null);
   const [replyDrafts, setReplyDrafts] = useState<Record<string, string>>({});
@@ -150,6 +152,20 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [confirmDelete]);
+
+  const handleSent = (sent: SentMessage) => {
+    setMessages((prev) => [
+      {
+        ...sent,
+        phone: null, jobTitle: null, organization: null, address: null, workLocation: null,
+        isRead: true, reply: null, sentByAdmin: true, leadStatus: "NEW", statusUpdatedAt: null,
+        // Reuse the customer tag from an earlier message; otherwise it appears on the next page load.
+        customer: prev.find((m) => m.customer?.email.toLowerCase() === sent.email.toLowerCase())?.customer ?? null,
+      },
+      ...prev,
+    ]);
+    setFilter("ALL");
+  };
 
   const markAsRead = async (id: string) => {
     setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, isRead: true } : m)));
@@ -255,9 +271,12 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
     { value: "LOST", label: "Lost" },
   ];
 
+  const compose = <ComposeMessageDialog customers={customers} onSent={handleSent} />;
+
   if (messages.length === 0) {
     return (
       <div className="p-16 text-center">
+        <div className="flex justify-end mb-6">{compose}</div>
         <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
           <MessageSquare size={28} className="text-gray-400" />
         </div>
@@ -334,6 +353,7 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
         </button>
       ))}
       <span className="ml-auto text-sm text-gray-500">{unread} unread</span>
+      {compose}
     </div>
     <div className="bg-white rounded-2xl border overflow-hidden">
     {visible.length === 0 && (
@@ -395,6 +415,11 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
                   <span className={cn("px-2 py-0.5 rounded-full text-xs font-semibold", STATUS_META[msg.leadStatus].badge)}>
                     {STATUS_META[msg.leadStatus].label}
                   </span>
+                  {msg.sentByAdmin && (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-primary-50 text-primary-700">
+                      <Forward size={12} /> Sent by you
+                    </span>
+                  )}
                   {needsFollowUp(msg, now) && (
                     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-900">
                       <AlarmClock size={12} /> Follow up · quoted {daysSince(msg.statusUpdatedAt ?? msg.createdAt, now)} days ago
@@ -443,7 +468,7 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
 
                 <div className="bg-white border border-gray-200 rounded-xl">
                   <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-100">
-                    <h3 className="text-sm font-semibold text-gray-900">Customer details</h3>
+                    <h3 className="text-sm font-semibold text-gray-900">{msg.sentByAdmin ? "Recipient" : "Customer details"}</h3>
                     <button
                       type="button"
                       onClick={() => copyText(allDetailsText(msg), "All details")}
@@ -487,13 +512,14 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
                       <CopyButton text={msg.message} label="Message" />
                     </div>
                   </div>
+                  {msg.sentByAdmin && <p className="px-4 pt-3 text-xs font-semibold text-primary-700">Your message to {msg.name}</p>}
                   <p className="px-4 py-3 text-sm text-gray-800 whitespace-pre-line break-words">{msg.message}</p>
                 </div>
 
                 {msg.reply && (
                   <div className="bg-green-50 border border-green-100 rounded-xl p-3 mb-3">
                     <p className="text-xs font-semibold text-green-700 mb-1 flex items-center gap-1">
-                      <CheckCircle2 size={12} /> Your reply
+                      <CheckCircle2 size={12} /> {msg.sentByAdmin ? "Your follow-up" : "Your reply"}
                     </p>
                     <p className="text-sm text-green-800 whitespace-pre-line">{msg.reply}</p>
                   </div>
@@ -503,7 +529,7 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
                     rows={3}
                     value={replyDrafts[msg.id] ?? ""}
                     onChange={(e) => setReplyDrafts((prev) => ({ ...prev, [msg.id]: e.target.value }))}
-                    placeholder={`Reply to ${msg.name}...`}
+                    placeholder={msg.sentByAdmin ? `Follow up with ${msg.name}...` : `Reply to ${msg.name}...`}
                     className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
                   />
                   <button
@@ -512,7 +538,7 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
                     className="self-end flex items-center gap-2 px-4 py-2.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 disabled:opacity-60 whitespace-nowrap"
                   >
                     <Send size={14} />
-                    {sending === msg.id ? "Sending..." : "Send Reply"}
+                    {sending === msg.id ? "Sending..." : msg.sentByAdmin ? "Send Follow-up" : "Send Reply"}
                   </button>
                 </div>
 

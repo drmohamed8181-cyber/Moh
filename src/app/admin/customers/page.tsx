@@ -5,6 +5,7 @@ import { safeDb } from "@/lib/prisma";
 import Badge from "@/components/ui/Badge";
 import Image from "next/image";
 import CustomerEditModal from "@/components/admin/CustomerEditModal";
+import ComposeMessageDialog from "@/components/admin/ComposeMessageDialog";
 import CustomerSearchBar from "@/components/admin/CustomerSearchBar";
 import CustomerListControls from "@/components/admin/CustomerListControls";
 import { ArrowUp, ArrowDown } from "lucide-react";
@@ -193,15 +194,18 @@ export default async function AdminCustomersPage({ searchParams }: { searchParam
                         </div>
                       </td>
                       <td className="px-5 py-3.5">
-                        <CustomerEditModal
-                          customer={{
-                            id: customer.id,
-                            name: customer.name,
-                            organization: customer.organization,
-                            customerType: customer.customerType,
-                            addresses: customer.addresses,
-                          }}
-                        />
+                        <div className="flex items-center gap-3">
+                          <ComposeMessageDialog variant="link" to={{ name: customer.name, email: customer.email }} />
+                          <CustomerEditModal
+                            customer={{
+                              id: customer.id,
+                              name: customer.name,
+                              organization: customer.organization,
+                              customerType: customer.customerType,
+                              addresses: customer.addresses,
+                            }}
+                          />
+                        </div>
                       </td>
                     </tr>
                   );

@@ -6,7 +6,7 @@ import { DAY_MS, FOLLOW_UP_DAYS, HOUR_MS, NEW_LEAD_REMINDER_HOURS } from "@/lib/
 
 // Daily check (13:00 UTC, about 9am US Eastern; Vercel Hobby allows one run a day).
 // Emails the business once per lead when:
-// - a new message has had no reply or status change for NEW_LEAD_REMINDER_HOURS, or
+// - a new customer message (not one staff sent) has had no reply or status change for NEW_LEAD_REMINDER_HOURS, or
 // - a quote has had no status change for FOLLOW_UP_DAYS.
 const RECIPIENT = process.env.LEAD_DIGEST_EMAIL || "info@mpmedpharma.com";
 
@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
     db.contactMessage.findMany({
       where: {
         OR: [
-          { leadStatus: "NEW", reply: null, reminderSentAt: null, createdAt: { lte: newCutoff } },
+          { leadStatus: "NEW", reply: null, sentByAdmin: false, reminderSentAt: null, createdAt: { lte: newCutoff } },
           { leadStatus: "QUOTED", OR: [{ statusUpdatedAt: { lte: quoteCutoff } }, { statusUpdatedAt: null, createdAt: { lte: quoteCutoff } }] },
         ],
       },
