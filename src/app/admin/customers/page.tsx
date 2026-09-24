@@ -1,5 +1,6 @@
 import Link from "next/link";
-import type { OrderStatus, Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
+import { getSalesByUser } from "@/lib/customers";
 import { safeDb } from "@/lib/prisma";
 import Badge from "@/components/ui/Badge";
 import Image from "next/image";
@@ -29,9 +30,6 @@ const TYPE_BADGE: Record<CustomerType, { label: string; variant: "blue" | "yello
   SELLER: { label: "Seller", variant: "yellow" },
   BOTH: { label: "Buyer & Seller", variant: "gray" },
 };
-
-// Cancelled and refunded orders don't count toward sales.
-const NON_SALE_STATUSES: OrderStatus[] = ["CANCELLED", "REFUNDED"];
 
 function formatUsd(n: number) {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n);
@@ -99,14 +97,7 @@ export default async function AdminCustomersPage({ searchParams }: { searchParam
     orderBy: { name: "asc" },
   })) ?? [];
 
-  const salesRows = customers.length
-    ? await safeDb((db) => db.order.groupBy({
-        by: ["userId"],
-        where: { userId: { in: customers.map((c) => c.id) }, status: { notIn: NON_SALE_STATUSES } },
-        _sum: { total: true },
-      })) ?? []
-    : [];
-  const salesByUser = new Map(salesRows.map((r) => [r.userId, r._sum.total ?? 0]));
+  const salesByUser = await getSalesByUser(customers.map((c) => c.id));
   const salesOf = (id: string) => salesByUser.get(id) ?? 0;
 
   const sorted = [...customers].sort((a, b) => {

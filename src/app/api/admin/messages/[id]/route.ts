@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import type { LeadStatus } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { safeDb } from "@/lib/prisma";
 import { sendMail } from "@/lib/mail";
@@ -18,8 +19,12 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   const message = await safeDb((db) => db.contactMessage.findUnique({ where: { id } }));
   if (!message) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const data: { isRead?: boolean; reply?: string } = {};
+  const data: { isRead?: boolean; reply?: string; leadStatus?: LeadStatus; statusUpdatedAt?: Date } = {};
   if (typeof body.isRead === "boolean") data.isRead = body.isRead;
+  if (["NEW", "QUOTED", "WON", "LOST"].includes(body.leadStatus) && body.leadStatus !== message.leadStatus) {
+    data.leadStatus = body.leadStatus as LeadStatus;
+    data.statusUpdatedAt = new Date();
+  }
 
   let emailSent = false;
   if (typeof body.reply === "string" && body.reply.trim()) {

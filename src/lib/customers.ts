@@ -1,4 +1,20 @@
+import type { OrderStatus } from "@prisma/client";
 import { safeDb } from "@/lib/prisma";
+
+// Cancelled and refunded orders don't count toward sales.
+export const NON_SALE_STATUSES: OrderStatus[] = ["CANCELLED", "REFUNDED"];
+
+/** Total sales per customer id (order totals, excluding cancelled/refunded). */
+export async function getSalesByUser(userIds: string[]) {
+  const rows = userIds.length
+    ? await safeDb((db) => db.order.groupBy({
+        by: ["userId"],
+        where: { userId: { in: userIds }, status: { notIn: NON_SALE_STATUSES } },
+        _sum: { total: true },
+      })) ?? []
+    : [];
+  return new Map(rows.map((r) => [r.userId, r._sum.total ?? 0]));
+}
 
 /**
  * Keep everyone who contacts us in the customer list. Creates a CUSTOMER with
