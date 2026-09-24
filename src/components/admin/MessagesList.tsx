@@ -271,23 +271,35 @@ export default function MessagesList({ initialMessages, customers }: { initialMe
     { value: "LOST", label: "Lost" },
   ];
 
-  const compose = <ComposeMessageDialog customers={customers} onSent={handleSent} />;
+  // The "New message" button sits in the page header so it's the first thing on the page.
+  const header = (
+    <div className="flex flex-wrap items-start justify-between gap-4 mb-8">
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900">Contact Messages</h1>
+        <p className="text-gray-500 text-sm">Track every inquiry from first message to won or lost, or start a new conversation.</p>
+      </div>
+      <ComposeMessageDialog customers={customers} onSent={handleSent} />
+    </div>
+  );
 
   if (messages.length === 0) {
     return (
-      <div className="p-16 text-center">
-        <div className="flex justify-end mb-6">{compose}</div>
-        <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-          <MessageSquare size={28} className="text-gray-400" />
+      <div>
+        {header}
+        <div className="p-16 text-center">
+          <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <MessageSquare size={28} className="text-gray-400" />
+          </div>
+          <p className="text-gray-500">No messages yet.</p>
+          <p className="text-gray-400 text-sm mt-1">Messages from your contact form will appear here.</p>
         </div>
-        <p className="text-gray-500">No messages yet.</p>
-        <p className="text-gray-400 text-sm mt-1">Messages from your contact form will appear here.</p>
       </div>
     );
   }
 
   return (
     <>
+    {header}
     {confirmDelete && (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setConfirmDelete(null)}>
         <div
@@ -353,7 +365,6 @@ export default function MessagesList({ initialMessages, customers }: { initialMe
         </button>
       ))}
       <span className="ml-auto text-sm text-gray-500">{unread} unread</span>
-      {compose}
     </div>
     <div className="bg-white rounded-2xl border overflow-hidden">
     {visible.length === 0 && (
