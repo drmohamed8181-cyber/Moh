@@ -57,13 +57,11 @@ function SortHeader({ label, sortKey, sort, order, keep }: { label: string; sort
 
 export default async function AdminCustomersPage({ searchParams }: { searchParams: Promise<{ sort?: string; order?: string; q?: string; type?: string }> }) {
   const sp = await searchParams;
-  const preset = sp.sort ? PRESETS[sp.sort] : undefined;
-  const sort: SortKey = preset
-    ? preset[0]
-    : sp.sort === "name" || sp.sort === "state" || sp.sort === "joined" || sp.sort === "orders" || sp.sort === "sales"
-      ? sp.sort
-      : "joined";
-  const order: Order = preset ? preset[1] : sp.order === "asc" || sp.order === "desc" ? sp.order : DEFAULT_ORDER[sort];
+  // Column headers send sort=<column>&order=…; the "Sort by" menu sends a preset name.
+  const isColumn = sp.sort === "name" || sp.sort === "state" || sp.sort === "joined" || sp.sort === "orders" || sp.sort === "sales";
+  const preset = !isColumn && sp.sort ? PRESETS[sp.sort] : undefined;
+  const sort: SortKey = isColumn ? (sp.sort as SortKey) : preset ? preset[0] : "joined";
+  const order: Order = sp.order === "asc" || sp.order === "desc" ? sp.order : preset ? preset[1] : DEFAULT_ORDER[sort];
   const sortValue = Object.entries(PRESETS).find(([, [k, o]]) => k === sort && o === order)?.[0] ?? `${sort}-${order}`;
   const q = sp.q?.trim() ?? "";
   const type = sp.type === "BUYER" || sp.type === "SELLER" || sp.type === "BOTH" ? sp.type : "";
