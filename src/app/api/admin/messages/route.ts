@@ -4,6 +4,7 @@ import { safeDb } from "@/lib/prisma";
 import { sendMail } from "@/lib/mail";
 import { INFO_EMAIL, infoSignatureHtml, infoSignatureText } from "@/lib/emailSignature";
 import { escapeHtml } from "@/lib/utils";
+import { PRICE_BLOCKED_ERROR, containsPrice } from "@/lib/priceGuard";
 import { saveContactAsCustomer } from "@/lib/customers";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -26,6 +27,7 @@ export async function POST(req: NextRequest) {
 
   if (!EMAIL_RE.test(email)) return NextResponse.json({ error: "Enter a valid email address." }, { status: 400 });
   if (!subject || !message) return NextResponse.json({ error: "Subject and message are required." }, { status: 400 });
+  if (containsPrice(subject) || containsPrice(message)) return NextResponse.json({ error: PRICE_BLOCKED_ERROR }, { status: 400 });
 
   const emailSent = await sendMail({
     to: email,

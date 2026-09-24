@@ -91,6 +91,7 @@ export async function GET(req: NextRequest) {
 
   const sent = await sendMail({
     to: RECIPIENT,
+    internal: true,
     subject: `Reminder: ${subject}`,
     html: `<div style="font-family:Arial,sans-serif;max-width:640px;margin:0 auto;">
         <h2 style="color:#0a2540;">Leads waiting on you</h2>

@@ -128,6 +128,7 @@ export async function POST(req: NextRequest) {
 
     await sendMail({
       to: NOTIFY_EMAIL,
+      internal: true,
       replyTo: email,
       subject: `New Product Submission ${referenceNumber} — ${productName}`,
       html: `

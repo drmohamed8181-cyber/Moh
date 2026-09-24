@@ -5,6 +5,7 @@ import { safeDb } from "@/lib/prisma";
 import { sendMail } from "@/lib/mail";
 import { INFO_EMAIL, infoSignatureHtml, infoSignatureText } from "@/lib/emailSignature";
 import { escapeHtml } from "@/lib/utils";
+import { PRICE_BLOCKED_ERROR, containsPrice, redactPrices } from "@/lib/priceGuard";
 
 async function checkAdmin() {
   const session = await auth();
@@ -20,6 +21,10 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   const message = await safeDb((db) => db.contactMessage.findUnique({ where: { id } }));
   if (!message) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
+  if (typeof body.reply === "string" && containsPrice(body.reply)) {
+    return NextResponse.json({ error: PRICE_BLOCKED_ERROR }, { status: 400 });
+  }
+
   const data: { isRead?: boolean; reply?: string; leadStatus?: LeadStatus; statusUpdatedAt?: Date } = {};
   if (typeof body.isRead === "boolean") data.isRead = body.isRead;
   if (["NEW", "QUOTED", "WON", "LOST"].includes(body.leadStatus) && body.leadStatus !== message.leadStatus) {
@@ -32,18 +37,21 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     const replyText = body.reply.trim();
     data.reply = replyText;
     data.isRead = true;
+    // The quoted message and subject can carry an amount the customer typed; never echo one back.
+    const quoted = redactPrices(message.message);
+    const quoteLabel = message.sentByAdmin ? "Our earlier message" : "In reply to your message";
     // Reply-To is the shared inbox so the customer's answer lands in info@ rather than the sending address.
     emailSent = await sendMail({
       to: message.email,
       replyTo: INFO_EMAIL,
-      subject: `Re: ${message.subject}`,
+      subject: `Re: ${redactPrices(message.subject)}`,
       html: `
         <p>${escapeHtml(replyText).replace(/\n/g, "<br/>")}</p>
         ${infoSignatureHtml}
         <hr/>
-        <p style="color:#888;font-size:12px;">${message.sentByAdmin ? "Our earlier message" : "In reply to your message"}: "${escapeHtml(message.message)}"</p>
+        <p style="color:#888;font-size:12px;">${quoteLabel}: "${escapeHtml(quoted)}"</p>
       `,
-      text: `${replyText}\n\n${infoSignatureText}\n\n---\n${message.sentByAdmin ? "Our earlier message" : "In reply to your message"}: "${message.message}"`,
+      text: `${replyText}\n\n${infoSignatureText}\n\n---\n${quoteLabel}: "${quoted}"`,
     });
   }
 
