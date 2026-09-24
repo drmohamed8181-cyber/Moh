@@ -3,6 +3,7 @@ import { revalidateTag } from "next/cache";
 import { safeDb } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { PRODUCTS_TAG } from "@/lib/publicData";
+import { setProductWatermark } from "@/lib/watermarkAdmin";
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -11,7 +12,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     const { id } = await params;
-    const body = await req.json();
+    const { watermark, ...body } = await req.json();
 
     // Track price drops on the end-user price so the public page can show a
     // "was X, now Y" strikethrough. If the new price is lower than what's
@@ -31,6 +32,8 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     }
 
     const product = await safeDb((db) => db.product.update({ where: { id }, data: body }));
+    // The logo stamp lives in a site setting, not on the product row.
+    if (product && typeof watermark === "boolean") await setProductWatermark(id, watermark);
     // Public product pages are cached; drop them so the edit is visible now.
     revalidateTag(PRODUCTS_TAG, { expire: 0 });
     return NextResponse.json(product);
@@ -48,6 +51,7 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
     }
     const { id } = await params;
     await safeDb((db) => db.product.delete({ where: { id } }));
+    await setProductWatermark(id, false);
     revalidateTag(PRODUCTS_TAG, { expire: 0 });
     return NextResponse.json({ success: true });
   } catch (error) {

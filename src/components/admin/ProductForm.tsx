@@ -14,6 +14,8 @@ interface Props {
   product?: Product;
   /** SEO fields shown from the site's written content because the database has none yet. */
   prefilled?: string[];
+  /** Whether this product's photos carry the logo stamp (a site setting, not a product column). */
+  watermark?: boolean;
 }
 
 function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
@@ -27,10 +29,11 @@ function Field({ label, required, children }: { label: string; required?: boolea
   );
 }
 
-export default function ProductForm({ categories, product, prefilled = [] }: Props) {
+export default function ProductForm({ categories, product, prefilled = [], watermark: initialWatermark = false }: Props) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState<string[]>(product?.images ?? []);
+  const [watermark, setWatermark] = useState(initialWatermark);
   const [features, setFeatures] = useState<string[]>(product?.features ?? [""]);
   const [accessories, setAccessories] = useState<string[]>(product?.accessories ?? [""]);
   const [indications, setIndications] = useState<string[]>(product?.indications ?? [""]);
@@ -136,6 +139,7 @@ export default function ProductForm({ categories, product, prefilled = [] }: Pro
         stockQty: parseInt(form.stockQty as string),
         weight: form.weight ? parseFloat(form.weight as string) : null,
         images,
+        watermark,
         features: features.filter(Boolean),
         accessories: accessories.filter(Boolean),
         indications: indications.filter(Boolean),
@@ -231,6 +235,15 @@ export default function ProductForm({ categories, product, prefilled = [] }: Pro
                 <input type="file" className="hidden" multiple accept="image/*" onChange={handleImageUpload} />
               </label>
             </div>
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input type="checkbox" checked={watermark} onChange={(e) => setWatermark(e.target.checked)} className="rounded text-primary-600 mt-0.5" />
+              <span className="text-sm text-gray-700">
+                Stamp the MP MedPharma logo on these photos
+                <span className="block text-xs text-gray-500 mt-0.5">
+                  Only for photos you took or have permission to modify, not manufacturer or other sites&apos; photos. Google still gets the clean original.
+                </span>
+              </span>
+            </label>
           </div>
 
           {/* Features */}

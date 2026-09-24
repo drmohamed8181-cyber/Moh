@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { Prisma } from "@prisma/client";
 import { safeDb } from "@/lib/prisma";
 import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
-import { getDefaultProductListing, getPublicCategories } from "@/lib/publicData";
+import { getDefaultProductListing, getPublicCategories, readWatermarkIds } from "@/lib/publicData";
 import { jsonLdScript } from "@/lib/jsonLd";
 import ProductCard from "@/components/product/ProductCard";
 import ProductsSortSelect from "@/components/shop/ProductsSortSelect";
@@ -83,7 +83,8 @@ async function loadFilteredListing(
     safeDb((db) => db.product.count({ where })),
   ]);
   if (!rows || total === null) throw new Error("Product catalogue unavailable");
-  return { products: rows.map(withPublicPrice), total };
+  const watermarkIds = await readWatermarkIds();
+  return { products: rows.map((p) => withPublicPrice(p, watermarkIds)), total };
 }
 
 export default async function ProductsPage({ searchParams }: { searchParams: Promise<{ category?: string; specialty?: string; sort?: string; featured?: string; q?: string; page?: string; inStock?: string }> }) {

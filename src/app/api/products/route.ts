@@ -4,7 +4,8 @@ import type { Prisma } from "@prisma/client";
 import { safeDb } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
-import { PRODUCTS_TAG } from "@/lib/publicData";
+import { PRODUCTS_TAG, readWatermarkIds } from "@/lib/publicData";
+import { setProductWatermark } from "@/lib/watermarkAdmin";
 import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
 
 export async function GET(req: NextRequest) {
@@ -30,7 +31,8 @@ export async function GET(req: NextRequest) {
     }));
     const total = await safeDb((db) => db.product.count({ where }));
 
-    return NextResponse.json({ products: (products ?? []).map(withPublicPrice), total: total ?? 0, page, pages: Math.ceil((total ?? 0) / limit) });
+    const watermarkIds = await readWatermarkIds();
+    return NextResponse.json({ products: (products ?? []).map((p) => withPublicPrice(p, watermarkIds)), total: total ?? 0, page, pages: Math.ceil((total ?? 0) / limit) });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Server error";
     return NextResponse.json({ error: message }, { status: 500 });
@@ -43,8 +45,10 @@ export async function POST(req: NextRequest) {
     if (!session?.user || !["ADMIN", "SUPER_ADMIN"].includes(session.user.role)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    const body = await req.json();
+    const { watermark, ...body } = await req.json();
     const product = await safeDb((db) => db.product.create({ data: body }));
+    // The logo stamp lives in a site setting, not on the product row.
+    if (product && watermark === true) await setProductWatermark(product.id, true);
     // Let the new product appear on the cached public listing/detail pages.
     revalidateTag(PRODUCTS_TAG, { expire: 0 });
     return NextResponse.json(product, { status: 201 });

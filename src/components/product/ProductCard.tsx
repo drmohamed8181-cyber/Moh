@@ -9,6 +9,7 @@ import { Mail, Heart } from "lucide-react";
 import { toast } from "sonner";
 import { buildInquiryHref, formatPrice } from "@/lib/utils";
 import { useWishlistStore } from "@/store/wishlistStore";
+import { watermarkedSrc } from "@/lib/watermark";
 
 interface Product {
   id: string;
@@ -22,6 +23,7 @@ interface Product {
   isSold?: boolean;
   publicPrice?: number | null;
   previousPublicPrice?: number | null;
+  watermark?: boolean;
 }
 
 export default function ProductCard({ product }: { product: Product }) {
@@ -30,7 +32,10 @@ export default function ProductCard({ product }: { product: Product }) {
   const wishlisted = useWishlistStore((s) => s.isWishlisted(product.id));
   const toggleWishlist = useWishlistStore((s) => s.toggle);
   const [imgFailed, setImgFailed] = useState(false);
-  const mainImage = product.images[0];
+  // If the stamped copy can't be made, fall back to the original photo.
+  const [stampFailed, setStampFailed] = useState(false);
+  const stamped = Boolean(product.watermark && !stampFailed);
+  const mainImage = product.images[0] && (stamped ? watermarkedSrc(product.images[0]) : product.images[0]);
 
   const handleWishlistClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -55,7 +60,7 @@ export default function ProductCard({ product }: { product: Product }) {
               fill
               sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
               className="object-contain p-6 group-hover:scale-105 transition-transform duration-500"
-              onError={() => setImgFailed(true)}
+              onError={() => (stamped ? setStampFailed(true) : setImgFailed(true))}
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-primary-50 via-white to-primary-100/50">

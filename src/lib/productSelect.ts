@@ -66,9 +66,11 @@ export const LISTING_PRODUCT_SELECT = {
 //
 // Every public product passes through here, so it also adds isSold (see
 // src/lib/partnerStock.ts), which the cards, the product page and its
-// structured data read.
+// structured data read, and watermark — whether the admin turned on the logo
+// stamp for this product's photos (see src/lib/watermark.ts).
 export function withPublicPrice<
   T extends {
+    id: string;
     slug: string;
     category?: { slug: string } | null;
     retailPrice: number | null;
@@ -76,13 +78,15 @@ export function withPublicPrice<
     retailPricePublic: boolean;
   },
 >(
-  product: T
-): Omit<T, "retailPrice" | "previousRetailPrice" | "retailPricePublic"> & { publicPrice: number | null; previousPublicPrice: number | null; isSold: boolean } {
+  product: T,
+  watermarkIds?: ReadonlySet<string>
+): Omit<T, "retailPrice" | "previousRetailPrice" | "retailPricePublic"> & { publicPrice: number | null; previousPublicPrice: number | null; isSold: boolean; watermark: boolean } {
   const { retailPrice, previousRetailPrice, retailPricePublic, ...rest } = product;
   return {
     ...rest,
     publicPrice: retailPricePublic ? retailPrice : null,
     previousPublicPrice: retailPricePublic ? previousRetailPrice : null,
     isSold: isSold(product),
+    watermark: watermarkIds?.has(product.id) ?? false,
   };
 }
