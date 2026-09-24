@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Plus, Pencil, Trash2, GripVertical, Eye, EyeOff, X, Save, Check, ArrowUp, ArrowDown } from "lucide-react";
 import SearchSuggestInput from "@/components/ui/SearchSuggestInput";
 import { productSearchRank } from "@/lib/productSearch";
+import { useDragReorder, moveItem } from "./useDragReorder";
 
 interface Slide {
   id: string;
@@ -38,8 +39,6 @@ export default function HomepageManager({ slides: initialSlides, products = [] }
   const [loading, setLoading] = useState(false);
   const [productQuery, setProductQuery] = useState("");
   const [picked, setPicked] = useState<PickableProduct | null>(null);
-  const [dragId, setDragId] = useState<string | null>(null);
-  const [overId, setOverId] = useState<string | null>(null);
   const [reordering, setReordering] = useState(false);
 
   const productMatches = useMemo(() => {
@@ -147,9 +146,7 @@ export default function HomepageManager({ slides: initialSlides, products = [] }
   const moveSlide = async (from: number, to: number) => {
     if (from === to || to < 0 || to >= slides.length) return;
     const previous = slides;
-    const next = [...slides];
-    const [moved] = next.splice(from, 1);
-    next.splice(to, 0, moved);
+    const next = moveItem(slides, from, to);
     setSlides(next);
     setReordering(true);
     try {
@@ -168,10 +165,7 @@ export default function HomepageManager({ slides: initialSlides, products = [] }
     }
   };
 
-  const endDrag = () => {
-    setDragId(null);
-    setOverId(null);
-  };
+  const { rowProps, rowClass } = useDragReorder(slides.map((s) => s.id), moveSlide, reordering);
 
   const inputClass = "w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm";
 
@@ -192,32 +186,7 @@ export default function HomepageManager({ slides: initialSlides, products = [] }
           {slides.length === 0 ? (
             <div className="p-12 text-center text-gray-500 text-sm">No slides yet. Add your first hero slide.</div>
           ) : slides.map((slide, i) => (
-            <div
-              key={slide.id}
-              draggable={!reordering}
-              onDragStart={(e) => {
-                e.dataTransfer.effectAllowed = "move";
-                // Firefox only starts a drag when some data is set.
-                e.dataTransfer.setData("text/plain", slide.id);
-                setDragId(slide.id);
-              }}
-              onDragOver={(e) => {
-                if (!dragId) return;
-                e.preventDefault();
-                e.dataTransfer.dropEffect = "move";
-                if (overId !== slide.id) setOverId(slide.id);
-              }}
-              onDrop={(e) => {
-                e.preventDefault();
-                const from = slides.findIndex((s) => s.id === dragId);
-                endDrag();
-                if (from !== -1) moveSlide(from, i);
-              }}
-              onDragEnd={endDrag}
-              className={`flex items-center gap-4 p-5 transition-colors ${dragId === slide.id ? "opacity-40" : ""} ${
-                overId === slide.id && dragId !== slide.id ? "bg-primary-50 ring-2 ring-inset ring-primary-300" : ""
-              }`}
-            >
+            <div key={slide.id} {...rowProps(slide.id)} className={`flex items-center gap-4 p-5 transition-colors ${rowClass(slide.id)}`}>
               <GripVertical size={18} className="text-gray-400 cursor-grab active:cursor-grabbing flex-shrink-0" aria-hidden />
               <span className="text-xs font-semibold text-gray-400 w-4 text-center flex-shrink-0">{i + 1}</span>
               <div className="relative w-24 h-14 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0">
