@@ -39,3 +39,10 @@ export function watermarkedSrc(src: string): string {
   const encoded = btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
   return `/api/watermark/${encoded}`;
 }
+
+// Photos named as a manufacturer's official images (e.g.
+// "Zeiss-Cirrus-OCT-5000-Official-HD.jpg") aren't ours to brand, so the admin
+// warns before stamping them and "stamp all" leaves them out.
+export function looksLikeOfficialPhoto(src: string): boolean {
+  return /official/i.test(src.split("/").pop() ?? "");
+}
