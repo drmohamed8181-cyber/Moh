@@ -12,6 +12,9 @@ import EditableRetailPrice from "@/components/admin/EditableRetailPrice";
 import ProductSearchBar from "@/components/admin/ProductSearchBar";
 import HeroProductToggle from "@/components/admin/HeroProductToggle";
 import { HERO_PRODUCTS_KEY, parseHeroProductIds } from "@/lib/heroProducts";
+import WatermarkToggle, { StampAllButton } from "@/components/admin/WatermarkToggle";
+import { canWatermark, looksLikeOfficialPhoto } from "@/lib/watermark";
+import { getWatermarkedProductIds } from "@/lib/watermarkAdmin";
 import { productSearchRank } from "@/lib/productSearch";
 import { PARTNER_STOCK_UPDATED } from "@/content/partnerStock";
 import { partnerListLoaded, partnerStockStatus } from "@/lib/partnerStock";
@@ -41,6 +44,11 @@ export default async function AdminProductsPage({ searchParams }: { searchParams
   const products = await safeDb((db) => db.product.findMany({ orderBy: { name: "asc" }, select: { ...ADMIN_PRODUCT_SELECT, category: true } })) ?? [];
   const heroSetting = await safeDb((db) => db.siteSetting.findUnique({ where: { key: HERO_PRODUCTS_KEY } }));
   const heroIds = new Set(parseHeroProductIds(heroSetting?.value));
+  const watermarkIds = await getWatermarkedProductIds();
+  const stampable = (p: { images: string[] }) => p.images.some(canWatermark);
+  const official = (p: { images: string[] }) => p.images.some(looksLikeOfficialPhoto);
+  const toStamp = products.filter((p) => !watermarkIds.has(p.id) && stampable(p) && !official(p)).map((p) => p.id);
+  const skippedOfficial = products.filter((p) => !watermarkIds.has(p.id) && stampable(p) && official(p)).length;
   const suggestions = products.map((p) => ({ id: p.id, name: p.name, sku: p.sku, image: p.images[0] ?? null, category: p.category?.name ?? null }));
   const shown = q ? products.filter((p) => productSearchRank({ name: p.name, sku: p.sku, category: p.category?.name ?? null }, q) >= 0) : products;
 
@@ -58,9 +66,12 @@ export default async function AdminProductsPage({ searchParams }: { searchParams
               : "Ophthalmology stock: awaiting the partner's weekly list"}
           </p>
         </div>
-        <Link href="/admin/products/new" className="flex items-center gap-2 px-5 py-2.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 transition-colors">
-          <Plus size={16} /> Add Product
-        </Link>
+        <div className="flex items-center gap-3">
+          {products.length > 0 && <StampAllButton productIds={toStamp} skipped={skippedOfficial} />}
+          <Link href="/admin/products/new" className="flex items-center gap-2 px-5 py-2.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 transition-colors">
+            <Plus size={16} /> Add Product
+          </Link>
+        </div>
       </div>
 
       {products.length > 0 && <ProductSearchBar products={suggestions} />}
@@ -126,6 +137,7 @@ export default async function AdminProductsPage({ searchParams }: { searchParams
                           {p.isAvailable ? "Active" : "Hidden"}
                         </span>
                         <HeroProductToggle id={p.id} inHero={heroIds.has(p.id)} hasImage={p.images.length > 0} />
+                        <WatermarkToggle id={p.id} on={watermarkIds.has(p.id)} hasImage={stampable(p)} looksOfficial={official(p)} />
                       </div>
                     </td>
                     <td className="px-6 py-4">
