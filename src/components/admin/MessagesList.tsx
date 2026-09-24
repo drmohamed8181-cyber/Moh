@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { Mail, MailOpen, MessageSquare, Send, ChevronDown, CheckCircle2 } from "lucide-react";
+import Link from "next/link";
+import { Mail, MailOpen, MessageSquare, Send, ChevronDown, CheckCircle2, Copy, ExternalLink } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
 interface ContactMessage {
@@ -12,11 +13,66 @@ interface ContactMessage {
   phone: string | null;
   jobTitle: string | null;
   organization: string | null;
+  address: string | null;
+  workLocation: string | null;
   subject: string;
   message: string;
   isRead: boolean;
   reply: string | null;
   createdAt: string;
+}
+
+function formatDateTime(date: string) {
+  return new Intl.DateTimeFormat("en-US", { dateStyle: "long", timeStyle: "short" }).format(new Date(date));
+}
+
+async function copyText(text: string, label: string) {
+  try {
+    await navigator.clipboard.writeText(text);
+    toast.success(`${label} copied.`);
+  } catch {
+    toast.error("Could not copy. Select the text and copy it manually.");
+  }
+}
+
+function CopyButton({ text, label }: { text: string; label: string }) {
+  return (
+    <button
+      type="button"
+      onClick={() => copyText(text, label)}
+      aria-label={`Copy ${label}`}
+      title={`Copy ${label}`}
+      className="p-1.5 rounded-lg text-gray-400 hover:text-primary-600 hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-500 flex-shrink-0"
+    >
+      <Copy size={14} />
+    </button>
+  );
+}
+
+/** Inquiry messages include a "Link: /products/<slug>" line; surface it as a real link. */
+function productPath(message: string) {
+  return message.match(/^Link: (\/products\/[\w-]+)\s*$/m)?.[1] ?? null;
+}
+
+function detailFields(msg: ContactMessage) {
+  return [
+    { label: "Name", value: msg.name, href: null },
+    { label: "Email", value: msg.email, href: `mailto:${msg.email}` },
+    { label: "Phone", value: msg.phone, href: msg.phone ? `tel:${msg.phone.replace(/[^\d+]/g, "")}` : null },
+    { label: "Job Title", value: msg.jobTitle, href: null },
+    { label: "Workplace", value: msg.organization, href: null },
+    { label: "Address", value: msg.address, href: null },
+    { label: "Work Location", value: msg.workLocation, href: null },
+    { label: "Received", value: formatDateTime(msg.createdAt), href: null },
+  ];
+}
+
+function allDetailsText(msg: ContactMessage) {
+  const lines = detailFields(msg)
+    .filter((f) => f.value)
+    .map((f) => `${f.label}: ${f.value}`);
+  lines.push(`Subject: ${msg.subject}`, "", msg.message);
+  return lines.join("\n");
 }
 
 export default function MessagesList({ initialMessages }: { initialMessages: ContactMessage[] }) {
@@ -86,40 +142,100 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
         const isOpen = openId === msg.id;
         return (
           <div key={msg.id} className={!msg.isRead ? "bg-blue-50/50" : ""}>
-            <button onClick={() => handleToggle(msg)} className="w-full flex gap-4 p-5 hover:bg-gray-50 text-left">
+            {/* A div, not a button, so the name, email and message text can be selected and copied. */}
+            <div
+              onClick={() => {
+                if (window.getSelection()?.toString()) return;
+                handleToggle(msg);
+              }}
+              className="w-full flex gap-4 p-5 hover:bg-gray-50 text-left cursor-pointer select-text"
+            >
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${!msg.isRead ? "bg-primary-100 text-primary-600" : "bg-gray-100 text-gray-500"}`}>
                 {msg.isRead ? <MailOpen size={18} /> : <Mail size={18} />}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="font-semibold text-gray-900">{msg.name}</p>
-                    <p className="text-sm text-gray-500">{msg.email}</p>
+                  <div className="min-w-0">
+                    <p className="font-semibold text-gray-900 break-words">{msg.name}</p>
+                    <p className="text-sm text-gray-500 break-all">{msg.email}</p>
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
                     <p className="text-xs text-gray-400">{formatDate(msg.createdAt)}</p>
-                    <ChevronDown size={16} className={`text-gray-400 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleToggle(msg);
+                      }}
+                      aria-expanded={isOpen}
+                      aria-label={isOpen ? `Hide details for ${msg.name}` : `Show details for ${msg.name}`}
+                      className="p-1 rounded-lg text-gray-400 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    >
+                      <ChevronDown size={16} className={`transition-transform ${isOpen ? "rotate-180" : ""}`} />
+                    </button>
                   </div>
                 </div>
                 <p className="text-sm font-medium text-gray-700 mt-1">{msg.subject}</p>
-                <p className={`text-sm text-gray-500 mt-1 ${isOpen ? "" : "line-clamp-2"}`}>{msg.message}</p>
+                {!isOpen && <p className="text-sm text-gray-500 mt-1 line-clamp-2">{msg.message}</p>}
                 {msg.reply && !isOpen && (
                   <p className="text-xs text-green-700 mt-1.5 flex items-center gap-1">
                     <CheckCircle2 size={12} /> Replied
                   </p>
                 )}
               </div>
-            </button>
+            </div>
 
             {isOpen && (
-              <div className="px-5 pb-5 pl-[4.5rem]">
-                {(msg.phone || msg.jobTitle || msg.organization) && (
-                  <p className="text-xs text-gray-500 mb-3 space-x-3">
-                    {msg.phone && <span>Phone: {msg.phone}</span>}
-                    {msg.jobTitle && <span>Job Title: {msg.jobTitle}</span>}
-                    {msg.organization && <span>Workplace: {msg.organization}</span>}
-                  </p>
-                )}
+              <div className="px-5 pb-5 sm:pl-[4.5rem] space-y-4 select-text">
+                <div className="bg-white border border-gray-200 rounded-xl">
+                  <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-100">
+                    <h3 className="text-sm font-semibold text-gray-900">Customer details</h3>
+                    <button
+                      type="button"
+                      onClick={() => copyText(allDetailsText(msg), "All details")}
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-primary-700 bg-primary-50 rounded-lg hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    >
+                      <Copy size={12} /> Copy all
+                    </button>
+                  </div>
+                  <dl className="divide-y divide-gray-100">
+                    {detailFields(msg).map((f) => (
+                      <div key={f.label} className="grid grid-cols-[7.5rem_1fr_auto] items-center gap-3 px-4 py-2">
+                        <dt className="text-xs font-medium text-gray-500">{f.label}</dt>
+                        <dd className="text-sm text-gray-900 break-words min-w-0">
+                          {!f.value ? (
+                            <span className="text-gray-400">Not provided</span>
+                          ) : f.href ? (
+                            <a href={f.href} className="text-primary-700 hover:underline">{f.value}</a>
+                          ) : (
+                            f.value
+                          )}
+                        </dd>
+                        {f.value ? <CopyButton text={f.value} label={f.label} /> : <span className="w-7" />}
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+
+                <div className="bg-white border border-gray-200 rounded-xl">
+                  <div className="flex items-center justify-between gap-3 px-4 py-2.5 border-b border-gray-100">
+                    <h3 className="text-sm font-semibold text-gray-900 break-words min-w-0">{msg.subject}</h3>
+                    <div className="flex items-center gap-1 flex-shrink-0">
+                      {productPath(msg.message) && (
+                        <Link
+                          href={productPath(msg.message)!}
+                          target="_blank"
+                          className="flex items-center gap-1 px-2 py-1 text-xs font-medium text-primary-700 hover:underline"
+                        >
+                          <ExternalLink size={12} /> View product
+                        </Link>
+                      )}
+                      <CopyButton text={msg.message} label="Message" />
+                    </div>
+                  </div>
+                  <p className="px-4 py-3 text-sm text-gray-800 whitespace-pre-line break-words">{msg.message}</p>
+                </div>
+
                 {msg.reply && (
                   <div className="bg-green-50 border border-green-100 rounded-xl p-3 mb-3">
                     <p className="text-xs font-semibold text-green-700 mb-1 flex items-center gap-1">
