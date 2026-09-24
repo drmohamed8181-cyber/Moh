@@ -34,6 +34,7 @@ import { HIDDEN_CATEGORY_SLUGS, PUBLIC_DENTAL_CATEGORY_SLUGS } from "@/lib/speci
 import { productBrand } from "@/lib/brands";
 import { withEditorialContent } from "@/content/productContent";
 import { HERO_PRODUCTS_KEY, parseHeroProductIds } from "@/lib/heroProducts";
+import { WATERMARK_PRODUCTS_KEY, parseWatermarkProductIds } from "@/lib/watermark";
 
 export const PRODUCTS_TAG = "products";
 export const CATEGORIES_TAG = "categories";
@@ -77,6 +78,21 @@ export async function getSiteSettings(): Promise<Record<string, string>> {
 }
 
 /**
+ * Ids of products whose photos get the logo stamp. Read inside each product
+ * reader's cache boundary; the toggle's write route expires PRODUCTS_TAG, so a
+ * change shows at once. An unreadable setting means no stamps, never an error.
+ */
+export async function readWatermarkIds(): Promise<Set<string>> {
+  if (!prisma) return new Set();
+  try {
+    const setting = await prisma.siteSetting.findUnique({ where: { key: WATERMARK_PRODUCTS_KEY } });
+    return parseWatermarkProductIds(setting?.value);
+  } catch {
+    return new Set();
+  }
+}
+
+/**
  * A single public product by slug, or null if no such product exists.
  * Throws if the database is unreachable — see DatabaseUnavailableError.
  *
@@ -103,7 +119,7 @@ export const getProductBySlug = unstable_cache(
       where: { slug },
       select: { ...LISTING_PRODUCT_SELECT, category: true },
     });
-    return product ? withEditorialContent(withPublicPrice(product)) : null;
+    return product ? withEditorialContent(withPublicPrice(product, await readWatermarkIds())) : null;
   },
   ["public-product-by-slug"],
   { tags: [PRODUCTS_TAG, CATEGORIES_TAG], revalidate: ONE_HOUR }
@@ -113,13 +129,14 @@ export const getProductBySlug = unstable_cache(
 export const getRelatedProducts = unstable_cache(
   async (categoryId: string, excludeProductId: string) => {
     if (!prisma) throw new DatabaseUnavailableError();
+    const watermarkIds = await readWatermarkIds();
     const products = await prisma.product.findMany({
       where: { categoryId, id: { not: excludeProductId }, isAvailable: true },
       orderBy: { name: "asc" },
       take: 4,
       select: { ...LISTING_PRODUCT_SELECT, category: true },
     });
-    return products.map(withPublicPrice);
+    return products.map((p) => withPublicPrice(p, watermarkIds));
   },
   ["public-related-products"],
   { tags: [PRODUCTS_TAG, CATEGORIES_TAG], revalidate: ONE_HOUR }
@@ -165,12 +182,13 @@ export const getCategoryBySlug = unstable_cache(
 export const getProductsInCategory = unstable_cache(
   async (slug: string) => {
     if (!prisma) throw new DatabaseUnavailableError();
+    const watermarkIds = await readWatermarkIds();
     const products = await prisma.product.findMany({
       where: { category: { slug }, isAvailable: true },
       orderBy: { name: "asc" },
       select: { ...LISTING_PRODUCT_SELECT, category: true },
     });
-    return products.map(withPublicPrice);
+    return products.map((p) => withPublicPrice(p, watermarkIds));
   },
   ["public-products-in-category"],
   { tags: [PRODUCTS_TAG, CATEGORIES_TAG], revalidate: ONE_HOUR }
@@ -289,7 +307,8 @@ export const getHeroProducts = unstable_cache(
       where: { id: { in: ids }, isAvailable: true, category: { slug: { notIn: HIDDEN_CATEGORY_SLUGS } } },
       select: { ...LISTING_PRODUCT_SELECT, category: true },
     });
-    const byId = new Map(products.map((p) => [p.id, withEditorialContent(withPublicPrice(p))]));
+    const watermarkIds = await readWatermarkIds();
+    const byId = new Map(products.map((p) => [p.id, withEditorialContent(withPublicPrice(p, watermarkIds))]));
     return ids.flatMap((id) => {
       const p = byId.get(id);
       if (!p || p.images.length === 0) return [];
@@ -353,6 +372,7 @@ const DENTAL_FEATURED_SLOTS = 2;
 export const getFeaturedProducts = unstable_cache(
   async () => {
     if (!prisma) throw new DatabaseUnavailableError();
+    const watermarkIds = await readWatermarkIds();
     const select = { ...LISTING_PRODUCT_SELECT, category: { select: { name: true, slug: true } } };
     const dental = await prisma.product.findMany({
       where: { isAvailable: true, category: { slug: { in: PUBLIC_DENTAL_CATEGORY_SLUGS } } },
@@ -373,7 +393,7 @@ export const getFeaturedProducts = unstable_cache(
     });
     return [...dental, ...others]
       .sort((a, b) => a.name.localeCompare(b.name))
-      .map(withPublicPrice);
+      .map((p) => withPublicPrice(p, watermarkIds));
   },
   ["home-featured-products"],
   { tags: [PRODUCTS_TAG, CATEGORIES_TAG], revalidate: ONE_HOUR }
@@ -387,6 +407,7 @@ export const getFeaturedProducts = unstable_cache(
 export const getDefaultProductListing = unstable_cache(
   async (page: number, pageSize: number) => {
     if (!prisma) throw new DatabaseUnavailableError();
+    const watermarkIds = await readWatermarkIds();
     const where = { category: { slug: { notIn: HIDDEN_CATEGORY_SLUGS } } };
     const [products, total] = await Promise.all([
       prisma.product.findMany({
@@ -398,7 +419,7 @@ export const getDefaultProductListing = unstable_cache(
       }),
       prisma.product.count({ where }),
     ]);
-    return { products: products.map(withPublicPrice), total };
+    return { products: products.map((p) => withPublicPrice(p, watermarkIds)), total };
   },
   ["default-product-listing"],
   { tags: [PRODUCTS_TAG, CATEGORIES_TAG], revalidate: ONE_HOUR }
@@ -467,6 +488,7 @@ export async function getBrandBySlug(slug: string): Promise<PublicBrand | null> 
 export const getProductsByBrand = unstable_cache(
   async (slug: string) => {
     if (!prisma) throw new DatabaseUnavailableError();
+    const watermarkIds = await readWatermarkIds();
     const products = await prisma.product.findMany({
       where: publicProductWhere,
       orderBy: { name: "asc" },
@@ -474,7 +496,7 @@ export const getProductsByBrand = unstable_cache(
     });
     return products
       .filter((product) => productBrand(product)?.slug === slug)
-      .map(withPublicPrice);
+      .map((p) => withPublicPrice(p, watermarkIds));
   },
   ["public-products-by-brand"],
   { tags: [PRODUCTS_TAG, CATEGORIES_TAG], revalidate: ONE_HOUR }

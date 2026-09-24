@@ -4,6 +4,7 @@ import Link from "next/link";
 import { safeDb } from "@/lib/prisma";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
 import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
+import { readWatermarkIds } from "@/lib/publicData";
 import ProductCard from "@/components/product/ProductCard";
 import SiteSearchBox from "@/components/shop/SiteSearchBox";
 import { Search } from "lucide-react";
@@ -33,7 +34,8 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
     orderBy: { name: "asc" },
     take: 24,
   })) : null;
-  const products = dbProducts ? dbProducts.map(withPublicPrice) : null;
+  const watermarkIds = dbProducts ? await readWatermarkIds() : undefined;
+  const products = dbProducts ? dbProducts.map((p) => withPublicPrice(p, watermarkIds)) : null;
 
   return (
     <div className="min-h-screen bg-gray-50">

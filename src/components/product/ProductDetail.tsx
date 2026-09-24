@@ -9,6 +9,7 @@ import { Mail, Heart, Shield, Truck, RotateCcw, ChevronRight, ZoomIn, CheckCircl
 import { toast } from "sonner";
 import { buildInquiryHref, formatPrice } from "@/lib/utils";
 import { useWishlistStore } from "@/store/wishlistStore";
+import { watermarkedSrc } from "@/lib/watermark";
 
 interface Product {
   id: string;
@@ -33,6 +34,7 @@ interface Product {
   weight?: number | null;
   dimensions?: string | null;
   category?: { name: string; slug: string } | null;
+  watermark?: boolean;
 }
 
 export default function ProductDetail({ product }: { product: Product }) {
@@ -42,6 +44,10 @@ export default function ProductDetail({ product }: { product: Product }) {
   const router = useRouter();
   const wishlisted = useWishlistStore((s) => s.isWishlisted(product.id));
   const toggleWishlist = useWishlistStore((s) => s.toggle);
+  // If the stamped copy can't be made, fall back to the original photos.
+  const [stampFailed, setStampFailed] = useState(false);
+  const stamped = Boolean(product.watermark && !stampFailed);
+  const images = stamped ? product.images.map(watermarkedSrc) : product.images;
 
   const handleWishlistClick = () => {
     if (!session?.user) {
@@ -87,11 +93,12 @@ export default function ProductDetail({ product }: { product: Product }) {
           <div>
             <div className="relative aspect-square bg-gray-50 rounded-2xl overflow-hidden mb-4 group">
               <Image
-                src={product.images[selectedImage] ?? "/placeholder.jpg"}
+                src={images[selectedImage] ?? "/placeholder.jpg"}
                 alt={product.name}
                 fill
                 className="object-contain p-8"
                 priority
+                onError={stamped ? () => setStampFailed(true) : undefined}
               />
               <button className="absolute top-4 right-4 w-9 h-9 bg-white shadow rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                 <ZoomIn size={16} className="text-gray-600" />
@@ -99,7 +106,7 @@ export default function ProductDetail({ product }: { product: Product }) {
             </div>
             {product.images.length > 1 && (
               <div className="flex gap-3 overflow-x-auto scrollbar-hide">
-                {product.images.map((img, i) => (
+                {images.map((img, i) => (
                   <button
                     key={i}
                     onClick={() => setSelectedImage(i)}

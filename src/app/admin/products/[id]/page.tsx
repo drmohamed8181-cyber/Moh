@@ -5,6 +5,7 @@ import { ADMIN_PRODUCT_SELECT } from "@/lib/productSelect";
 import { withEditorialContent } from "@/content/productContent";
 import { productDescription, productTitle } from "@/lib/seo";
 import ProductForm from "@/components/admin/ProductForm";
+import { isProductWatermarked } from "@/lib/watermarkAdmin";
 
 export const metadata: Metadata = { title: "Edit Product – Admin" };
 
@@ -39,7 +40,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-900 mb-8">Edit Product</h1>
-      <ProductForm categories={categories} product={product} prefilled={prefilled} />
+      <ProductForm categories={categories} product={product} prefilled={prefilled} watermark={await isProductWatermarked(id)} />
     </div>
   );
 }
