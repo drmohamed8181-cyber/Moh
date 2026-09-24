@@ -19,6 +19,7 @@ model User {
   isActive      Boolean        @default(true)
   phone         String?
   organization  String?
+  customerType  CustomerType   @default(BUYER)
   createdAt     DateTime       @default(now()) @db.Timestamptz(6)
   updatedAt     DateTime       @default(now()) @updatedAt @db.Timestamptz(6)
   accounts      Account[]
@@ -403,6 +404,12 @@ enum Role {
   ADMIN
   CONTENT_MANAGER
   CUSTOMER
+}
+
+enum CustomerType {
+  BUYER
+  SELLER
+  BOTH
 }
 
 enum OrderStatus {

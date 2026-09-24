@@ -9,6 +9,7 @@ type Customer = {
   id: string;
   name: string | null;
   organization: string | null;
+  customerType: "BUYER" | "SELLER" | "BOTH";
   addresses: { street: string; city: string; state: string; zip: string; country: string }[];
 };
 
@@ -19,6 +20,7 @@ export default function CustomerEditModal({ customer }: { customer: Customer }) 
 
   const address = customer.addresses[0];
   const [organization, setOrganization] = useState(customer.organization ?? "");
+  const [customerType, setCustomerType] = useState(customer.customerType);
   const [street, setStreet] = useState(address?.street ?? "");
   const [city, setCity] = useState(address?.city ?? "");
   const [state, setState] = useState(address?.state ?? "");
@@ -35,6 +37,7 @@ export default function CustomerEditModal({ customer }: { customer: Customer }) 
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           organization,
+          customerType,
           ...(hasAddress ? { address: { street, city, state, zip, country } } : {}),
         }),
       });
@@ -72,6 +75,22 @@ export default function CustomerEditModal({ customer }: { customer: Customer }) 
               </button>
             </div>
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
+              <div>
+                <label htmlFor={`type-${customer.id}`} className="block text-xs font-medium text-slate-500 uppercase tracking-wide mb-1.5">
+                  Type
+                </label>
+                <select
+                  id={`type-${customer.id}`}
+                  value={customerType}
+                  onChange={(e) => setCustomerType(e.target.value as Customer["customerType"])}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                >
+                  <option value="BUYER">Buyer</option>
+                  <option value="SELLER">Seller</option>
+                  <option value="BOTH">Buyer &amp; Seller</option>
+                </select>
+              </div>
+
               <div>
                 <label className="block text-xs font-medium text-slate-500 uppercase tracking-wide mb-1.5">
                   Organization Name

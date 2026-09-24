@@ -17,6 +17,9 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   if (!customer) return NextResponse.json({ error: "Customer not found" }, { status: 404 });
 
   const organization = typeof body.organization === "string" ? body.organization.trim() || null : undefined;
+  const customerType = ["BUYER", "SELLER", "BOTH"].includes(body.customerType)
+    ? (body.customerType as "BUYER" | "SELLER" | "BOTH")
+    : undefined;
 
   const rawAddress = body.address as
     | { street?: string; city?: string; state?: string; zip?: string; country?: string }
@@ -37,8 +40,8 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     : undefined;
 
   const updated = await safeDb(async (db) => {
-    if (organization !== undefined) {
-      await db.user.update({ where: { id }, data: { organization } });
+    if (organization !== undefined || customerType) {
+      await db.user.update({ where: { id }, data: { organization, customerType } });
     }
 
     if (address) {
