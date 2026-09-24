@@ -227,7 +227,7 @@ export default function HeroSlider({ slides = defaultSlides }: HeroSliderProps) 
               <Link
                 href={slide.buttonLink}
                 tabIndex={-1}
-                className="group/photo relative block w-full h-full bg-gradient-to-br from-white/[0.06] to-white/[0.02] backdrop-blur-sm overflow-hidden"
+                className="group/photo relative block w-full h-full bg-gradient-to-b from-[#fbfaf7] to-[#e9e7e1] overflow-hidden"
               >
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -236,7 +236,9 @@ export default function HeroSlider({ slides = defaultSlides }: HeroSliderProps) 
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.98 }}
                     transition={{ duration: 0.6, ease: "easeOut" }}
-                    className="absolute inset-0"
+                    // Same backdrop as the frame: the photo below blends into it,
+                    // and a blend only sees what is inside this layer.
+                    className="absolute inset-0 bg-gradient-to-b from-[#fbfaf7] to-[#e9e7e1]"
                   >
                     <Image
                       src={shownImage}
@@ -244,7 +246,7 @@ export default function HeroSlider({ slides = defaultSlides }: HeroSliderProps) 
                       fill
                       priority={firstRender}
                       sizes="(min-width: 1024px) 420px, 90vw"
-                      className="object-contain p-8 drop-shadow-[0_30px_60px_rgba(0,0,0,0.5)] transition-transform duration-500 group-hover/photo:scale-[1.03]"
+                      className="object-contain p-10 mix-blend-multiply transition-transform duration-500 group-hover/photo:scale-[1.03]"
                     />
                   </motion.div>
                 </AnimatePresence>
