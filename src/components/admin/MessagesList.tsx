@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { Mail, MailOpen, MessageSquare, Send, ChevronDown, CheckCircle2, Copy, ExternalLink, Trash2, UserRound, AlarmClock } from "lucide-react";
 import { cn, formatDate } from "@/lib/utils";
+import { DAY_MS, FOLLOW_UP_DAYS } from "@/lib/leads";
 
 interface ContactMessage {
   id: string;
@@ -43,9 +44,6 @@ const STATUSES: { value: LeadStatus; label: string; badge: string; active: strin
 ];
 const STATUS_META = Object.fromEntries(STATUSES.map((st) => [st.value, st])) as Record<LeadStatus, (typeof STATUSES)[number]>;
 
-// A quote with no status change for this long is flagged for a follow-up.
-const FOLLOW_UP_DAYS = 7;
-const DAY_MS = 24 * 60 * 60 * 1000;
 
 function daysSince(date: string, now: number) {
   return Math.floor((now - new Date(date).getTime()) / DAY_MS);
