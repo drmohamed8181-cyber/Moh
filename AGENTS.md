@@ -12,7 +12,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 Before building or shipping anything for MP MedPharma, check that it doesn't break a rule or guideline that applies to it, and tell the owner about any conflict before writing code. That includes:
 
-- **Copyright and permissions**: only modify or brand (e.g. watermark) images and text the business owns or has permission for. LaserLocators has given written permission to use and modify its product photos; manufacturer and other sites' photos do not have that permission.
+- **Copyright and permissions**: only modify or brand (e.g. watermark) images and text the business owns or has permission for. LaserLocators (ophthalmology) and the dental chair supplier are partners whose agreements allow using and modifying their product photos, including the logo stamp; manufacturer and other sites' photos (e.g. the LightMed Sapphire photo from another store) do not have that permission.
 - **Trademarks**: manufacturer names and logos may describe products, but must not suggest the business is the manufacturer or an authorized dealer unless it is.
 - **Google Search and Merchant Center**: structured data, sitemaps and product feeds must match what the page shows and use clean product images (no watermarks or promotional overlays).
 - **Medical device selling**: no health claims beyond the manufacturer's labeling; follow FDA and other applicable rules for resale of refurbished devices.
