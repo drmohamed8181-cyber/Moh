@@ -242,6 +242,8 @@ model ContactMessage {
   leadStatus   LeadStatus @default(NEW)
   // When leadStatus last changed; drives "needs follow-up" for quoted leads.
   statusUpdatedAt DateTime? @db.Timestamptz(6)
+  // Last reminder email about this lead; a later status change makes it eligible again.
+  reminderSentAt  DateTime? @db.Timestamptz(6)
   createdAt    DateTime @default(now()) @db.Timestamptz(6)
 }
 
