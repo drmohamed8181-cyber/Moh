@@ -19,6 +19,22 @@ export async function GET() {
   return NextResponse.json(slides);
 }
 
+// Save a new slide order: { ids } lists every slide id, first slide first.
+export async function PUT(req: NextRequest) {
+  if (!await checkAdmin()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const body = await req.json().catch(() => null);
+  const ids: unknown = body?.ids;
+  if (!Array.isArray(ids) || !ids.every((id) => typeof id === "string") || new Set(ids).size !== ids.length) {
+    return NextResponse.json({ error: "ids must be a list of slide ids" }, { status: 400 });
+  }
+  const saved = await safeDb((db) => db.$transaction(
+    ids.map((id, order) => db.heroSlide.update({ where: { id }, data: { order } }))
+  ));
+  if (!saved) return NextResponse.json({ error: "Failed to save order" }, { status: 500 });
+  revalidateTag(HERO_SLIDES_TAG, { expire: 0 });
+  return NextResponse.json({ success: true });
+}
+
 export async function POST(req: NextRequest) {
   if (!await checkAdmin()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
