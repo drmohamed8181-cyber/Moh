@@ -217,7 +217,7 @@ export default function HeroSlider({ slides = defaultSlides }: HeroSliderProps) 
 
           {/* Right — framed product photograph */}
           <div className="relative order-1 lg:order-2 flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-md aspect-[4/5]">
+            <div className="relative w-full max-w-lg aspect-square">
               {/* Gold frame offset */}
               <div className="absolute -inset-3 border border-gold-500/25" aria-hidden />
               <div className="absolute -top-4 -left-4 w-16 h-16 border-t border-l border-gold-400/50" aria-hidden />
@@ -245,8 +245,8 @@ export default function HeroSlider({ slides = defaultSlides }: HeroSliderProps) 
                       alt={slide.title}
                       fill
                       priority={firstRender}
-                      sizes="(min-width: 1024px) 420px, 90vw"
-                      className="object-contain p-10 mix-blend-multiply transition-transform duration-500 group-hover/photo:scale-[1.03]"
+                      sizes="(min-width: 1024px) 512px, 90vw"
+                      className="object-contain p-6 mix-blend-multiply transition-transform duration-500 group-hover/photo:scale-[1.03]"
                     />
                   </motion.div>
                 </AnimatePresence>
