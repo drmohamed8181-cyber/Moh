@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import Link from "next/link";
-import { Mail, MailOpen, MessageSquare, Send, ChevronDown, CheckCircle2, Copy, ExternalLink } from "lucide-react";
+import { Mail, MailOpen, MessageSquare, Send, ChevronDown, CheckCircle2, Copy, ExternalLink, Trash2 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
 interface ContactMessage {
@@ -80,6 +80,7 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
   const [openId, setOpenId] = useState<string | null>(null);
   const [replyDrafts, setReplyDrafts] = useState<Record<string, string>>({});
   const [sending, setSending] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState<string | null>(null);
 
   const markAsRead = async (id: string) => {
     setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, isRead: true } : m)));
@@ -121,6 +122,26 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
       toast.error("Network error.");
     } finally {
       setSending(null);
+    }
+  };
+
+  const handleDelete = async (msg: ContactMessage) => {
+    if (!confirm(`Delete the message from ${msg.name}? This cannot be undone. Their customer record is kept.`)) return;
+    setDeleting(msg.id);
+    try {
+      const res = await fetch(`/api/admin/messages/${msg.id}`, { method: "DELETE" });
+      if (res.ok) {
+        setMessages((prev) => prev.filter((m) => m.id !== msg.id));
+        setOpenId(null);
+        toast.success("Message deleted.");
+      } else {
+        const data = await res.json().catch(() => ({}));
+        toast.error(data.error ?? "Failed to delete message.");
+      }
+    } catch {
+      toast.error("Network error.");
+    } finally {
+      setDeleting(null);
     }
   };
 
@@ -259,6 +280,18 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
                   >
                     <Send size={14} />
                     {sending === msg.id ? "Sending..." : "Send Reply"}
+                  </button>
+                </div>
+
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(msg)}
+                    disabled={deleting === msg.id}
+                    className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-red-600 rounded-xl hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-60"
+                  >
+                    <Trash2 size={14} />
+                    {deleting === msg.id ? "Deleting..." : "Delete message"}
                   </button>
                 </div>
               </div>

@@ -43,3 +43,16 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
   return NextResponse.json({ message: updated, emailSent });
 }
+
+export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  if (!(await checkAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const { id } = await params;
+
+  const message = await safeDb((db) => db.contactMessage.findUnique({ where: { id }, select: { id: true } }));
+  if (!message) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+  const deleted = await safeDb((db) => db.contactMessage.delete({ where: { id } }));
+  if (!deleted) return NextResponse.json({ error: "Failed to delete message" }, { status: 500 });
+
+  return NextResponse.json({ success: true });
+}
