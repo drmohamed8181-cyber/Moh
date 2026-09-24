@@ -3,6 +3,7 @@ import type { LeadStatus } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { safeDb } from "@/lib/prisma";
 import { sendMail } from "@/lib/mail";
+import { INFO_EMAIL, infoSignatureHtml, infoSignatureText } from "@/lib/emailSignature";
 import { escapeHtml } from "@/lib/utils";
 
 async function checkAdmin() {
@@ -31,14 +32,18 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     const replyText = body.reply.trim();
     data.reply = replyText;
     data.isRead = true;
+    // Reply-To is the shared inbox so the customer's answer lands in info@ rather than the sending address.
     emailSent = await sendMail({
       to: message.email,
+      replyTo: INFO_EMAIL,
       subject: `Re: ${message.subject}`,
       html: `
         <p>${escapeHtml(replyText).replace(/\n/g, "<br/>")}</p>
+        ${infoSignatureHtml}
         <hr/>
         <p style="color:#888;font-size:12px;">In reply to your message: "${escapeHtml(message.message)}"</p>
       `,
+      text: `Hi ${message.name},\n\n${replyText}\n\n${infoSignatureText}\n\n---\nIn reply to your message: "${message.message}"`,
     });
   }
 

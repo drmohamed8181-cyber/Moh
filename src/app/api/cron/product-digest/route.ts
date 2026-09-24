@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { safeDb } from "@/lib/prisma";
 import { sendMail } from "@/lib/mail";
+import { INFO_EMAIL } from "@/lib/emailSignature";
 import { buildProductDigestEmail, type DigestProduct } from "@/lib/productDigest";
 import { createUnsubscribeToken } from "@/lib/unsubscribe";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
@@ -120,7 +121,7 @@ export async function GET(req: NextRequest) {
       unsubscribeUrl,
       issueDate: now,
     });
-    const ok = await sendMail({ to: email, subject, html, text });
+    const ok = await sendMail({ to: email, replyTo: INFO_EMAIL, subject, html, text });
     if (ok) sent++;
     else failed++;
   }
