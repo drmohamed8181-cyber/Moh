@@ -3,6 +3,7 @@ import { safeDb } from "@/lib/prisma";
 import { sendMail } from "@/lib/mail";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { escapeHtml, generateSubmissionReference } from "@/lib/utils";
+import { saveContactAsCustomer } from "@/lib/customers";
 
 const NOTIFY_EMAIL = process.env.PRODUCT_SUBMISSION_NOTIFY_EMAIL || "dr.mohamed8181@gmail.com";
 const SUPPORT_EMAIL = process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "dr.mohamed8181@gmail.com";
@@ -106,6 +107,13 @@ export async function POST(req: NextRequest) {
 
     if (!submission) {
       return NextResponse.json({ error: "We could not save your submission. Please try again." }, { status: 500 });
+    }
+
+    // Saving the seller must never stop the submission from going through.
+    try {
+      await saveContactAsCustomer({ name: fullName, email, phone, organization: str(body.companyName) || null, asSeller: true });
+    } catch (error) {
+      console.error("Failed to save submitter as customer", error);
     }
 
     const detailsHtml = `
