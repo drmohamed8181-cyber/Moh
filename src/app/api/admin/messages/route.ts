@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { safeDb } from "@/lib/prisma";
 import { sendMail } from "@/lib/mail";
+import { INFO_EMAIL, infoSignatureHtml, infoSignatureText } from "@/lib/emailSignature";
 import { escapeHtml } from "@/lib/utils";
 import { saveContactAsCustomer } from "@/lib/customers";
 
@@ -28,12 +29,13 @@ export async function POST(req: NextRequest) {
 
   const emailSent = await sendMail({
     to: email,
+    replyTo: INFO_EMAIL,
     subject,
     html: `<div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;">
         <p style="white-space:pre-line;color:#333;line-height:1.6;">${escapeHtml(message)}</p>
-        <p style="color:#667;font-size:13px;margin-top:24px;">— MP MedPharma</p>
+        ${infoSignatureHtml}
       </div>`,
-    text: `${message}\n\n— MP MedPharma`,
+    text: `${message}\n\n${infoSignatureText}`,
   });
   // Nothing is saved when the email didn't go out, so the list never shows a message the customer never got.
   if (!emailSent) {
