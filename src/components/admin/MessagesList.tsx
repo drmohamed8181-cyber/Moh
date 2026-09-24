@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import Link from "next/link";
 import { Mail, MailOpen, MessageSquare, Send, ChevronDown, CheckCircle2, Copy, ExternalLink, Trash2 } from "lucide-react";
@@ -81,6 +81,19 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
   const [replyDrafts, setReplyDrafts] = useState<Record<string, string>>({});
   const [sending, setSending] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<ContactMessage | null>(null);
+  const cancelRef = useRef<HTMLButtonElement>(null);
+
+  // Focus "Cancel" when the dialog opens, and let Escape close it.
+  useEffect(() => {
+    if (!confirmDelete) return;
+    cancelRef.current?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setConfirmDelete(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [confirmDelete]);
 
   const markAsRead = async (id: string) => {
     setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, isRead: true } : m)));
@@ -126,7 +139,7 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
   };
 
   const handleDelete = async (msg: ContactMessage) => {
-    if (!confirm(`Delete the message from ${msg.name}? This cannot be undone. Their customer record is kept.`)) return;
+    setConfirmDelete(null);
     setDeleting(msg.id);
     try {
       const res = await fetch(`/api/admin/messages/${msg.id}`, { method: "DELETE" });
@@ -158,6 +171,53 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
   }
 
   return (
+    <>
+    {confirmDelete && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setConfirmDelete(null)}>
+        <div
+          role="alertdialog"
+          aria-modal="true"
+          aria-labelledby="delete-message-title"
+          aria-describedby="delete-message-desc"
+          onClick={(e) => e.stopPropagation()}
+          className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6"
+        >
+          <div className="flex items-start gap-4">
+            <div className="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center flex-shrink-0">
+              <Trash2 size={18} />
+            </div>
+            <div className="min-w-0">
+              <h2 id="delete-message-title" className="font-semibold text-gray-900">Delete this message?</h2>
+              <div id="delete-message-desc" className="mt-2 text-sm text-gray-600 space-y-2">
+                <p className="break-words">
+                  <span className="font-medium text-gray-900">{confirmDelete.name}</span> ({confirmDelete.email})
+                  <br />
+                  {confirmDelete.subject}
+                </p>
+                <p>This can&apos;t be undone. Their customer record will be kept.</p>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-end gap-3 mt-6">
+            <button
+              ref={cancelRef}
+              type="button"
+              onClick={() => setConfirmDelete(null)}
+              className="px-4 py-2.5 text-sm font-medium text-gray-700 rounded-xl border border-gray-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={() => handleDelete(confirmDelete)}
+              className="px-4 py-2.5 text-sm font-semibold text-white bg-red-600 rounded-xl hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+            >
+              Yes, delete
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
     <div className="divide-y">
       {messages.map((msg) => {
         const isOpen = openId === msg.id;
@@ -186,7 +246,7 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleDelete(msg);
+                        setConfirmDelete(msg);
                       }}
                       disabled={deleting === msg.id}
                       aria-label={`Delete message from ${msg.name}`}
@@ -299,7 +359,7 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
                 <div className="flex justify-end">
                   <button
                     type="button"
-                    onClick={() => handleDelete(msg)}
+                    onClick={() => setConfirmDelete(msg)}
                     disabled={deleting === msg.id}
                     className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-red-600 rounded-xl hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-60"
                   >
@@ -313,5 +373,6 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
         );
       })}
     </div>
+    </>
   );
 }
