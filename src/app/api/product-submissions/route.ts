@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { safeDb } from "@/lib/prisma";
 import { sendMail } from "@/lib/mail";
+import { INFO_EMAIL } from "@/lib/emailSignature";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { escapeHtml, generateSubmissionReference } from "@/lib/utils";
 import { saveContactAsCustomer } from "@/lib/customers";
@@ -148,6 +149,7 @@ export async function POST(req: NextRequest) {
 
     await sendMail({
       to: email,
+      replyTo: INFO_EMAIL,
       subject: `We've Received Your Submission — ${referenceNumber}`,
       html: `
         <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;">
