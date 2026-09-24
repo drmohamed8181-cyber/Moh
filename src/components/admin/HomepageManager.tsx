@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, GripVertical, Eye, EyeOff, X, Save, Check } from "lucide-react";
+import { Plus, Pencil, Trash2, GripVertical, Eye, EyeOff, X, Save, Check, ArrowUp, ArrowDown } from "lucide-react";
 import SearchSuggestInput from "@/components/ui/SearchSuggestInput";
 import { productSearchRank } from "@/lib/productSearch";
 
@@ -38,6 +38,9 @@ export default function HomepageManager({ slides: initialSlides, products = [] }
   const [loading, setLoading] = useState(false);
   const [productQuery, setProductQuery] = useState("");
   const [picked, setPicked] = useState<PickableProduct | null>(null);
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [overId, setOverId] = useState<string | null>(null);
+  const [reordering, setReordering] = useState(false);
 
   const productMatches = useMemo(() => {
     const q = productQuery.trim();
@@ -139,6 +142,37 @@ export default function HomepageManager({ slides: initialSlides, products = [] }
     } catch {}
   };
 
+  // Move a slide to a new place (drag on desktop, arrows on phones and by
+  // keyboard) and save the whole order; the homepage follows immediately.
+  const moveSlide = async (from: number, to: number) => {
+    if (from === to || to < 0 || to >= slides.length) return;
+    const previous = slides;
+    const next = [...slides];
+    const [moved] = next.splice(from, 1);
+    next.splice(to, 0, moved);
+    setSlides(next);
+    setReordering(true);
+    try {
+      const res = await fetch("/api/admin/homepage/slides", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: next.map((s) => s.id) }),
+      });
+      if (!res.ok) throw new Error();
+      toast.success("Slide order saved");
+    } catch {
+      setSlides(previous);
+      toast.error("Failed to save the new order");
+    } finally {
+      setReordering(false);
+    }
+  };
+
+  const endDrag = () => {
+    setDragId(null);
+    setOverId(null);
+  };
+
   const inputClass = "w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm";
 
   return (
@@ -147,7 +181,7 @@ export default function HomepageManager({ slides: initialSlides, products = [] }
         <div className="flex items-center justify-between p-6 border-b">
           <div>
             <h2 className="font-bold text-gray-900">Hand-made slides</h2>
-            <p className="text-sm text-gray-500">{slides.length} slide{slides.length !== 1 ? "s" : ""} · shown only when no products are chosen above</p>
+            <p className="text-sm text-gray-500">{slides.length} slide{slides.length !== 1 ? "s" : ""} · shown only when no products are chosen above · drag to change the order</p>
           </div>
           <button onClick={openNew} className="flex items-center gap-2 px-5 py-2.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700">
             <Plus size={16} /> Add Slide
@@ -157,11 +191,37 @@ export default function HomepageManager({ slides: initialSlides, products = [] }
         <div className="divide-y">
           {slides.length === 0 ? (
             <div className="p-12 text-center text-gray-500 text-sm">No slides yet. Add your first hero slide.</div>
-          ) : slides.map((slide) => (
-            <div key={slide.id} className="flex items-center gap-4 p-5">
-              <GripVertical size={18} className="text-gray-300 cursor-grab flex-shrink-0" />
+          ) : slides.map((slide, i) => (
+            <div
+              key={slide.id}
+              draggable={!reordering}
+              onDragStart={(e) => {
+                e.dataTransfer.effectAllowed = "move";
+                // Firefox only starts a drag when some data is set.
+                e.dataTransfer.setData("text/plain", slide.id);
+                setDragId(slide.id);
+              }}
+              onDragOver={(e) => {
+                if (!dragId) return;
+                e.preventDefault();
+                e.dataTransfer.dropEffect = "move";
+                if (overId !== slide.id) setOverId(slide.id);
+              }}
+              onDrop={(e) => {
+                e.preventDefault();
+                const from = slides.findIndex((s) => s.id === dragId);
+                endDrag();
+                if (from !== -1) moveSlide(from, i);
+              }}
+              onDragEnd={endDrag}
+              className={`flex items-center gap-4 p-5 transition-colors ${dragId === slide.id ? "opacity-40" : ""} ${
+                overId === slide.id && dragId !== slide.id ? "bg-primary-50 ring-2 ring-inset ring-primary-300" : ""
+              }`}
+            >
+              <GripVertical size={18} className="text-gray-400 cursor-grab active:cursor-grabbing flex-shrink-0" aria-hidden />
+              <span className="text-xs font-semibold text-gray-400 w-4 text-center flex-shrink-0">{i + 1}</span>
               <div className="relative w-24 h-14 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0">
-                {slide.image && <Image src={slide.image} alt={slide.title} fill className="object-cover" />}
+                {slide.image && <Image src={slide.image} alt={slide.title} fill draggable={false} className="object-cover" />}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-semibold text-gray-900 truncate">{slide.title}</p>
@@ -169,6 +229,12 @@ export default function HomepageManager({ slides: initialSlides, products = [] }
                 <p className="text-xs text-primary-600 mt-1">{slide.buttonText} → {slide.buttonLink}</p>
               </div>
               <div className="flex items-center gap-2 flex-shrink-0">
+                <button type="button" disabled={reordering || i === 0} onClick={() => moveSlide(i, i - 1)} aria-label={`Move ${slide.title} up`} className="p-2 text-gray-500 hover:text-primary-600 hover:bg-primary-50 rounded-lg disabled:opacity-30">
+                  <ArrowUp size={16} />
+                </button>
+                <button type="button" disabled={reordering || i === slides.length - 1} onClick={() => moveSlide(i, i + 1)} aria-label={`Move ${slide.title} down`} className="p-2 text-gray-500 hover:text-primary-600 hover:bg-primary-50 rounded-lg disabled:opacity-30">
+                  <ArrowDown size={16} />
+                </button>
                 <button onClick={() => toggleActive(slide)} className={`p-2 rounded-lg transition-colors ${slide.isActive ? "text-green-600 bg-green-50" : "text-gray-400 bg-gray-50"}`}>
                   {slide.isActive ? <Eye size={16} /> : <EyeOff size={16} />}
                 </button>
