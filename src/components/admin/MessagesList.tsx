@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import Link from "next/link";
-import { Mail, MailOpen, MessageSquare, Send, ChevronDown, CheckCircle2, Copy, ExternalLink, Trash2 } from "lucide-react";
-import { formatDate } from "@/lib/utils";
+import { Mail, MailOpen, MessageSquare, Send, ChevronDown, CheckCircle2, Copy, ExternalLink, Trash2, UserRound, AlarmClock } from "lucide-react";
+import { cn, formatDate } from "@/lib/utils";
 
 interface ContactMessage {
   id: string;
@@ -19,8 +19,64 @@ interface ContactMessage {
   message: string;
   isRead: boolean;
   reply: string | null;
+  leadStatus: LeadStatus;
+  statusUpdatedAt: string | null;
   createdAt: string;
+  customer: MessageCustomer | null;
 }
+
+type LeadStatus = "NEW" | "QUOTED" | "WON" | "LOST";
+
+export interface MessageCustomer {
+  id: string;
+  email: string;
+  customerType: "BUYER" | "SELLER" | "BOTH";
+  orders: number;
+  sales: number;
+}
+
+const STATUSES: { value: LeadStatus; label: string; badge: string; active: string }[] = [
+  { value: "NEW", label: "New", badge: "bg-blue-50 text-blue-700", active: "bg-blue-600 text-white border-blue-600" },
+  { value: "QUOTED", label: "Quoted", badge: "bg-amber-50 text-amber-800", active: "bg-amber-500 text-white border-amber-500" },
+  { value: "WON", label: "Won", badge: "bg-green-50 text-green-700", active: "bg-green-600 text-white border-green-600" },
+  { value: "LOST", label: "Lost", badge: "bg-gray-100 text-gray-600", active: "bg-gray-600 text-white border-gray-600" },
+];
+const STATUS_META = Object.fromEntries(STATUSES.map((st) => [st.value, st])) as Record<LeadStatus, (typeof STATUSES)[number]>;
+
+// A quote with no status change for this long is flagged for a follow-up.
+const FOLLOW_UP_DAYS = 7;
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+function daysSince(date: string, now: number) {
+  return Math.floor((now - new Date(date).getTime()) / DAY_MS);
+}
+
+function needsFollowUp(msg: ContactMessage, now: number) {
+  return msg.leadStatus === "QUOTED" && daysSince(msg.statusUpdatedAt ?? msg.createdAt, now) >= FOLLOW_UP_DAYS;
+}
+
+function formatUsd(n: number) {
+  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n);
+}
+
+/** "Customer · 3 orders · $12,400", "Seller", or "New lead". */
+function CustomerTag({ customer }: { customer: MessageCustomer | null }) {
+  const parts: string[] = [];
+  if (customer && customer.orders > 0) {
+    parts.push("Customer", `${customer.orders} ${customer.orders === 1 ? "order" : "orders"}`, formatUsd(customer.sales));
+  }
+  if (customer?.customerType === "SELLER") parts.push("Seller");
+  if (customer?.customerType === "BOTH") parts.push("Buyer & Seller");
+  const isNew = parts.length === 0;
+  return (
+    <span className={cn("inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium", isNew ? "bg-violet-50 text-violet-700" : "bg-emerald-50 text-emerald-700")}>
+      <UserRound size={12} />
+      {isNew ? "New lead" : parts.join(" · ")}
+    </span>
+  );
+}
+
+type Filter = "ALL" | LeadStatus | "FOLLOW_UP";
 
 function formatDateTime(date: string) {
   return new Intl.DateTimeFormat("en-US", { dateStyle: "long", timeStyle: "short" }).format(new Date(date));
@@ -82,6 +138,8 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
   const [sending, setSending] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<ContactMessage | null>(null);
+  const [filter, setFilter] = useState<Filter>("ALL");
+  const [now] = useState(() => Date.now());
   const cancelRef = useRef<HTMLButtonElement>(null);
 
   // Focus "Cancel" when the dialog opens, and let Escape close it.
@@ -158,6 +216,47 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
     }
   };
 
+  const handleStatus = async (msg: ContactMessage, leadStatus: LeadStatus) => {
+    if (msg.leadStatus === leadStatus) return;
+    const previous = { leadStatus: msg.leadStatus, statusUpdatedAt: msg.statusUpdatedAt };
+    const update = (fields: Pick<ContactMessage, "leadStatus" | "statusUpdatedAt">) =>
+      setMessages((prev) => prev.map((m) => (m.id === msg.id ? { ...m, ...fields } : m)));
+    update({ leadStatus, statusUpdatedAt: new Date().toISOString() });
+    try {
+      const res = await fetch(`/api/admin/messages/${msg.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ leadStatus }),
+      });
+      if (!res.ok) throw new Error();
+      toast.success(`Marked as ${STATUS_META[leadStatus].label}.`);
+    } catch {
+      update(previous);
+      toast.error("Could not update the status.");
+    }
+  };
+
+  const counts: Record<Filter, number> = {
+    ALL: messages.length,
+    NEW: 0, QUOTED: 0, WON: 0, LOST: 0,
+    FOLLOW_UP: messages.filter((m) => needsFollowUp(m, now)).length,
+  };
+  for (const m of messages) counts[m.leadStatus]++;
+  const unread = messages.filter((m) => !m.isRead).length;
+
+  const visible = messages.filter((m) =>
+    filter === "ALL" ? true : filter === "FOLLOW_UP" ? needsFollowUp(m, now) : m.leadStatus === filter,
+  );
+
+  const tabs: { value: Filter; label: string }[] = [
+    { value: "ALL", label: "All" },
+    { value: "NEW", label: "New" },
+    { value: "QUOTED", label: "Quoted" },
+    { value: "FOLLOW_UP", label: "Needs follow-up" },
+    { value: "WON", label: "Won" },
+    { value: "LOST", label: "Lost" },
+  ];
+
   if (messages.length === 0) {
     return (
       <div className="p-16 text-center">
@@ -218,8 +317,32 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
         </div>
       </div>
     )}
+    <div className="flex flex-wrap items-center gap-2 mb-4" role="group" aria-label="Filter messages by status">
+      {tabs.map((t) => (
+        <button
+          key={t.value}
+          type="button"
+          onClick={() => setFilter(t.value)}
+          aria-pressed={filter === t.value}
+          className={cn(
+            "flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500",
+            filter === t.value ? "bg-gray-900 text-white border-gray-900" : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50",
+            t.value === "FOLLOW_UP" && counts.FOLLOW_UP > 0 && filter !== t.value && "border-amber-300 text-amber-800 bg-amber-50",
+          )}
+        >
+          {t.value === "FOLLOW_UP" && <AlarmClock size={14} />}
+          {t.label}
+          <span className={cn("text-xs", filter === t.value ? "text-white/70" : "text-gray-400")}>{counts[t.value]}</span>
+        </button>
+      ))}
+      <span className="ml-auto text-sm text-gray-500">{unread} unread</span>
+    </div>
+    <div className="bg-white rounded-2xl border overflow-hidden">
+    {visible.length === 0 && (
+      <p className="p-10 text-center text-sm text-gray-500">No messages in this view.</p>
+    )}
     <div className="divide-y">
-      {messages.map((msg) => {
+      {visible.map((msg) => {
         const isOpen = openId === msg.id;
         return (
           <div key={msg.id} className={!msg.isRead ? "bg-blue-50/50" : ""}>
@@ -270,6 +393,17 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
                   </div>
                 </div>
                 <p className="text-sm font-medium text-gray-700 mt-1">{msg.subject}</p>
+                <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
+                  <span className={cn("px-2 py-0.5 rounded-full text-xs font-semibold", STATUS_META[msg.leadStatus].badge)}>
+                    {STATUS_META[msg.leadStatus].label}
+                  </span>
+                  {needsFollowUp(msg, now) && (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-900">
+                      <AlarmClock size={12} /> Follow up · quoted {daysSince(msg.statusUpdatedAt ?? msg.createdAt, now)} days ago
+                    </span>
+                  )}
+                  <CustomerTag customer={msg.customer} />
+                </div>
                 {!isOpen && <p className="text-sm text-gray-500 mt-1 line-clamp-2">{msg.message}</p>}
                 {msg.reply && !isOpen && (
                   <p className="text-xs text-green-700 mt-1.5 flex items-center gap-1">
@@ -281,6 +415,34 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
 
             {isOpen && (
               <div className="px-5 pb-5 sm:pl-[4.5rem] space-y-4 select-text">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Lead status">
+                    <span className="text-xs font-medium text-gray-500 mr-1">Status</span>
+                    {STATUSES.map((st) => (
+                      <button
+                        key={st.value}
+                        type="button"
+                        onClick={() => handleStatus(msg, st.value)}
+                        aria-pressed={msg.leadStatus === st.value}
+                        className={cn(
+                          "px-3 py-1.5 rounded-lg border text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-primary-500",
+                          msg.leadStatus === st.value ? st.active : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50",
+                        )}
+                      >
+                        {st.label}
+                      </button>
+                    ))}
+                  </div>
+                  {msg.customer && (
+                    <Link
+                      href={`/admin/customers?q=${encodeURIComponent(msg.customer.email)}`}
+                      className="flex items-center gap-1.5 text-xs font-semibold text-primary-700 hover:underline"
+                    >
+                      <UserRound size={14} /> View customer record
+                    </Link>
+                  )}
+                </div>
+
                 <div className="bg-white border border-gray-200 rounded-xl">
                   <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-100">
                     <h3 className="text-sm font-semibold text-gray-900">Customer details</h3>
@@ -372,6 +534,7 @@ export default function MessagesList({ initialMessages }: { initialMessages: Con
           </div>
         );
       })}
+    </div>
     </div>
     </>
   );

@@ -239,6 +239,9 @@ model ContactMessage {
   message      String
   isRead       Boolean  @default(false)
   reply        String?
+  leadStatus   LeadStatus @default(NEW)
+  // When leadStatus last changed; drives "needs follow-up" for quoted leads.
+  statusUpdatedAt DateTime? @db.Timestamptz(6)
   createdAt    DateTime @default(now()) @db.Timestamptz(6)
 }
 
@@ -404,6 +407,13 @@ enum Role {
   ADMIN
   CONTENT_MANAGER
   CUSTOMER
+}
+
+enum LeadStatus {
+  NEW
+  QUOTED
+  WON
+  LOST
 }
 
 enum CustomerType {
