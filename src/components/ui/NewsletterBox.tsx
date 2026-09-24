@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import { ArrowRight, CheckCircle2, Loader2, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
+import EmailSuggestion from "@/components/ui/EmailSuggestion";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -182,6 +183,7 @@ export default function NewsletterBox() {
                     aria-describedby={errors.email ? errorId : undefined}
                     className={cn(FIELD_CLASSES, errors.email && "ring-red-400/60")}
                   />
+                  <EmailSuggestion dark email={form.email} onAccept={(email) => setForm((f) => ({ ...f, email }))} />
                 </div>
               </div>
 

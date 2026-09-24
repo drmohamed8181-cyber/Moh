@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, User, Mail, Lock, ArrowLeft, Phone } from "lucide-react";
 import { toast } from "sonner";
+import EmailSuggestion from "@/components/ui/EmailSuggestion";
 
 export default function RegisterPage() {
   const [form, setForm] = useState({ name: "", email: "", phone: "", password: "", confirm: "" });
@@ -72,6 +73,7 @@ export default function RegisterPage() {
                     required={key !== "phone"}
                   />
                 </div>
+                {key === "email" && <EmailSuggestion email={form.email} onAccept={(email) => setForm({ ...form, email })} />}
               </div>
             ))}
 
