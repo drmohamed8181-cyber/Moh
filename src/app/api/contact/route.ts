@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { safeDb } from "@/lib/prisma";
-import { sendMail } from "@/lib/mail";
+import { PRICING_EMAIL, sendMail } from "@/lib/mail";
 import { INFO_EMAIL } from "@/lib/emailSignature";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { escapeHtml } from "@/lib/utils";
@@ -92,15 +92,15 @@ export async function POST(req: NextRequest) {
       text: `${isInquiry ? "New product inquiry" : "New contact message"} from ${name} (${email}${phone ? `, ${phone}` : ""})${isInquiry ? `\nProduct: ${product!.name}` : ""}${jobTitle ? `\nJob Title: ${jobTitle}` : ""}${organization ? `\nWorkplace: ${organization}` : ""}${address ? `\nAddress: ${address}` : ""}${workLocation ? `\nWork Location: ${workLocation}` : ""}\nSubject: ${finalSubject}\n\n${message}`,
     });
 
-    // Pricing goes in a separate internal-only email whose Reply-To is our own inbox, so replying
-    // to or quoting it can never reach the customer.
+    // Pricing goes in a separate email to the owner only (PRICING_EMAIL, never the shared info@ inbox),
+    // with Reply-To set to that same address, so replying to or quoting it can never reach the customer.
     if (isInquiry) {
       const dealer = product!.dealerPrice != null ? formatUsd(product!.dealerPrice) : "Not on file — check current distributor sheet";
       const retail = product!.retailPrice != null ? formatUsd(product!.retailPrice) : "Not on file — check current distributor sheet";
       await sendMail({
-        to: INQUIRY_NOTIFY_EMAIL,
-        internal: true,
-        replyTo: INQUIRY_NOTIFY_EMAIL,
+        to: PRICING_EMAIL,
+        pricing: true,
+        replyTo: PRICING_EMAIL,
         subject: `INTERNAL ONLY — do not forward: Pricing for ${product!.name}`,
         html: `
           <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;">

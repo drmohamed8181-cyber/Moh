@@ -15,7 +15,10 @@ function getTransport() {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-// Staff inboxes. Only mail to these may carry prices (the internal pricing email).
+/** The only inbox that ever receives prices: the owner's inquiry pricing reminder. */
+export const PRICING_EMAIL = (process.env.PRICING_NOTIFY_EMAIL || "ma@mpmedpharma.com").trim().toLowerCase();
+
+// Staff inboxes. Staff notifications may quote what a customer typed, amounts included.
 function isInternalRecipient(to: string) {
   const address = to.trim().toLowerCase();
   const staff = [
@@ -28,11 +31,16 @@ function isInternalRecipient(to: string) {
 }
 
 /**
- * `internal: true` marks a staff notification. Everything else is treated as going to a customer
- * and is refused if it contains a price, and so is an "internal" email addressed outside the staff inboxes.
+ * `internal: true` marks a staff notification; everything else is treated as going to a customer and is
+ * refused if it contains a price. `pricing: true` marks the owner's pricing reminder, which is refused
+ * unless it is addressed to PRICING_EMAIL.
  */
-export async function sendMail(options: { to: string; subject: string; html: string; text?: string; from?: string; replyTo?: string; internal?: boolean }) {
-  const toStaff = options.internal === true && isInternalRecipient(options.to);
+export async function sendMail(options: { to: string; subject: string; html: string; text?: string; from?: string; replyTo?: string; internal?: boolean; pricing?: boolean }) {
+  if (options.pricing && options.to.trim().toLowerCase() !== PRICING_EMAIL) {
+    console.error(`Pricing email not sent: it may only go to ${PRICING_EMAIL}.`);
+    return false;
+  }
+  const toStaff = options.pricing === true || (options.internal === true && isInternalRecipient(options.to));
   if (!toStaff && emailContainsPrice(options)) {
     console.error(`Email not sent: it contains a price and is not addressed to a staff inbox (subject: "${options.subject}").`);
     return false;
