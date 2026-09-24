@@ -27,7 +27,7 @@ const DEFAULT_TITLE = "New & Refurbished Ophthalmic & Dental Equipment | MP MedP
 const DEFAULT_DESCRIPTION =
   "New and certified refurbished ophthalmic equipment from a US supplier: excimer, femtosecond, SLT and YAG lasers, phaco systems, OCT and surgical microscopes from Alcon, Zeiss, Ellex, Lumenis and Iridex — plus integrated dental chair units. Warranty on every unit.";
 const DEFAULT_KEYWORDS =
-  "refurbished ophthalmic equipment, used ophthalmic lasers, phaco machine for sale, OCT for sale, excimer laser for sale, SLT YAG laser, dental chair unit for sale, dental operatory equipment, ophthalmic equipment supplier USA, MP MedPharma";
+  "refurbished ophthalmic equipment, used ophthalmic lasers, phaco machine for sale, OCT for sale, excimer laser for sale, SLT YAG laser, dental chair unit for sale, dental operatory equipment, ophthalmic equipment supplier USA, MP MedPharma, MPMedPharma";
 
 // Address shown in the footer/contact defaults, mirrored here so the
 // Organization markup carries a location. Search engines treat a business
@@ -141,6 +141,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     ...(sameAs.length > 0 ? { sameAs } : {}),
   };
 
+  // Google takes the site name shown in results from WebSite markup, and
+  // alternateName tells it that the one-word spelling people type
+  // ("MPMedPharma", the domain) is the same site as "MP MedPharma". Without it
+  // the two-word brand and the one-word query are matched as different words.
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "MP MedPharma",
+    alternateName: ["MPMedPharma", "mpmedpharma.com"],
+    url: "https://www.mpmedpharma.com/",
+  };
+
   const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
   return (
@@ -149,6 +161,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: jsonLdScript(organizationJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdScript(websiteJsonLd) }}
         />
         <SessionProvider>
           {children}

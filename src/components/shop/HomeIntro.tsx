@@ -19,7 +19,7 @@ export default function HomeIntro({ brands }: { brands: PublicBrand[] }) {
               New &amp; certified refurbished equipment for hospitals, eye clinics, dental practices and surgery centers
             </h2>
             <p className="text-slate-600 leading-relaxed mb-4">
-              MP MedPharma is a US-based supplier of new and certified refurbished medical equipment. Our ophthalmic range covers
+              MP MedPharma (MPMedPharma.com) is a US-based supplier of new and certified refurbished medical equipment. Our ophthalmic range covers
               cataract and refractive surgery systems, retina and glaucoma lasers, SLT and YAG lasers, OCT and diagnostic imaging,
               slit lamps and surgical microscopes from the manufacturers surgeons already trust.
             </p>
