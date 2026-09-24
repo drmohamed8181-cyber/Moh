@@ -239,6 +239,8 @@ model ContactMessage {
   message      String
   isRead       Boolean  @default(false)
   reply        String?
+  // True when staff started the conversation from the admin page (name/email are the recipient).
+  sentByAdmin  Boolean  @default(false)
   leadStatus   LeadStatus @default(NEW)
   // When leadStatus last changed; drives "needs follow-up" for quoted leads.
   statusUpdatedAt DateTime? @db.Timestamptz(6)

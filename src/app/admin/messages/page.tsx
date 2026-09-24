@@ -25,6 +25,13 @@ export default async function AdminMessagesPage() {
     ]),
   );
 
+  // Everyone the "New message" picker can suggest.
+  const customers = await safeDb((db) => db.user.findMany({
+    where: { role: "CUSTOMER" },
+    select: { name: true, email: true },
+    orderBy: { name: "asc" },
+  })) ?? [];
+
   const messages = rows.map((m) => ({
     ...m,
     createdAt: m.createdAt.toISOString(),
@@ -37,11 +44,11 @@ export default async function AdminMessagesPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Contact Messages</h1>
-          <p className="text-gray-500 text-sm">Track every inquiry from first message to won or lost.</p>
+          <p className="text-gray-500 text-sm">Track every inquiry from first message to won or lost, or start a new conversation.</p>
         </div>
       </div>
 
-      <MessagesList initialMessages={messages} />
+      <MessagesList initialMessages={messages} customers={customers} />
     </div>
   );
 }
