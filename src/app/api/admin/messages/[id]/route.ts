@@ -35,7 +35,6 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
       to: message.email,
       subject: `Re: ${message.subject}`,
       html: `
-        <p>Hi ${escapeHtml(message.name)},</p>
         <p>${escapeHtml(replyText).replace(/\n/g, "<br/>")}</p>
         <hr/>
         <p style="color:#888;font-size:12px;">In reply to your message: "${escapeHtml(message.message)}"</p>
