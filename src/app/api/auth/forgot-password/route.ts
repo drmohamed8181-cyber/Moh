@@ -25,12 +25,13 @@ export async function POST(req: NextRequest) {
       const token = crypto.randomBytes(32).toString("hex");
       const expires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 
-      await safeDb((db) => db.verificationToken.deleteMany({ where: { identifier: email } }));
-      await safeDb((db) => db.verificationToken.create({ data: { identifier: email, token, expires } }));
+      // Use the stored address: reset-password looks the user up by this exact value.
+      await safeDb((db) => db.verificationToken.deleteMany({ where: { identifier: user.email } }));
+      await safeDb((db) => db.verificationToken.create({ data: { identifier: user.email, token, expires } }));
 
       const resetUrl = `${req.nextUrl.origin}/reset-password?token=${token}`;
       await sendMail({
-        to: email,
+        to: user.email,
         subject: "Reset your MP MedPharma password",
         html: `
           <p>Hi ${escapeHtml(user.name ?? "there")},</p>

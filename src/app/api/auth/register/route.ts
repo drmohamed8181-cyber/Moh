@@ -22,7 +22,13 @@ export async function POST(req: NextRequest) {
     }
 
     const existing = await safeDb((db) => db.user.findUnique({ where: { email } }));
-    if (existing) return NextResponse.json({ error: "Email already registered" }, { status: 409 });
+    if (existing) {
+      // Customers saved from the contact form have no password yet.
+      const error = existing.password
+        ? "Email already registered"
+        : "We already have your details from a previous message. Use \"Forgot password\" on the sign-in page to set your password.";
+      return NextResponse.json({ error }, { status: 409 });
+    }
 
     const hashed = await bcrypt.hash(password, 12);
     await safeDb((db) => db.user.create({

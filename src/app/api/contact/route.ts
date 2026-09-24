@@ -3,6 +3,7 @@ import { safeDb } from "@/lib/prisma";
 import { sendMail } from "@/lib/mail";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { escapeHtml } from "@/lib/utils";
+import { saveContactAsCustomer } from "@/lib/customers";
 
 const NOTIFY_EMAIL = process.env.CONTACT_NOTIFY_EMAIL || process.env.PRODUCT_SUBMISSION_NOTIFY_EMAIL || "dr.mohamed8181@gmail.com";
 const INQUIRY_NOTIFY_EMAIL = "info@mpmedpharma.com";
@@ -52,6 +53,13 @@ export async function POST(req: NextRequest) {
     }));
     if (!saved) {
       return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    }
+
+    // Saving the customer must never stop the message from going through.
+    try {
+      await saveContactAsCustomer({ name, email, phone, organization });
+    } catch (error) {
+      console.error("Failed to save contact as customer", error);
     }
 
     const notifyTo = isInquiry ? INQUIRY_NOTIFY_EMAIL : NOTIFY_EMAIL;

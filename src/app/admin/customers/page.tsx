@@ -54,7 +54,7 @@ export default async function AdminCustomersPage({ searchParams }: { searchParam
   const customers = await safeDb((db) => db.user.findMany({
     where,
     include: {
-      _count: { select: { orders: true } },
+      _count: { select: { orders: true, accounts: true } },
       addresses: { where: { isDefault: true }, take: 1 },
     },
   })) ?? [];
@@ -139,9 +139,14 @@ export default async function AdminCustomersPage({ searchParams }: { searchParam
                       <td className="px-5 py-3.5 text-sm text-slate-700 font-medium">{customer._count.orders}</td>
                       <td className="px-5 py-3.5 text-sm text-slate-400">{new Date(customer.createdAt).toLocaleDateString()}</td>
                       <td className="px-5 py-3.5">
-                        <Badge variant={customer.isActive ? "green" : "red"}>
-                          {customer.isActive ? "Active" : "Disabled"}
-                        </Badge>
+                        <div className="flex flex-wrap gap-1">
+                          <Badge variant={customer.isActive ? "green" : "red"}>
+                            {customer.isActive ? "Active" : "Disabled"}
+                          </Badge>
+                          {!customer.password && customer._count.accounts === 0 && (
+                            <Badge variant="yellow" className="whitespace-nowrap">From message</Badge>
+                          )}
+                        </div>
                       </td>
                       <td className="px-5 py-3.5">
                         <CustomerEditModal
