@@ -67,6 +67,7 @@ export async function POST(req: NextRequest) {
 
     await sendMail({
       to: notifyTo,
+      replyTo: email,
       subject: isInquiry ? `New Pricing Inquiry: ${product!.name}` : `New Contact Message: ${finalSubject}`,
       html: `
         <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;">
