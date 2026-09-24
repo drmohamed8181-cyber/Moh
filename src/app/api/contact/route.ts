@@ -56,23 +56,17 @@ export async function POST(req: NextRequest) {
 
     const notifyTo = isInquiry ? INQUIRY_NOTIFY_EMAIL : NOTIFY_EMAIL;
 
-    const pricingRow = isInquiry
-      ? `<tr><td style="padding:4px 12px 4px 0;color:#667;">Product</td><td>${escapeHtml(product!.name)}</td></tr>
-         <tr><td style="padding:4px 12px 4px 0;color:#667;">My Price (dealer)</td><td>${product!.dealerPrice != null ? formatUsd(product!.dealerPrice) : "Not on file — check current distributor sheet"}</td></tr>
-         <tr><td style="padding:4px 12px 4px 0;color:#667;">End User Price (retail)</td><td>${product!.retailPrice != null ? formatUsd(product!.retailPrice) : "Not on file — check current distributor sheet"}</td></tr>`
-      : "";
-    const pricingText = isInquiry
-      ? `\nProduct: ${product!.name}\nMy Price (dealer): ${product!.dealerPrice != null ? formatUsd(product!.dealerPrice) : "Not on file"}\nEnd User Price (retail): ${product!.retailPrice != null ? formatUsd(product!.retailPrice) : "Not on file"}\n`
-      : "";
-
+    // This email is the one staff reply to from their inbox (Reply-To is the customer), and mail
+    // clients quote the original message in replies — so it must never contain internal pricing.
     await sendMail({
       to: notifyTo,
-      subject: isInquiry ? `New Pricing Inquiry: ${product!.name}` : `New Contact Message: ${finalSubject}`,
+      replyTo: email,
+      subject: isInquiry ? `New Inquiry: ${product!.name}` : `New Contact Message: ${finalSubject}`,
       html: `
         <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;">
-          <h2 style="color:#0a2540;">${isInquiry ? "New Pricing Inquiry" : "New Contact Message"}</h2>
+          <h2 style="color:#0a2540;">${isInquiry ? "New Product Inquiry" : "New Contact Message"}</h2>
           <table style="width:100%;border-collapse:collapse;font-size:14px;">
-            ${pricingRow}
+            ${isInquiry ? `<tr><td style="padding:4px 12px 4px 0;color:#667;">Product</td><td>${escapeHtml(product!.name)}</td></tr>` : ""}
             <tr><td style="padding:4px 12px 4px 0;color:#667;">Name</td><td>${escapeHtml(name)}</td></tr>
             <tr><td style="padding:4px 12px 4px 0;color:#667;">Email</td><td>${escapeHtml(email)}</td></tr>
             <tr><td style="padding:4px 12px 4px 0;color:#667;">Phone</td><td>${escapeHtml(phone || "—")}</td></tr>
@@ -85,8 +79,32 @@ export async function POST(req: NextRequest) {
           <p style="margin-top:16px;color:#0a2540;font-weight:600;">Message</p>
           <p style="white-space:pre-line;color:#333;line-height:1.6;">${escapeHtml(message)}</p>
         </div>`,
-      text: `${isInquiry ? "New pricing inquiry" : "New contact message"} from ${name} (${email}${phone ? `, ${phone}` : ""})${jobTitle ? `\nJob Title: ${jobTitle}` : ""}${organization ? `\nWorkplace: ${organization}` : ""}${address ? `\nAddress: ${address}` : ""}${workLocation ? `\nWork Location: ${workLocation}` : ""}\nSubject: ${finalSubject}\n${pricingText}\n${message}`,
+      text: `${isInquiry ? "New product inquiry" : "New contact message"} from ${name} (${email}${phone ? `, ${phone}` : ""})${isInquiry ? `\nProduct: ${product!.name}` : ""}${jobTitle ? `\nJob Title: ${jobTitle}` : ""}${organization ? `\nWorkplace: ${organization}` : ""}${address ? `\nAddress: ${address}` : ""}${workLocation ? `\nWork Location: ${workLocation}` : ""}\nSubject: ${finalSubject}\n\n${message}`,
     });
+
+    // Pricing goes in a separate internal-only email whose Reply-To is our own inbox, so replying
+    // to or quoting it can never reach the customer.
+    if (isInquiry) {
+      const dealer = product!.dealerPrice != null ? formatUsd(product!.dealerPrice) : "Not on file — check current distributor sheet";
+      const retail = product!.retailPrice != null ? formatUsd(product!.retailPrice) : "Not on file — check current distributor sheet";
+      await sendMail({
+        to: INQUIRY_NOTIFY_EMAIL,
+        replyTo: INQUIRY_NOTIFY_EMAIL,
+        subject: `INTERNAL ONLY — do not forward: Pricing for ${product!.name}`,
+        html: `
+          <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;">
+            <p style="background:#fdecea;color:#8a1c1c;padding:10px 14px;border-radius:6px;font-weight:600;">
+              Internal pricing — do not forward or reply to the customer from this email.
+            </p>
+            <p style="color:#333;">For the inquiry from ${escapeHtml(name)} about <strong>${escapeHtml(product!.name)}</strong>:</p>
+            <table style="width:100%;border-collapse:collapse;font-size:14px;">
+              <tr><td style="padding:4px 12px 4px 0;color:#667;">My Price (dealer)</td><td>${escapeHtml(dealer)}</td></tr>
+              <tr><td style="padding:4px 12px 4px 0;color:#667;">End User Price (retail)</td><td>${escapeHtml(retail)}</td></tr>
+            </table>
+          </div>`,
+        text: `INTERNAL ONLY — do not forward or reply to the customer from this email.\n\nInquiry from ${name} about ${product!.name}\nMy Price (dealer): ${dealer}\nEnd User Price (retail): ${retail}`,
+      });
+    }
 
     // Customer-facing acknowledgement — sent regardless of email delivery success above.
     const firstName = name.split(" ")[0];

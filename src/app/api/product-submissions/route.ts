@@ -119,6 +119,7 @@ export async function POST(req: NextRequest) {
 
     await sendMail({
       to: NOTIFY_EMAIL,
+      replyTo: email,
       subject: `New Product Submission ${referenceNumber} — ${productName}`,
       html: `
         <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;">

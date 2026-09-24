@@ -12,8 +12,12 @@ function getTransport() {
   });
 }
 
-export async function sendMail(options: { to: string; subject: string; html: string; text?: string; from?: string }) {
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export async function sendMail(options: { to: string; subject: string; html: string; text?: string; from?: string; replyTo?: string }) {
   const from = options.from || process.env.SMTP_FROM || process.env.SMTP_USER;
+  // Only pass a well-formed Reply-To so a bad address can't make the provider reject the whole message.
+  const replyTo = options.replyTo && EMAIL_RE.test(options.replyTo.trim()) ? options.replyTo.trim() : undefined;
 
   if (process.env.RESEND_API_KEY) {
     try {
@@ -24,6 +28,7 @@ export async function sendMail(options: { to: string; subject: string; html: str
         subject: options.subject,
         html: options.html,
         text: options.text,
+        replyTo,
       });
       if (error) {
         console.error("Failed to send email via Resend:", error);
@@ -48,6 +53,7 @@ export async function sendMail(options: { to: string; subject: string; html: str
       subject: options.subject,
       html: options.html,
       text: options.text,
+      replyTo,
     });
     return true;
   } catch (e) {
