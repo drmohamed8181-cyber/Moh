@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { safeDb } from "@/lib/prisma";
 import { sendMail } from "@/lib/mail";
+import { containsPrice, redactPrices } from "@/lib/priceGuard";
 import { INFO_EMAIL } from "@/lib/emailSignature";
 import { buildProductDigestEmail, type DigestProduct } from "@/lib/productDigest";
 import { createUnsubscribeToken } from "@/lib/unsubscribe";
@@ -28,6 +29,11 @@ const DIGEST_SELECT = {
   category: { select: { name: true, slug: true } },
 } as const;
 
+function withoutPrices(specs: Record<string, string> | null): Record<string, string> | null {
+  if (!specs) return null;
+  return Object.fromEntries(Object.entries(specs).filter(([k, v]) => !containsPrice(k) && !containsPrice(String(v)) && !/price|cost/i.test(k)));
+}
+
 function toDigestProduct(p: {
   name: string;
   slug: string;
@@ -48,13 +54,14 @@ function toDigestProduct(p: {
     sku: p.sku,
     category: p.category?.name ?? null,
     manufacturer: p.manufacturer,
-    shortDescription: p.shortDesc,
-    features: p.features,
+    // Catalogue text is free-form; an amount typed into it must not reach subscribers.
+    shortDescription: p.shortDesc ? redactPrices(p.shortDesc) : p.shortDesc,
+    features: p.features.filter((f) => !containsPrice(f)),
     images: p.images,
     isAvailable: p.isAvailable,
     stock: p.stockQty,
     isFeatured: p.isFeatured,
-    specifications: (p.specifications as Record<string, string> | null) ?? null,
+    specifications: withoutPrices(p.specifications as Record<string, string> | null),
   };
 }
 

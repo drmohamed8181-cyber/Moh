@@ -69,6 +69,7 @@ export async function POST(req: NextRequest) {
     // clients quote the original message in replies — so it must never contain internal pricing.
     await sendMail({
       to: notifyTo,
+      internal: true,
       replyTo: email,
       subject: isInquiry ? `New Inquiry: ${product!.name}` : `New Contact Message: ${finalSubject}`,
       html: `
@@ -98,6 +99,7 @@ export async function POST(req: NextRequest) {
       const retail = product!.retailPrice != null ? formatUsd(product!.retailPrice) : "Not on file — check current distributor sheet";
       await sendMail({
         to: INQUIRY_NOTIFY_EMAIL,
+        internal: true,
         replyTo: INQUIRY_NOTIFY_EMAIL,
         subject: `INTERNAL ONLY — do not forward: Pricing for ${product!.name}`,
         html: `
