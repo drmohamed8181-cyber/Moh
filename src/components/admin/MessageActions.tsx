@@ -73,7 +73,7 @@ export default function MessageActions({ message }: { message: Message }) {
               disabled={saving || !reply.trim()}
               className="flex-1 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors disabled:opacity-50"
             >
-              {saving ? "Saving…" : "Save Reply"}
+              {saving ? "Sending…" : "Send Reply"}
             </button>
             <button onClick={() => setShowReply(false)} className="px-3 py-1.5 bg-slate-100 text-slate-600 text-xs rounded-lg hover:bg-slate-200">
               Cancel
