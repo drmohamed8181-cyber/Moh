@@ -5,6 +5,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { Phone, Mail, MapPin, Clock, Facebook, Twitter, Instagram, Youtube, Loader2 } from "lucide-react";
 import { LogoMark } from "@/components/ui/Logo";
+import EmailSuggestion from "@/components/ui/EmailSuggestion";
 
 type FooterSettings = {
   phone?: string;
@@ -197,6 +198,7 @@ export default function Footer({ settings }: { settings?: FooterSettings }) {
                 {subscribing ? "Subscribing..." : "Subscribe"}
               </button>
             </form>
+            <EmailSuggestion dark email={newsletterEmail} onAccept={setNewsletterEmail} />
           </div>
         </div>
 

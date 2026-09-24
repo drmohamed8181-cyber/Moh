@@ -7,6 +7,7 @@ import {
   ChevronDown, ChevronLeft, ChevronRight, CheckCircle2, Loader2,
   UploadCloud, X, ImageOff, AlertCircle, ArrowRight,
 } from "lucide-react";
+import EmailSuggestion from "@/components/ui/EmailSuggestion";
 
 const CATEGORIES = [
   "Diagnostic Equipment",
@@ -520,6 +521,7 @@ export default function SellProductForm() {
               <div>
                 <label className={fieldLabel}>Email Address *</label>
                 <input type="email" value={contact.email} onChange={(e) => setC("email", e.target.value)} className={inputClass} required />
+                <EmailSuggestion email={contact.email} onAccept={(email) => setC("email", email)} />
               </div>
               <div>
                 <label className={fieldLabel}>Phone Number *</label>

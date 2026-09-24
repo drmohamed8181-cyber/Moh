@@ -4,6 +4,7 @@ import { Suspense, useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
+import EmailSuggestion from "@/components/ui/EmailSuggestion";
 
 function InquiryPrefill({ onPrefill }: { onPrefill: (subject: string, message: string, productSlug: string) => void }) {
   const searchParams = useSearchParams();
@@ -137,6 +138,7 @@ export default function ContactSection({ settings }: { settings?: ContactSetting
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
                   />
+                  <EmailSuggestion email={form.email} onAccept={(email) => setForm({ ...form, email })} />
                 </div>
               </div>
               <div className="grid sm:grid-cols-2 gap-5">
