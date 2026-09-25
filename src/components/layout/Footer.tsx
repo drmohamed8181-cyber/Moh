@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Phone, Mail, MapPin, Clock, Facebook, Twitter, Instagram, Youtube, Loader2 } from "lucide-react";
 import { LogoMark } from "@/components/ui/Logo";
 import EmailSuggestion from "@/components/ui/EmailSuggestion";
+import { trackNewsletterSignup } from "@/lib/analytics";
 
 type FooterSettings = {
   phone?: string;
@@ -52,6 +53,7 @@ export default function Footer({ settings }: { settings?: FooterSettings }) {
         body: JSON.stringify({ email: newsletterEmail }),
       });
       if (res.ok) {
+        trackNewsletterSignup("footer");
         toast.success("You're subscribed! Thanks for joining our newsletter.");
         setNewsletterEmail("");
       } else {

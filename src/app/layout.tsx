@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Cormorant_Garamond } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import ContactClickTracker from "@/components/analytics/ContactClickTracker";
 import "./globals.css";
 import { Toaster } from "sonner";
 import SessionProvider from "@/components/auth/SessionProvider";
@@ -177,6 +178,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </SessionProvider>
       </body>
       {gaId && <GoogleAnalytics gaId={gaId} />}
+      {gaId && <ContactClickTracker />}
     </html>
   );
 }
