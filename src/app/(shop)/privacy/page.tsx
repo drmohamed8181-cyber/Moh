@@ -12,7 +12,7 @@ export default function PrivacyPage() {
       <div className="bg-gradient-to-br from-primary-600 to-primary-800 text-white py-16">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Privacy Policy</h1>
-          <p className="text-blue-100 text-lg max-w-2xl mx-auto">Last updated: August 2026</p>
+          <p className="text-blue-100 text-lg max-w-2xl mx-auto">Last updated: September 2026</p>
         </div>
       </div>
 
@@ -41,6 +41,20 @@ export default function PrivacyPage() {
           <p className="text-gray-600 leading-relaxed">
             We use essential cookies to keep you signed in and remember your preferences. We do not use cookies
             for third-party advertising.
+          </p>
+          <p className="text-gray-600 leading-relaxed mt-3">
+            We also use Google Analytics to understand how visitors find and use our website, for example which
+            pages are viewed and which search engine or site referred you. Google Analytics sets cookies and
+            collects information such as your IP address, browser and device type; it does not receive the
+            contents of forms you submit. You can learn how Google uses this data at{" "}
+            <a href="https://policies.google.com/technologies/partner-sites" className="text-primary-600 underline" target="_blank" rel="noopener noreferrer">
+              policies.google.com/technologies/partner-sites
+            </a>{" "}
+            and opt out with the{" "}
+            <a href="https://tools.google.com/dlpage/gaoptout" className="text-primary-600 underline" target="_blank" rel="noopener noreferrer">
+              Google Analytics opt-out browser add-on
+            </a>
+            .
           </p>
         </section>
 
