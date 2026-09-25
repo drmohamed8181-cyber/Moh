@@ -153,7 +153,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     url: "https://www.mpmedpharma.com/",
   };
 
-  const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+  // The measurement ID is public (it ships in every page), so production falls
+  // back to the site's own GA4 stream. Preview and local builds only report
+  // when the env var is set, so test traffic stays out of the real property.
+  const gaId =
+    process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ??
+    (process.env.VERCEL_ENV === "production" ? "G-KR8S70JNL6" : undefined);
 
   return (
     <html lang="en" className={`${inter.variable} ${cormorant.variable}`}>
