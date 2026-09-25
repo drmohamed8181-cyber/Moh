@@ -299,6 +299,181 @@ export const GUIDES: Guide[] = [
       { label: "Contact us", href: "/contact" },
     ],
   },
+  {
+    slug: "slt-vs-yag-laser-which-to-buy-first",
+    title: "SLT vs YAG Laser: Which Should Your Practice Buy First?",
+    description:
+      "How SLT and Nd:YAG lasers differ, which procedures each is used for, and when a combination SLT/YAG platform is the better buy for a growing ophthalmology practice.",
+    publishedAt: "2026-09-25",
+    intro:
+      "SLT and YAG lasers often sit side by side in the same room, and many practices adding their first anterior-segment laser ask which one to buy first. They are related technologies with different jobs. This guide explains the difference and how to decide.",
+    sections: [
+      {
+        heading: "Two lasers, two jobs",
+        paragraphs: [
+          "A YAG laser is a Q-switched Nd:YAG laser working at 1064 nm. It is a photodisruptor: it creates a tiny, precisely placed optical breakdown inside the eye. Its everyday uses are posterior capsulotomy after cataract surgery and peripheral iridotomy.",
+          "An SLT laser performs selective laser trabeculoplasty, a glaucoma procedure that treats the trabecular meshwork. It uses a frequency-doubled Q-switched Nd:YAG at 532 nm with a large spot and low energy. It is a different instrument with a different delivery system, even though the laser source is related.",
+          "Which procedures a particular unit is cleared for is set by its manufacturer's labeling. Check that labeling for the exact model you are considering.",
+        ],
+      },
+      {
+        heading: "Start from your case mix",
+        paragraphs: [
+          "If your practice performs cataract surgery, or refers many post-cataract patients back to you, a YAG laser is usually the first purchase. Capsulotomy volume follows cataract volume, and sending those patients elsewhere costs you the follow-up relationship.",
+          "If your practice manages a large glaucoma population, an SLT laser lets you offer trabeculoplasty in-house rather than referring it out. Look at how many trabeculoplasty referrals you made last year before deciding.",
+        ],
+      },
+      {
+        heading: "When a combination platform makes sense",
+        paragraphs: [
+          "Combination SLT/YAG platforms put both lasers in one slit-lamp delivery system. They save a room and a slit lamp, and they are often the better value when you expect to need both within a few years.",
+          "The trade-off is that the whole platform is out of service when either laser is. A practice with high volume on both procedures may prefer two dedicated units so a service visit never stops both. Examples in our catalogue include the Ellex Tango and Tango Reflex and the Lumenis Selecta Duet, alongside dedicated units such as the Ellex Ultra Q YAG and the Ellex Solo and Lumenis Selecta II SLT lasers.",
+        ],
+      },
+      {
+        heading: "What to check on a pre-owned unit",
+        paragraphs: ["Both types are durable and well suited to the refurbished market, provided you verify the following:"],
+        bullets: [
+          "Energy output measured against specification at the time of refurbishment, with the report.",
+          "The shot count or usage history the unit records, where available.",
+          "The condition of the slit lamp optics, the aiming beam and the joystick. These are what the surgeon feels every day.",
+          "Which contact lenses, table and footswitch are included.",
+          "The electrical requirements, and the laser safety measures the room will need.",
+        ],
+      },
+      {
+        heading: "How MP MedPharma can help",
+        paragraphs: [
+          "Tell us your procedure volumes and your room layout and we will suggest a dedicated unit or a combination platform to match. Every laser we sell ships with its service documentation and warranty coverage, and pricing is quoted per unit.",
+        ],
+      },
+    ],
+    related: [
+      { label: "SLT lasers", href: "/categories/slt-lasers" },
+      { label: "YAG lasers", href: "/categories/yag-lasers" },
+      { label: "Ellex equipment", href: "/brands/ellex" },
+      { label: "Lumenis equipment", href: "/brands/lumenis" },
+    ],
+  },
+  {
+    slug: "buying-a-used-oct-zeiss-cirrus-guide",
+    title: "Buying a Used OCT: Zeiss Cirrus 4000 vs 5000 vs AngioPlex",
+    description:
+      "What separates the Zeiss Cirrus OCT generations, what drives the price of a pre-owned OCT, and what to check on software, licences and the review station before you buy.",
+    publishedAt: "2026-09-25",
+    intro:
+      "An OCT is now a routine diagnostic in most ophthalmology and many optometry practices, and the Zeiss Cirrus family is one of the most common platforms on the pre-owned market. The generations look alike but differ in ways that affect both price and what the device can do for you. This guide sets out what to compare.",
+    sections: [
+      {
+        heading: "What drives the price of a used OCT",
+        paragraphs: ["Four things account for most of the difference between two pre-owned OCTs:"],
+        bullets: [
+          "Generation: newer platforms run current software and stay eligible for updates for longer.",
+          "Licensed analysis modules: the analyses a unit can run are software licences. Two identical-looking units can differ greatly in what they offer.",
+          "Included equipment: the instrument table, the review computer, the printer and any network licences.",
+          "Documentation: service history and a recent calibration raise the value.",
+        ],
+      },
+      {
+        heading: "Cirrus 4000 vs Cirrus 5000",
+        paragraphs: [
+          "The Cirrus HD-OCT 4000 is the earlier generation. It remains a capable spectral-domain OCT for retinal and optic-nerve imaging, and it is the lowest-cost way into the Cirrus ecosystem. Before buying, confirm the highest software version the unit can run and whether that version supports the analyses and data export your practice needs.",
+          "The Cirrus HD-OCT 5000 is the later generation. It runs newer software and supports a wider range of analysis options. It usually costs more, and for a practice planning to keep the device for many years it is often the better long-term buy.",
+        ],
+      },
+      {
+        heading: "What AngioPlex adds",
+        paragraphs: [
+          "AngioPlex is Zeiss's OCT angiography option on the Cirrus 5000 platform. It builds images of retinal blood flow from repeated OCT scans, without dye injection. For retina-focused practices it is often the deciding feature. For general practices it may be capability they rarely use, so compare the price difference against how often you would order the scan.",
+          "AngioPlex is a licensed capability tied to the unit. Confirm in writing that it is active on the device you are buying and that it transfers with the sale.",
+        ],
+      },
+      {
+        heading: "Anterior segment imaging",
+        paragraphs: [
+          "The Cirrus platforms are primarily posterior-segment devices. Practices that mainly need anterior chamber and angle imaging, for example for refractive or glaucoma work, may also consider a dedicated anterior-segment OCT such as the Zeiss Visante.",
+        ],
+      },
+      {
+        heading: "Before you buy",
+        paragraphs: ["Get written answers to the following:"],
+        bullets: [
+          "Serial number, manufacturing date and installed software version.",
+          "The full list of active licences and analysis modules, and confirmation that each one transfers.",
+          "Whether the existing patient database will be wiped. It must be, and you should get it in writing, because patient data cannot travel with the device.",
+          "Whether the review station, table and any network licences are included.",
+          "Who installs and calibrates the unit, and what the warranty covers.",
+        ],
+      },
+    ],
+    related: [
+      { label: "Diagnostic equipment", href: "/categories/diagnostic-equipment" },
+      { label: "Zeiss equipment", href: "/brands/zeiss" },
+      { label: "Refurbished vs new equipment", href: "/guides/refurbished-vs-new-ophthalmic-equipment" },
+      { label: "Contact us", href: "/contact" },
+    ],
+  },
+  {
+    slug: "buying-a-used-ophthalmic-surgical-microscope",
+    title: "Buying a Used Ophthalmic Surgical Microscope: What to Check",
+    description:
+      "How to evaluate a pre-owned ophthalmic surgical microscope: optics, red reflex illumination, stand type, camera integration and what a proper refurbishment covers.",
+    publishedAt: "2026-09-25",
+    intro:
+      "The surgical microscope is the instrument a cataract or retina surgeon looks through for every minute of every case. A good pre-owned microscope can serve for many years, but optics and mechanics wear in ways that are easy to miss in a showroom. This guide covers what to evaluate.",
+    sections: [
+      {
+        heading: "Optics come first",
+        paragraphs: [
+          "Look through the unit at full and minimum magnification and across the whole field. The image should be sharp to the edges, free of haze, and both eyepieces should merge into one image without strain. Haze usually points to contaminated or degraded internal optics. That can be corrected, but it belongs in the refurbishment, not after delivery.",
+          "Check the zoom and focus motors across their full range. They should move smoothly and quietly, without hunting or stalling.",
+        ],
+      },
+      {
+        heading: "Illumination and red reflex",
+        paragraphs: [
+          "For cataract surgery, a stable red reflex is one of the most valued features of an ophthalmic microscope. Different platforms approach it differently: the Alcon LuxOR line, for example, is built around red reflex illumination, and Zeiss ophthalmic microscopes such as the OPMI Visu series have their own coaxial illumination designs.",
+          "On a pre-owned unit, check the light source type, the lamp hours where recorded, and whether a spare lamp is included. Also confirm that any illumination modules or filters listed in the specification are actually installed.",
+        ],
+      },
+      {
+        heading: "Stand, balance and mobility",
+        paragraphs: [
+          "Floor stands, ceiling mounts and wall mounts each suit a different room. A floor stand is the easiest to install and to move between rooms. A ceiling mount frees floor space but needs a structural assessment and professional installation.",
+          "Whatever the mount, the arm should hold its position when balanced and move without drift. Check the brakes and the footswitch functions, including zoom, focus and XY movement where fitted.",
+        ],
+      },
+      {
+        heading: "Accessories and video",
+        paragraphs: [
+          "Assistant scopes, beam splitters, camera adapters, a video system and a retina viewing system add real value, and they are often the difference between two quotes. List exactly what is included. For teaching or documentation, confirm that the camera output works with your recording system.",
+        ],
+      },
+      {
+        heading: "What a proper refurbishment covers",
+        paragraphs: ["Ask the supplier to confirm, in writing, that the refurbishment included:"],
+        bullets: [
+          "Cleaning and inspection of the optics, with any damaged elements replaced.",
+          "Testing of the illumination, zoom, focus and XY motors across their full range.",
+          "Inspection of the arm, brakes, cables and footswitch.",
+          "Electrical safety testing.",
+          "A warranty, and a named service contact for your area.",
+        ],
+      },
+      {
+        heading: "How MP MedPharma can help",
+        paragraphs: [
+          "Tell us your procedure mix and your room, and we will match a microscope and mounting option to it. Every unit ships with its service documentation and warranty coverage, and pricing is quoted per unit according to configuration.",
+        ],
+      },
+    ],
+    related: [
+      { label: "Surgical microscopes", href: "/categories/surgical-microscopes" },
+      { label: "Zeiss equipment", href: "/brands/zeiss" },
+      { label: "Alcon equipment", href: "/brands/alcon" },
+      { label: "Contact us", href: "/contact" },
+    ],
+  },
 ];
 
 export function getGuide(slug: string): Guide | undefined {
