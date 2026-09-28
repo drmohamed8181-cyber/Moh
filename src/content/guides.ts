@@ -603,6 +603,185 @@ export const GUIDES: Guide[] = [
       { label: "Contact us", href: "/contact" },
     ],
   },
+  {
+    slug: "buying-a-used-femtosecond-laser",
+    title: "Buying a Used Femtosecond Laser for LASIK: What to Check",
+    description:
+      "What to verify on a pre-owned refractive femtosecond laser: licensed applications, patient-interface supply, per-procedure fees, mobility and service history.",
+    publishedAt: "2026-09-28",
+    intro:
+      "A femtosecond laser replaces the mechanical microkeratome for LASIK flaps and adds other corneal cuts. Pre-owned units make that step affordable for many refractive practices, but the value of a used femtosecond laser depends on things you cannot see by looking at it. This guide covers what to check.",
+    sections: [
+      {
+        heading: "Refractive and cataract femtosecond lasers are different",
+        paragraphs: [
+          "Refractive femtosecond lasers, such as the IntraLase iFS and the Ziemer FEMTO LDV family, are built for corneal work: LASIK flaps and, depending on model and licences, corneal tunnels and lamellar cuts. Femtosecond lasers for cataract surgery are a separate class of device. Make sure the platform you are considering is designed and cleared for the procedures you plan to offer.",
+        ],
+      },
+      {
+        heading: "Licensed applications",
+        paragraphs: [
+          "Many femtosecond platforms enable procedures through software licences. Ask for the list of applications active on the unit and whether each licence transfers with the sale. A laser licensed only for flaps is worth less than one with additional corneal applications, and re-licensing can be expensive.",
+        ],
+      },
+      {
+        heading: "Consumables and per-procedure costs",
+        paragraphs: [
+          "Every procedure uses a sterile patient interface specific to the platform. Before buying, confirm that interfaces are still manufactured, that you can buy them as a new owner, and what they cost. Some platforms have also used per-procedure fees or procedure cards. Build these into your cost per case, because they often matter more than the purchase price over the life of the laser.",
+        ],
+      },
+      {
+        heading: "Fixed or mobile",
+        paragraphs: [
+          "Some femtosecond lasers are fixed installations. Others, such as the Ziemer FEMTO LDV, are designed to move between rooms. A mobile unit can serve more than one operating room, but it still has room requirements and needs careful handling each time it is moved. Check the site-preparation guide for the exact model either way.",
+        ],
+      },
+      {
+        heading: "Regional versions",
+        paragraphs: [
+          "Some platforms are sold in different configurations for different markets. If a unit is described as a US or international version, confirm which configuration it is, and that it may be used for your intended procedures where you practise, before you buy.",
+        ],
+      },
+      {
+        heading: "Before you buy",
+        paragraphs: ["Get written answers to these:"],
+        bullets: [
+          "Manufacturing date, software version and procedure count.",
+          "Service history of the laser source, with dates of major service.",
+          "Active licences, and confirmation that each one transfers.",
+          "Patient-interface supply, price, and any per-procedure fees.",
+          "Who de-installs, ships, re-installs and calibrates the laser, and what the warranty covers.",
+        ],
+      },
+    ],
+    related: [
+      { label: "Femtosecond lasers", href: "/categories/femtosecond-lasers" },
+      { label: "Ziemer equipment", href: "/brands/ziemer" },
+      { label: "J&J Vision equipment", href: "/brands/johnson-johnson-vision" },
+      { label: "Used excimer laser checklist", href: "/guides/buying-a-used-excimer-laser-checklist" },
+    ],
+  },
+  {
+    slug: "preparing-a-room-for-an-excimer-laser",
+    title: "How to Prepare a Room for an Excimer Laser",
+    description:
+      "Temperature, humidity, air quality, power, gas storage, floor, laser safety and delivery access: the site checklist to complete before an excimer laser arrives.",
+    publishedAt: "2026-09-28",
+    intro:
+      "An excimer laser only performs to specification in a room that meets its requirements, and most installation delays come from the room, not the laser. Use this checklist with the site-preparation guide for your exact model, and have your facility engineer sign it off before delivery.",
+    sections: [
+      {
+        heading: "Temperature, humidity and air quality",
+        paragraphs: [
+          "Excimer lasers specify a range of room temperature and humidity, and many specify how stable those must be during treatment. Plan for dedicated air conditioning that holds the room within range all year, including when the building's main system is off. Dust and fumes affect the optics, so keep the room clean and avoid aerosol sprays and cleaning products the manufacturer prohibits.",
+        ],
+      },
+      {
+        heading: "Electrical supply",
+        paragraphs: [
+          "Most excimer lasers need a dedicated circuit with a specific voltage, phase and current rating. Some manufacturers also recommend power conditioning or an uninterruptible supply for the control electronics. Confirm the exact specification from the site guide and have it installed and tested before delivery.",
+        ],
+      },
+      {
+        heading: "Laser gas",
+        paragraphs: [
+          "Excimer lasers use a premixed gas that contains a small amount of a halogen. Cylinders must be stored, secured and ventilated as the manufacturer specifies and as your local fire and safety rules require. Plan where cylinders will be kept, how they will be changed, and who supplies them.",
+        ],
+      },
+      {
+        heading: "Floor, space and delivery path",
+        paragraphs: [
+          "Check the floor can carry the laser's weight and is level and free from vibration. Allow space for the patient bed to swing, for staff to work around the laser, and for service access. Then walk the delivery route: doorways, corridors, lifts and ramps must fit the crated laser.",
+        ],
+      },
+      {
+        heading: "Laser safety",
+        paragraphs: ["Excimer lasers are Class 4 medical lasers. Plan for:"],
+        bullets: [
+          "A laser safety officer and written procedures.",
+          "Warning signs and, where required, door interlocks.",
+          "Eye protection rated for the laser's wavelength.",
+          "Any registration your state requires for Class 4 lasers; check with your state radiation control program.",
+        ],
+      },
+      {
+        heading: "Diagnostics and data",
+        paragraphs: [
+          "The laser works with a topographer or aberrometer and a planning station. Plan network connections, space and power for those devices too, and confirm their software versions are compatible with the laser's.",
+        ],
+      },
+      {
+        heading: "How MP MedPharma can help",
+        paragraphs: [
+          "We provide the site-preparation requirements for every excimer laser we sell and coordinate delivery, installation and calibration with you. Share your room plan before you order and we will check it against the laser's requirements.",
+        ],
+      },
+    ],
+    related: [
+      { label: "Excimer lasers", href: "/categories/excimer-lasers" },
+      { label: "Used excimer laser checklist", href: "/guides/buying-a-used-excimer-laser-checklist" },
+      { label: "J&J Vision equipment", href: "/brands/johnson-johnson-vision" },
+      { label: "Contact us", href: "/contact" },
+    ],
+  },
+  {
+    slug: "slit-lamp-buying-guide",
+    title: "Slit Lamp Buying Guide: What to Compare",
+    description:
+      "How to compare slit lamps: optics and magnification, illumination, filters, imaging, tonometer mounting and ergonomics, plus what to check on a pre-owned unit.",
+    publishedAt: "2026-09-28",
+    intro:
+      "The slit lamp is the most used instrument in an eye clinic. Nearly every model does the basics well, so the differences that matter are in optics, illumination, imaging and how the instrument feels over a full clinic day. This guide covers what to compare.",
+    sections: [
+      {
+        heading: "Optics and magnification",
+        paragraphs: [
+          "Most modern slit lamps use a Galilean magnification changer with three or five steps. Five steps give finer control between a wide overview and high magnification for detailed examination. Look through the instrument at every step: the image should be sharp, bright and free of haze, and both eyepieces should merge easily into one image.",
+        ],
+      },
+      {
+        heading: "Illumination and filters",
+        paragraphs: [
+          "LED illumination runs cooler, lasts longer and keeps a stable colour. Halogen illumination is found on older and some current models and needs spare bulbs. Check the slit width and height controls move smoothly, and that the standard filters are present: cobalt blue for fluorescein, red-free, and a yellow barrier filter if you use one.",
+        ],
+      },
+      {
+        heading: "Imaging",
+        paragraphs: [
+          "If you document findings or teach, consider a slit lamp with an integrated camera, or one with a beam splitter that accepts a camera. Confirm the imaging software runs on your computers and can export to your records system.",
+        ],
+      },
+      {
+        heading: "Tonometer and accessories",
+        paragraphs: [
+          "Check whether the slit lamp accepts the applanation tonometer you use, how it mounts, and whether breath shields, a fixation target and chin rest paper are included.",
+        ],
+      },
+      {
+        heading: "Ergonomics and table",
+        paragraphs: [
+          "A clinician uses the slit lamp for hours each day. Check the joystick moves smoothly and precisely, the eyepieces adjust for your posture, and the table height suits both seated and wheelchair patients. A motorised instrument table often matters as much as the slit lamp itself.",
+        ],
+      },
+      {
+        heading: "What to check on a pre-owned unit",
+        paragraphs: ["Slit lamps are durable and a good refurbished buy. Confirm the following:"],
+        bullets: [
+          "Clean, undamaged optics with no haze or fungus.",
+          "Smooth joystick, slit and magnification controls.",
+          "Working illumination, with spare bulbs if it is halogen.",
+          "Filters, chin rest, forehead rest and breath shield present.",
+          "Table, tonometer and camera included, if listed.",
+        ],
+      },
+    ],
+    related: [
+      { label: "Slit lamps", href: "/categories/slit-lamps" },
+      { label: "CSO equipment", href: "/brands/cso" },
+      { label: "Diagnostic equipment", href: "/categories/diagnostic-equipment" },
+      { label: "Contact us", href: "/contact" },
+    ],
+  },
 ];
 
 export function getGuide(slug: string): Guide | undefined {
