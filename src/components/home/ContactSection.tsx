@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
 import EmailSuggestion from "@/components/ui/EmailSuggestion";
+import { trackLead } from "@/lib/analytics";
 
 function InquiryPrefill({ onPrefill }: { onPrefill: (subject: string, message: string, productSlug: string) => void }) {
   const searchParams = useSearchParams();
@@ -68,6 +69,7 @@ export default function ContactSection({ settings }: { settings?: ContactSetting
         body: JSON.stringify(form),
       });
       if (res.ok) {
+        trackLead(isInquiry ? "product_inquiry" : "contact", isInquiry ? { product_slug: form.productSlug } : {});
         toast.success("Message sent! We'll get back to you shortly.");
         setForm({ name: "", email: "", phone: "", jobTitle: "", organization: "", address: "", workLocation: "", subject: "", message: "", productSlug: "" });
       } else {

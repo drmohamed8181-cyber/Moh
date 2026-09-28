@@ -4,6 +4,7 @@ import { useId, useState } from "react";
 import { ArrowRight, CheckCircle2, Loader2, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import EmailSuggestion from "@/components/ui/EmailSuggestion";
+import { trackNewsletterSignup } from "@/lib/analytics";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -68,6 +69,7 @@ export default function NewsletterBox() {
           address: form.address.trim(),
         }),
       });
+      if (res.ok) trackNewsletterSignup("newsletter_box");
       setStatus(res.ok ? "success" : "error");
     } catch {
       setStatus("error");

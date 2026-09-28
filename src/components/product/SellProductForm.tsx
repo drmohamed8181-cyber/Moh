@@ -8,6 +8,7 @@ import {
   UploadCloud, X, ImageOff, AlertCircle, ArrowRight,
 } from "lucide-react";
 import EmailSuggestion from "@/components/ui/EmailSuggestion";
+import { trackLead } from "@/lib/analytics";
 
 const CATEGORIES = [
   "Diagnostic Equipment",
@@ -253,6 +254,7 @@ export default function SellProductForm() {
       });
       const data = await res.json();
       if (res.ok) {
+        trackLead("sell_equipment");
         setResult({ referenceNumber: data.referenceNumber, estimatedReview: data.estimatedReview, supportEmail: data.supportEmail });
       } else {
         toast.error(data.error || "Something went wrong. Please try again.");
