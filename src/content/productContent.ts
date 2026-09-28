@@ -37,6 +37,15 @@ export type ProductContent = {
    */
   seoTitle?: string;
   seoDesc?: string;
+  /**
+   * Per-version titles for a family entry that matches more than one product
+   * (a "Reflex" model, a unit with AngioPlex, a serial range). The first
+   * variant whose keywords all appear in the name replaces the entry's
+   * seoTitle and seoDesc, so each version gets its own search listing while
+   * sharing the family's description. Keep the entry's own seoTitle for the
+   * base model.
+   */
+  variants?: { match: string[]; seoTitle: string; seoDesc: string }[];
   description: string;
   features?: string[];
   indications?: string[];
@@ -161,12 +170,20 @@ export const PRODUCT_CONTENT: ProductContent[] = [
     indications: ["Pars plana vitrectomy", "Retinal detachment and macular surgery", "Combined phaco-vitrectomy procedures"],
   },
   {
-    match: ["luxor"],
+    match: ["luxor", "lx3"],
     seoTitle: "Alcon LuxOR LX3 Microscope for Sale",
     seoDesc: "Alcon LuxOR LX3 ophthalmic surgical microscope for sale, known for a wide, stable red reflex in cataract surgery. Refurbished with warranty. Request pricing.",
     description: `The Alcon LuxOR LX3 is an ophthalmic surgical microscope designed for cataract and anterior segment surgery. Its illumination system is built to give a wide, stable red reflex that stays visible with eye movement and decentration, which surgeons value during capsulorhexis and cortex removal. It is offered on floor stands with motorised focus, zoom and XY positioning and can be fitted with assistant scopes and video documentation.\n\nOn a pre-owned microscope check the optics for haze or delamination, the stand's motorised movements, the light source hours and any video or recording equipment included. ${OFFER}`,
     features: ["Wide, stable red reflex illumination", "Motorised focus, zoom and XY", "Floor stand with counterbalanced arm", "Options for assistant scope and video"],
     indications: ["Cataract surgery", "Anterior segment surgery", "Corneal and glaucoma procedures"],
+  },
+  {
+    match: ["luxor"],
+    seoTitle: "Alcon LuxOR Surgical Microscope for Sale",
+    seoDesc: "Alcon LuxOR ophthalmic surgical microscope for sale, for cataract and anterior segment surgery. Refurbished with warranty. Confirm the model and request pricing.",
+    description: `The Alcon LuxOR is a line of ophthalmic surgical microscopes for cataract and anterior segment surgery, built around illumination designed to give a strong, stable red reflex. Models and generations differ in illumination, stand and documentation options, so confirm the exact model and configuration of the unit you are considering.\n\nOn a pre-owned microscope check the optics for haze or delamination, the stand's motorised movements, the light source hours and any video or recording equipment included. ${OFFER}`,
+    features: ["Red reflex illumination for cataract surgery", "Motorised focus and zoom", "Options for assistant scope and video"],
+    indications: ["Cataract surgery", "Anterior segment surgery"],
   },
   {
     match: ["ex500"],
@@ -208,6 +225,13 @@ export const PRODUCT_CONTENT: ProductContent[] = [
     match: ["cirrus", "5000"],
     seoTitle: "Zeiss Cirrus HD-OCT 5000 for Sale",
     seoDesc: "Zeiss Cirrus HD-OCT 5000 for sale: spectral-domain OCT for retina and glaucoma with FastTrac tracking and optional AngioPlex OCTA. Refurbished with warranty.",
+    variants: [
+      {
+        match: ["angioplex"],
+        seoTitle: "Zeiss Cirrus 5000 with AngioPlex for Sale",
+        seoDesc: "Zeiss Cirrus HD-OCT 5000 with AngioPlex OCT angiography for sale: spectral-domain OCT for retina and glaucoma. Refurbished with warranty. Request a quote.",
+      },
+    ],
     description: `The Zeiss Cirrus HD-OCT 5000 is a spectral-domain optical coherence tomography system for retina, glaucoma and anterior segment imaging. It scans at 68,000 A-scans per second, includes FastTrac retinal tracking, and supports AngioPlex OCT angiography on suitably licensed units, giving non-invasive visualisation of retinal and choroidal vasculature. Its analysis library covers macular thickness, RNFL and ganglion cell analysis with normative databases, and progression tracking over time.\n\nWhen comparing units, confirm which software licences are active (in particular AngioPlex), the software version, and whether the review station and table are included. ${OFFER}`,
     features: ["68 kHz spectral-domain OCT", "FastTrac retinal tracking", "AngioPlex OCT angiography (licence-dependent)", "Macular, RNFL and ganglion cell analyses with normative data", "Anterior segment imaging"],
     indications: ["Retinal disease diagnosis and monitoring", "Glaucoma assessment and progression analysis", "Anterior segment and angle imaging", "OCT angiography of retinal and choroidal vasculature"],
@@ -260,6 +284,13 @@ export const PRODUCT_CONTENT: ProductContent[] = [
     match: ["tango"],
     seoTitle: "Ellex Tango SLT/YAG Laser for Sale",
     seoDesc: "Ellex Tango combined SLT and Nd:YAG laser for sale: glaucoma trabeculoplasty and capsulotomy in one slit-lamp system. Refurbished with warranty. Get a quote.",
+    variants: [
+      {
+        match: ["reflex"],
+        seoTitle: "Ellex Tango Reflex SLT/YAG Laser for Sale",
+        seoDesc: "Ellex Tango Reflex combined SLT and YAG laser for sale, with Reflex technology in YAG mode. SLT and capsulotomy in one slit-lamp system. Refurbished with warranty.",
+      },
+    ],
     description: `The Ellex Tango is a combined SLT and YAG ophthalmic laser: a 532 nm frequency-doubled laser for selective laser trabeculoplasty and a 1064 nm Nd:YAG for posterior capsulotomy and iridotomy in one slit-lamp-mounted system. Reflex versions add Ellex's Reflex technology for the YAG mode. It lets a practice offer glaucoma laser treatment and capsulotomy from a single device and a single room.\n\nOn a pre-owned Tango check the energy calibration in both modes, the aiming beam alignment, the slit-lamp optics and the included table. ${OFFER}`,
     features: ["SLT and YAG in one platform", "Slit-lamp delivery with aiming beam", "Selectable energy for capsulotomy and iridotomy"],
     indications: ["Selective laser trabeculoplasty for open-angle glaucoma", "Posterior capsulotomy", "Peripheral iridotomy"],
@@ -277,7 +308,14 @@ export const PRODUCT_CONTENT: ProductContent[] = [
   {
     match: ["ultraq"],
     seoTitle: "Ellex Ultra Q YAG Laser for Sale",
-    seoDesc: "Ellex Ultra Q Nd:YAG laser for sale, including Reflex versions, for posterior capsulotomy and iridotomy. Refurbished, calibrated and warranted. Request a quote.",
+    seoDesc: "Ellex Ultra Q Nd:YAG laser for sale for posterior capsulotomy and peripheral iridotomy. Refurbished, calibrated and warranted. Request a quote.",
+    variants: [
+      {
+        match: ["reflex"],
+        seoTitle: "Ellex Ultra Q Reflex YAG Laser for Sale",
+        seoDesc: "Ellex Ultra Q Reflex Nd:YAG laser for sale, with Reflex technology for visualising the capsule in capsulotomy. Refurbished, calibrated and warranted. Get a quote.",
+      },
+    ],
     description: `The Ellex Ultra Q is an Nd:YAG ophthalmic laser for posterior capsulotomy and peripheral iridotomy. Reflex versions include Ellex's Reflex technology, which switches between slit-lamp illumination and laser optical paths to improve visualisation of the capsule and reduce the energy required. It is a compact, widely serviced YAG suitable as a primary capsulotomy laser.\n\nVerify energy calibration, aiming beam alignment and slit-lamp optics, and confirm the included table and filters. ${OFFER}`,
     features: ["Nd:YAG photodisruption", "Reflex technology on Reflex models", "Slit-lamp delivery with aiming beam"],
     indications: ["Posterior capsulotomy", "Peripheral iridotomy"],
@@ -305,6 +343,18 @@ export const PRODUCT_CONTENT: ProductContent[] = [
     match: ["integre"],
     seoTitle: "Ellex Integre Photocoagulator for Sale",
     seoDesc: "Ellex Integre slit-lamp-integrated retinal photocoagulator for sale: compact PRP, focal laser and trabeculoplasty in one unit. Refurbished with warranty.",
+    variants: [
+      {
+        match: ["duo"],
+        seoTitle: "Ellex Integre Duo Photocoagulator for Sale",
+        seoDesc: "Ellex Integre Duo dual-wavelength slit-lamp-integrated photocoagulator for sale. Compact retinal laser with the slit lamp built in. Refurbished with warranty.",
+      },
+      {
+        match: ["532"],
+        seoTitle: "Ellex Integre 532 Photocoagulator for Sale",
+        seoDesc: "Ellex Integre 532 nm green slit-lamp-integrated photocoagulator for sale, supplied with table. Compact retinal laser in one unit. Refurbished with warranty.",
+      },
+    ],
     description: `The Ellex Integre is a slit-lamp-integrated retinal photocoagulator combining the laser and the slit-lamp in one compact unit. It is used for panretinal and focal photocoagulation and for laser trabeculoplasty, and its integrated design suits clinics with limited space or those equipping a dedicated laser room. Model variants differ in the wavelengths fitted.\n\nConfirm the wavelength configuration of the specific unit, the power calibration and the delivery accessories included. ${OFFER}`,
     features: ["Integrated slit-lamp and laser", "Adjustable spot size and duration", "Compact footprint"],
     indications: ["Panretinal photocoagulation", "Focal and grid macular laser", "Laser trabeculoplasty"],
@@ -378,6 +428,18 @@ export const PRODUCT_CONTENT: ProductContent[] = [
     match: ["visx"],
     seoTitle: "VISX STAR S4 IR Excimer Laser for Sale",
     seoDesc: "AMO VISX STAR S4 IR excimer laser for sale: variable spot scanning, eye tracking and iris registration for LASIK and PRK. Refurbished with warranty.",
+    variants: [
+      {
+        match: ["3xxx"],
+        seoTitle: "VISX STAR S4 IR Excimer (3XXX SN) for Sale",
+        seoDesc: "AMO VISX STAR S4 IR excimer laser, 3XXX serial range, for sale: variable spot scanning, eye tracking and iris registration. Refurbished with warranty.",
+      },
+      {
+        match: ["5xxx"],
+        seoTitle: "VISX STAR S4 IR Excimer (5XXX SN) for Sale",
+        seoDesc: "AMO VISX STAR S4 IR excimer laser, 5XXX serial range, for sale: variable spot scanning, eye tracking and iris registration. Refurbished with warranty.",
+      },
+    ],
     description: `The AMO VISX STAR S4 IR is an excimer laser for LASIK and surface ablation with variable spot scanning, active eye tracking and iris registration to compensate for cyclotorsion between the diagnostic capture and treatment. Paired with the WaveScan or iDesign aberrometer it delivers wavefront-guided treatments, and it has one of the largest installed bases of any refractive laser.\n\nAs with any used excimer, assess shot count, optics and gas service history, active treatment licences and room requirements; see our used excimer laser checklist. ${OFFER}`,
     features: ["Variable spot scanning excimer", "Iris registration and active eye tracking", "Wavefront-guided treatment with WaveScan or iDesign"],
     indications: ["LASIK", "PRK and surface ablation", "Wavefront-guided refractive treatment"],
@@ -421,6 +483,13 @@ export const PRODUCT_CONTENT: ProductContent[] = [
     match: ["stellaris", "pc"],
     seoTitle: "Bausch + Lomb Stellaris PC for Sale",
     seoDesc: "Bausch + Lomb Stellaris PC combined phaco and vitrectomy system for sale, for cataract and retina lists on one console. Refurbished with warranty. Get a quote.",
+    variants: [
+      {
+        match: ["laser"],
+        seoTitle: "Bausch + Lomb Stellaris PC with Laser for Sale",
+        seoDesc: "Bausch + Lomb Stellaris PC phaco-vitrectomy system with integrated laser for sale, for cataract and retina lists on one console. Refurbished with warranty.",
+      },
+    ],
     description: `The Bausch + Lomb Stellaris PC is a combined phaco and vitrectomy platform for anterior and posterior segment surgery, offering high-speed vitrectomy, xenon illumination, dual-linear control and the option of an integrated laser. It suits surgical centres that want one console for cataract and retina lists.\n\nConfirm which modules are fitted and licensed, and check the illumination source hours and included handpieces. ${OFFER}`,
     features: ["Combined phaco and vitrectomy", "High-speed vitrectomy cutter support", "Xenon illumination", "Optional integrated laser"],
     indications: ["Phacoemulsification cataract surgery", "Pars plana vitrectomy", "Combined procedures"],
@@ -462,6 +531,18 @@ export const PRODUCT_CONTENT: ProductContent[] = [
     match: ["femtoldv"],
     seoTitle: "Ziemer FEMTO LDV Z6 Laser for Sale",
     seoDesc: "Ziemer FEMTO LDV Z6 mobile femtosecond laser for sale, for LASIK flaps and corneal procedures across more than one OR. Refurbished with warranty. Get a quote.",
+    variants: [
+      {
+        match: ["usa"],
+        seoTitle: "Ziemer FEMTO LDV Z6 (USA) Laser for Sale",
+        seoDesc: "Ziemer FEMTO LDV Z6 mobile femtosecond laser, USA configuration, for sale. Refurbished with warranty. Confirm licensed applications and request a quote.",
+      },
+      {
+        match: ["global"],
+        seoTitle: "Ziemer FEMTO LDV Z6 (Global) Laser for Sale",
+        seoDesc: "Ziemer FEMTO LDV Z6 mobile femtosecond laser, global configuration, for sale. Refurbished with warranty. Confirm licensed applications and request a quote.",
+      },
+    ],
     description: `The Ziemer FEMTO LDV Z6 is a mobile femtosecond laser for LASIK flap creation and corneal procedures, using a low-energy, high-repetition-rate approach and a compact, movable design that can serve more than one operating room. Depending on model and licences it supports lamellar keratoplasty, tunnels and other corneal cuts.\n\nConfirm the licensed applications, the laser source service history, the patient-interface consumable supply and room requirements. ${OFFER}`,
     features: ["Mobile femtosecond laser", "Low-energy, high-frequency pulses", "Programmable flap and corneal cuts (licence-dependent)"],
     indications: ["LASIK flap creation", "Corneal tunnels and lamellar cuts"],
@@ -494,7 +575,10 @@ const normalise = (text: string) => text.toLowerCase().replace(/[^a-z0-9]/g, "")
  */
 export function findProductContent(name: string): ProductContent | undefined {
   const key = normalise(name);
-  return PRODUCT_CONTENT.find((entry) => entry.match.every((keyword) => key.includes(normalise(keyword))));
+  const matches = (keywords: string[]) => keywords.every((keyword) => key.includes(normalise(keyword)));
+  const entry = PRODUCT_CONTENT.find((candidate) => matches(candidate.match));
+  const variant = entry?.variants?.find((candidate) => matches(candidate.match));
+  return entry && variant ? { ...entry, seoTitle: variant.seoTitle, seoDesc: variant.seoDesc } : entry;
 }
 
 type Fillable = {
