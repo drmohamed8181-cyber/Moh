@@ -474,6 +474,135 @@ export const GUIDES: Guide[] = [
       { label: "Contact us", href: "/contact" },
     ],
   },
+  {
+    slug: "532nm-vs-577nm-photocoagulation-laser",
+    title: "532 nm vs 577 nm Photocoagulation Lasers: How to Choose",
+    description:
+      "How green 532 nm and yellow 577 nm retinal photocoagulation lasers differ, what delivery options and modes to compare, and what to check on a pre-owned unit.",
+    publishedAt: "2026-09-28",
+    intro:
+      "Retinal photocoagulation lasers are sold mainly in two wavelengths: green at 532 nm and yellow at 577 nm. Practices replacing or adding a laser often ask which one to buy. The answer depends less on the wavelength alone than on the delivery systems, treatment modes and support that come with the platform. This guide sets out what to compare.",
+    sections: [
+      {
+        heading: "What the wavelength changes",
+        paragraphs: [
+          "Both wavelengths are absorbed by melanin in the retinal pigment epithelium, which is what makes photocoagulation possible. They differ in how other tissues absorb and scatter them.",
+          "Green 532 nm light, usually from a frequency-doubled solid-state laser, has been the standard for decades. Most retina specialists trained on it, and a large installed base means parts, service and pre-owned units are easy to find.",
+          "Yellow 577 nm light sits close to an absorption peak of oxygenated haemoglobin and is absorbed less by the yellow macular pigment. It also scatters somewhat less through media that are not perfectly clear. Those physical differences are the reasons commonly given for choosing yellow, particularly by practices that do a lot of work close to the macula.",
+          "Which conditions a particular laser is cleared to treat is set by its manufacturer's labeling. Check the labeling of the exact model, not the wavelength in general.",
+        ],
+      },
+      {
+        heading: "Delivery systems matter as much as wavelength",
+        paragraphs: [
+          "A photocoagulator is only as useful as the ways it can deliver light. Compare the delivery options each unit includes, because they are often priced separately:",
+        ],
+        bullets: [
+          "Slit-lamp adapter, the everyday office delivery, and whether it fits a slit lamp you already own.",
+          "Laser indirect ophthalmoscope (LIO) for peripheral retina and patients who cannot sit at a slit lamp.",
+          "Endoprobes for use in the operating room during vitrectomy, and which vitrectomy systems they connect to.",
+          "Pattern scanning, if the platform offers it, which places multiple spots per activation.",
+        ],
+      },
+      {
+        heading: "Treatment modes",
+        paragraphs: [
+          "Beyond conventional continuous-wave treatment, some platforms offer a micropulse or subthreshold mode, such as Iridex's MicroPulse. Whether that mode is included, licensed or available at all differs by model and generation, so confirm it for the specific unit rather than the product line.",
+        ],
+      },
+      {
+        heading: "What to check on a pre-owned unit",
+        paragraphs: ["Photocoagulators are robust and well suited to the refurbished market. Before buying, confirm the following:"],
+        bullets: [
+          "Measured output power at the treatment plane against the manufacturer's specification, with the report.",
+          "The condition of the fibre and delivery devices, which wear before the laser console does.",
+          "Aiming beam brightness and alignment.",
+          "Which delivery devices, filters, footswitch and interlocks are included.",
+          "Laser safety requirements for the room, including eyewear rated for the wavelength you buy.",
+        ],
+      },
+      {
+        heading: "How MP MedPharma can help",
+        paragraphs: [
+          "We stock green and yellow photocoagulators from Iridex and Ellex when available. Tell us how and where you treat — office, operating room or both — and we will match a unit and its delivery devices to that. Every laser ships with its service documentation and warranty coverage, and pricing is quoted per unit.",
+        ],
+      },
+    ],
+    related: [
+      { label: "Photocoagulation lasers", href: "/categories/photocoagulation-lasers" },
+      { label: "Iridex equipment", href: "/brands/iridex" },
+      { label: "Ellex equipment", href: "/brands/ellex" },
+      { label: "SLT vs YAG lasers", href: "/guides/slt-vs-yag-laser-which-to-buy-first" },
+    ],
+  },
+  {
+    slug: "phaco-service-contract-what-to-include",
+    title: "What a Phaco Service Contract Should Include",
+    description:
+      "What to look for in a phaco or vitrectomy service contract: preventive maintenance, parts, handpieces, response times, loaners and software updates.",
+    publishedAt: "2026-09-28",
+    intro:
+      "A phaco or combined phaco-vitrectomy system is the busiest capital device in most cataract practices, and a day without it is a cancelled list. The service contract decides how long that day lasts. Contracts differ far more than the headline price suggests. This guide covers the terms worth reading closely, whether the system is new or refurbished.",
+    sections: [
+      {
+        heading: "Preventive maintenance",
+        paragraphs: [
+          "The core of any contract is scheduled preventive maintenance: inspection, calibration and replacement of wear parts at the intervals the manufacturer recommends. Check how many visits a year are included, what each visit covers, and whether you receive a written report and calibration record after every visit. Those records also protect the resale value of the system later.",
+        ],
+      },
+      {
+        heading: "Parts, and what counts as a part",
+        paragraphs: [
+          "Most contracts cover parts and labour for repairs, but the definitions matter. Handpieces, footpedals, remote controls, batteries and cables are often excluded or covered only up to a limit. Consumables such as cassettes, tips and sleeves are almost never included.",
+          "Ask for the exclusions list in writing. A contract that looks cheaper may simply exclude the parts that fail most often.",
+        ],
+      },
+      {
+        heading: "Response time and loaners",
+        paragraphs: [
+          "Look for a stated response time — how quickly an engineer attends after you call — and whether it is measured in business hours or calendar hours. Ask what happens if the system cannot be repaired on the first visit: is a loaner console provided, and how quickly can it arrive?",
+          "For practices with a single phaco system, loaner availability is often worth more than any other clause.",
+        ],
+      },
+      {
+        heading: "Software and upgrades",
+        paragraphs: [
+          "Confirm whether software updates are included and who installs them. Some updates add features or fix known issues; others require new hardware. Ask whether the system is still eligible for updates at all, which is especially important on older or refurbished platforms.",
+        ],
+      },
+      {
+        heading: "Manufacturer or independent service",
+        paragraphs: [
+          "Manufacturer service offers factory-trained engineers and direct access to parts, usually at a higher price. Independent service organisations can cost less and respond faster in some regions, but check their training on your exact platform, where their parts come from, and whether the manufacturer will still support the unit afterwards.",
+          "For refurbished systems, also check whether the manufacturer will accept the unit into a service contract at all. Some require an inspection or recertification fee first.",
+        ],
+      },
+      {
+        heading: "Questions to ask before signing",
+        paragraphs: ["Get written answers to these:"],
+        bullets: [
+          "How many preventive maintenance visits are included, and what does each cover?",
+          "Which parts and accessories are excluded, and are handpieces covered?",
+          "What is the guaranteed response time, and is it business or calendar hours?",
+          "Is a loaner provided if the system is down for more than a day?",
+          "Are software updates included, and is the system still eligible for them?",
+          "Can the contract be transferred if the system is sold?",
+        ],
+      },
+      {
+        heading: "How MP MedPharma can help",
+        paragraphs: [
+          "Every phaco and vitrectomy system we sell ships with its service documentation and warranty coverage. Tell us where the system will be installed and we will explain how service works for that platform in your area before you buy.",
+        ],
+      },
+    ],
+    related: [
+      { label: "Phaco & vitrectomy systems", href: "/categories/phaco-vitrectomy" },
+      { label: "Alcon Centurion vs Infiniti", href: "/guides/alcon-centurion-vs-infiniti" },
+      { label: "Refurbished vs new equipment", href: "/guides/refurbished-vs-new-ophthalmic-equipment" },
+      { label: "Contact us", href: "/contact" },
+    ],
+  },
 ];
 
 export function getGuide(slug: string): Guide | undefined {
