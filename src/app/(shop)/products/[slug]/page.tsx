@@ -2,6 +2,8 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { HIDDEN_CATEGORY_SLUGS } from "@/lib/specialties";
 import { getProductBySlug, getRelatedProducts, getPublicProductSlugs } from "@/lib/publicData";
+import { productBrand } from "@/lib/brands";
+import RelatedGuides from "@/components/shop/RelatedGuides";
 import { jsonLdScript } from "@/lib/jsonLd";
 import { productDescription, productTitle } from "@/lib/seo";
 import ProductDetail from "@/components/product/ProductDetail";
@@ -72,6 +74,7 @@ export default async function ProductPage({ params }: Props) {
   const product = { ...dbProduct, specifications: dbProduct.specifications as Record<string, string> | null };
 
   const publicPrice = product.publicPrice;
+  const brand = productBrand(product);
 
   // Google requires a Product to carry at least one of offers/review/aggregateRating.
   // Quote-only products (no public price, no reviews) can satisfy none of the three,
@@ -137,6 +140,15 @@ export default async function ProductPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: jsonLdScript(breadcrumbJsonLd) }}
       />
       <ProductDetail product={product} />
+      <div className="bg-white border-t">
+        <RelatedGuides
+          paths={[
+            `/categories/${product.category.slug}`,
+            ...(brand ? [`/brands/${brand.slug}`] : []),
+          ]}
+          className="container mx-auto px-4 py-12"
+        />
+      </div>
       {relatedProducts.length > 0 && (
         <div className="bg-white border-t">
           <div className="container mx-auto px-4 py-12">

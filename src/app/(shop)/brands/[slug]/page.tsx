@@ -5,6 +5,7 @@ import { getBrandBySlug, getProductsByBrand, getPublicBrands, getPublicBrandSlug
 import { jsonLdScript } from "@/lib/jsonLd";
 import { SITE_URL, brandDescription, brandTitle } from "@/lib/seo";
 import ProductCard from "@/components/product/ProductCard";
+import RelatedGuides from "@/components/shop/RelatedGuides";
 import { ChevronRight } from "lucide-react";
 
 // One landing page per manufacturer. "Alcon equipment", "Zeiss OCT for sale"
@@ -123,6 +124,8 @@ export default async function BrandPage({ params }: Props) {
             ))}
           </div>
         )}
+
+        <RelatedGuides paths={[`/brands/${brand.slug}`]} className="mt-14" />
 
         {otherBrands.length > 0 && (
           <div className="mt-14 pt-8 border-t border-gray-200">

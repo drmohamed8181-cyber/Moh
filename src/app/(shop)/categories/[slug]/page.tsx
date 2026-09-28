@@ -11,6 +11,7 @@ import { jsonLdScript } from "@/lib/jsonLd";
 import { categoryDescription, categoryTitle } from "@/lib/seo";
 import { getCategoryContent } from "@/content/categoryContent";
 import ProductCard from "@/components/product/ProductCard";
+import RelatedGuides from "@/components/shop/RelatedGuides";
 import { ChevronRight } from "lucide-react";
 
 // These pages were the ones sitting in Google's "Discovered - currently not
@@ -186,6 +187,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
             </div>
           </section>
         )}
+        <RelatedGuides paths={[`/categories/${slug}`]} className="mt-14" />
       </div>
     </div>
   );
