@@ -784,6 +784,23 @@ export const GUIDES: Guide[] = [
   },
 ];
 
+/**
+ * Guides that link to any of `paths` (a category or brand page), most relevant
+ * first: a guide linking to more of the paths ranks higher, then newer ones.
+ * Product, category and brand pages use this to link back to the guides that
+ * already point at them, so the connection runs both ways.
+ */
+export function guidesLinkingTo(paths: string[], limit = 3): Guide[] {
+  return GUIDES.map((guide) => ({
+    guide,
+    score: guide.related.filter((link) => paths.includes(link.href)).length,
+  }))
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score || b.guide.publishedAt.localeCompare(a.guide.publishedAt))
+    .slice(0, limit)
+    .map(({ guide }) => guide);
+}
+
 export function getGuide(slug: string): Guide | undefined {
   return GUIDES.find((guide) => guide.slug === slug);
 }
