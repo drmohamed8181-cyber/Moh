@@ -107,7 +107,7 @@ just the homepage.
 
 ## 5. Content that earns visits over time (one piece per month)
 
-**Done for you:** the site now has a `/guides` section with ten articles,
+**Done for you:** the site now has a `/guides` section with thirteen articles,
 each targeting a real query and linking into the catalogue:
 - Refurbished vs new ophthalmic equipment: what actually differs
 - What to check before buying a used excimer laser
@@ -119,11 +119,14 @@ each targeting a real query and linking into the catalogue:
 - Buying a used ophthalmic surgical microscope: what to check
 - 532 nm vs 577 nm photocoagulation lasers: how to choose
 - What a phaco service contract should include
+- Buying a used femtosecond laser for LASIK: what to check
+- How to prepare a room for an excimer laser
+- Slit lamp buying guide: what to compare
 
 To add one, append an entry to `src/content/guides.ts`; the index, sitemap and
 Article markup update automatically. Good next topics are the questions your
-customers ask on the phone: "femtosecond laser for LASIK flaps: what to
-check", "how to prepare a room for an excimer laser", "slit lamp buying guide". Share
+customers ask on the phone: "how to choose a fundus camera", "microkeratome
+vs femtosecond flap", "corneal topographer buying guide". Share
 each guide on LinkedIn and in the product-digest email when it goes live.
 
 ## 6. Turn visitors into inquiries
