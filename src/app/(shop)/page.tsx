@@ -48,7 +48,7 @@ async function getHomeData() {
 // "ISO 13485" and "24/7" lines were removed: buyers of capital equipment check.
 const trustFeatures = [
   { icon: Shield, title: "Documented Service History", description: "Every unit ships with its service records" },
-  { icon: Award, title: "Warranty on Every Unit", description: "Refurbished ophthalmic and new dental equipment" },
+  { icon: Award, title: "Warranty on Every Unit", description: "New and refurbished ophthalmic; new dental" },
   { icon: Headphones, title: "Installation & Training", description: "Ophthalmic equipment: delivery and clinical training" },
   { icon: Truck, title: "We Buy Used Ophthalmic Equipment", description: "Fair, transparent offers on the device you retire" },
 ];
