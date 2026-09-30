@@ -48,6 +48,7 @@
     "next-auth": "^5.0.0-beta.22",
     "next-cloudinary": "^6.19.3",
     "nodemailer": "^10.0.10",
+    "pdf-lib": "^1.17.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "react-hook-form": "^7.88.0",
