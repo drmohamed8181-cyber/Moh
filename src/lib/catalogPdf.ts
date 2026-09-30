@@ -27,6 +27,11 @@ export type CatalogPdfIntro = {
   supply: { heading: string; body: string }[];
   /** Whether to include the trade-in offer (the business buys ophthalmic and surgical equipment only). */
   tradeIn: boolean;
+  /**
+   * Whether to claim a documented service history per unit. That fits
+   * refurbished equipment, not new units such as the dental chairs.
+   */
+  serviceHistory: boolean;
 };
 
 export type CatalogPdfInput = {
@@ -76,17 +81,18 @@ const ABOUT = [
     "covered, who installs it and who answers when it stops working. That is the part we take seriously.",
 ];
 
-const HIGHLIGHTS = [
+const HIGHLIGHTS: { value: string; label: string; serviceHistory?: boolean }[] = [
   { value: "Since 2009", label: "Serving hospitals & clinics" },
   { value: "Warranty", label: "On every unit we sell" },
-  { value: "Documented", label: "Service history, per unit" },
+  { value: "Documented", label: "Service history, per unit", serviceHistory: true },
   { value: "Installed", label: "Delivery, setup and training" },
 ];
 
-const SERVICES = [
+const SERVICES: { heading: string; body: string; serviceHistory?: boolean }[] = [
   {
     heading: "Every unit is inspected and documented",
     body: "Units ship with their service history, and we will tell you what was replaced and what was left alone.",
+    serviceHistory: true,
   },
   {
     heading: "Warranty on new and refurbished alike",
@@ -273,8 +279,9 @@ function drawCoverPage(doc: PDFDocument, page: PDFPage, fonts: Fonts, input: Cat
   if (coverPhotos.length > 0) y -= showH + 18;
 
   // Highlights row.
-  const cellW = inner / HIGHLIGHTS.length;
-  HIGHLIGHTS.forEach((item, i) => {
+  const highlights = HIGHLIGHTS.filter((item) => input.intro.serviceHistory || !item.serviceHistory);
+  const cellW = inner / highlights.length;
+  highlights.forEach((item, i) => {
     const x = MARGIN + i * cellW;
     if (i > 0) page.drawLine({ start: { x, y: y - 2 }, end: { x, y: y - 36 }, thickness: 0.75, color: BORDER });
     const vw = fonts.serif.widthOfTextAtSize(item.value, 15);
@@ -326,8 +333,9 @@ function drawAboutPage(page: PDFPage, fonts: Fonts, input: CatalogPdfInput) {
   y -= 6;
   kicker("HOW WE WORK");
   const colW = (inner - 18) / 2;
-  for (let row = 0; row < SERVICES.length; row += 2) {
-    const ends = SERVICES.slice(row, row + 2).map((service, col) => {
+  const services = SERVICES.filter((service) => input.intro.serviceHistory || !service.serviceHistory);
+  for (let row = 0; row < services.length; row += 2) {
+    const ends = services.slice(row, row + 2).map((service, col) => {
       const x = MARGIN + col * (colW + 18);
       page.drawText(service.heading, { x, y, size: 10.5, font: fonts.bold, color: NAVY });
       return paragraph(page, service.body, { x, y: y - 15, width: colW, size: 9, font: fonts.regular, color: TEXT });

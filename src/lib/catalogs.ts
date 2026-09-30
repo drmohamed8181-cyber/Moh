@@ -37,6 +37,7 @@ export const CATALOGS: Catalog[] = [
         },
       ],
       tradeIn: true,
+      serviceHistory: true,
     },
   },
   {
@@ -56,6 +57,8 @@ export const CATALOGS: Catalog[] = [
       ],
       // The About page's trade-in offer covers ophthalmic and surgical equipment only.
       tradeIn: false,
+      // New chairs have no service history to document.
+      serviceHistory: false,
     },
   },
 ];
