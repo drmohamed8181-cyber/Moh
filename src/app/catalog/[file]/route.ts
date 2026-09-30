@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import sharp from "sharp";
 import { buildCatalogPdf } from "@/lib/catalogPdf";
-import { getCatalogProducts, getSiteSettings, type CatalogSpecialty } from "@/lib/publicData";
+import { CATALOGS } from "@/lib/catalogs";
+import { getCatalogProducts, getSiteSettings } from "@/lib/publicData";
 import { SITE_URL } from "@/lib/seo";
 
 // The downloadable equipment catalogs, one per specialty:
@@ -9,12 +10,7 @@ import { SITE_URL } from "@/lib/seo";
 //   /catalog/dental.pdf
 // Printed QR codes point here, so the PDF is built from the live listings on
 // every (CDN-cached) request: a sold unit drops out and a new one appears
-// without anything being reprinted.
-
-const CATALOGS: Record<string, { specialty: CatalogSpecialty; title: string }> = {
-  "ophthalmology.pdf": { specialty: "ophthalmology", title: "Ophthalmic Equipment Catalog" },
-  "dental.pdf": { specialty: "dental", title: "Dental Equipment Catalog" },
-};
+// without anything being reprinted. The list of catalogs is src/lib/catalogs.ts.
 
 // Fetching and shrinking a few dozen photos takes a while on a cold start.
 export const maxDuration = 60;
@@ -87,7 +83,7 @@ async function mapLimited<T, R>(items: T[], limit: number, fn: (item: T) => Prom
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ file: string }> }) {
   const { file } = await params;
-  const catalog = CATALOGS[file];
+  const catalog = CATALOGS.find((c) => c.file === file);
   if (!catalog) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const origin = req.nextUrl.origin;
