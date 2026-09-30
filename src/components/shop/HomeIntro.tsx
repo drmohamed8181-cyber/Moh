@@ -16,10 +16,10 @@ export default function HomeIntro({ brands }: { brands: PublicBrand[] }) {
           <div className="lg:col-span-3">
             <p className="text-primary-600 text-sm font-semibold uppercase tracking-wider mb-3">Ophthalmic &amp; Dental Equipment Supplier</p>
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 leading-tight mb-5">
-              Certified refurbished ophthalmic equipment and new dental chairs for hospitals, eye clinics, dental practices and surgery centers
+              New and certified refurbished ophthalmic equipment, plus new dental chairs, for hospitals, eye clinics, dental practices and surgery centers
             </h2>
             <p className="text-slate-600 leading-relaxed mb-4">
-              MP MedPharma (MPMedPharma.com) is a US-based supplier of certified refurbished ophthalmic equipment and new dental chair units. Our ophthalmic range covers
+              MP MedPharma (MPMedPharma.com) is a US-based supplier of new and certified refurbished ophthalmic equipment and new dental chair units. Our ophthalmic range covers
               cataract and refractive surgery systems, retina and glaucoma lasers, SLT and YAG lasers, OCT and diagnostic imaging,
               slit lamps and surgical microscopes from the manufacturers surgeons already trust.
             </p>
