@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { useWishlistStore } from "@/store/wishlistStore";
 import { LogoMark } from "@/components/ui/Logo";
 import SiteSearchBox from "@/components/shop/SiteSearchBox";
+import { SPECIALTIES } from "@/lib/specialties";
 
 const defaultNav = [
   { id: "1", label: "Home", href: "/", children: [] },
@@ -26,7 +27,11 @@ const defaultNav = [
   {
     id: "3", label: "Categories", href: "/categories",
     children: [
-      { id: "3a", label: "All Categories", href: "/categories" },
+      // One entry per live specialty (same filter the homepage cards use); a
+      // "coming soon" specialty joins the menu once it launches.
+      ...SPECIALTIES.filter((s) => !s.comingSoon).map((s) => ({
+        id: `3-${s.slug}`, label: s.name, href: `/products?specialty=${s.slug}`,
+      })),
       { id: "3d", label: "Download Catalogs (PDF)", href: "/catalogs" },
     ],
   },
