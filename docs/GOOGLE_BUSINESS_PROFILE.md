@@ -67,14 +67,14 @@ wrong.
 | Saturday | 9:00 AM – 4:00 PM |
 | Sunday | Closed |
 
-## 6. Business description (Google's limit: 750 characters; this is 689)
+## 6. Business description (Google's limit: 750 characters; this is 731)
 
 ```
-MP MedPharma is a New Jersey based supplier of new and certified refurbished ophthalmic, surgical and dental equipment, serving hospitals, eye clinics, surgery centers and dental practices since 2009.
+MP MedPharma is a New Jersey based supplier of certified refurbished ophthalmic equipment and new dental chair units, serving hospitals, eye clinics, surgery centers and dental practices since 2009.
 
-We supply phaco and vitrectomy systems, excimer and femtosecond lasers, SLT, YAG and photocoagulation lasers, OCT and diagnostic imaging, slit lamps, surgical microscopes and dental chair units.
+Every refurbished ophthalmic system is inspected and tested, and ships with its documented service history and warranty. Our range covers phaco and vitrectomy systems, excimer, femtosecond, SLT, YAG and photocoagulation lasers, OCT and diagnostic imaging, slit lamps and surgical microscopes.
 
-Every unit ships with its documented service history and warranty coverage, and we arrange delivery, installation and clinical training. Pricing is quoted per unit to match its condition and configuration. Replacing equipment? We also make transparent offers on the devices you are retiring.
+For ophthalmic equipment we arrange delivery, installation and clinical training, and we make clear offers on the devices you are retiring. Dental chair units ship new. Pricing is quoted per unit to match its condition and configuration.
 ```
 
 ## 7. Opening date
@@ -93,9 +93,9 @@ use the line after the dash.
 - **Glaucoma and retina laser sales** — SLT, YAG and photocoagulation lasers.
 - **OCT and diagnostic imaging** — OCT, fundus cameras, topographers and slit lamps.
 - **Surgical microscopes** — Ophthalmic operating microscopes.
-- **Dental chair units** — Integrated chair units for general, paediatric and multi-chair practices.
-- **Delivery, installation and training** — White-glove delivery, installation and clinical handover.
-- **Used medical equipment buying** — Offers on the equipment you are replacing.
+- **Dental chair units (new)** — New integrated chair units for general, paediatric and multi-chair practices.
+- **Delivery, installation and training (ophthalmic)** — White-glove delivery, installation and clinical handover for ophthalmic equipment.
+- **Used ophthalmic equipment buying** — Offers on the ophthalmic equipment you are replacing.
 
 ## 9. Photos
 
