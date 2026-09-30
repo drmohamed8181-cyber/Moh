@@ -7,7 +7,7 @@ import { SITE_URL } from "@/lib/seo";
 export const INFO_EMAIL = "info@mpmedpharma.com";
 const PHONE = "929-349-8569";
 const LOCATION = "New Jersey, NJ 07675, USA";
-const TAGLINE = "New & refurbished ophthalmic & dental equipment";
+const TAGLINE = "New & refurbished ophthalmic equipment · New dental chairs";
 
 const FONT = "font-family:Arial,Helvetica,sans-serif;";
 const NAVY = "#0F1B33";

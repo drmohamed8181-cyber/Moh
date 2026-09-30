@@ -24,7 +24,7 @@ const cormorant = Cormorant_Garamond({
 // catalogue's search history, and dental is one category against eleven. The
 // title is shorter than the version that led with device classes because that
 // one ran past what Google displays and was being truncated anyway.
-const DEFAULT_TITLE = "New & Refurbished Ophthalmic & Dental Equipment | MP MedPharma";
+const DEFAULT_TITLE = "Refurbished Ophthalmic Equipment & New Dental Chairs | MP MedPharma";
 const DEFAULT_DESCRIPTION =
   "New and certified refurbished ophthalmic equipment from a US supplier: excimer, femtosecond, SLT and YAG lasers, phaco systems, OCT and surgical microscopes from Alcon, Zeiss, Ellex, Lumenis and Iridex — plus integrated dental chair units. Warranty on every unit.";
 const DEFAULT_KEYWORDS =
