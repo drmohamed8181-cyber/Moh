@@ -18,7 +18,6 @@ const CATEGORIES = [
   "Laboratory Equipment",
   "Mobility & Rehabilitation",
   "Respiratory & Anesthesia",
-  "Dental Equipment",
   "Sterilization Equipment",
   "Hospital Furniture",
   "Pharmaceutical Product",
