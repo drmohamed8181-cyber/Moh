@@ -3,7 +3,9 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { safeDb } from "@/lib/prisma";
 import { formatPrice } from "@/lib/utils";
-import { Package, ShoppingBag, Users, DollarSign, AlertTriangle } from "lucide-react";
+import { Package, ShoppingBag, Users, DollarSign, AlertTriangle, FileDown } from "lucide-react";
+import { getCatalogDownloadStats } from "@/lib/catalogDownloads";
+import { CATALOGS } from "@/lib/catalogs";
 
 export const metadata: Metadata = { title: "Admin Dashboard" };
 
@@ -36,7 +38,7 @@ const orderStatusColors: Record<string, string> = {
 };
 
 export default async function AdminDashboard() {
-  const [stats, recentOrders] = await Promise.all([getStats(), getRecentOrders()]);
+  const [stats, recentOrders, downloads] = await Promise.all([getStats(), getRecentOrders(), getCatalogDownloadStats()]);
 
   const statCards = [
     { label: "Total Revenue", value: formatPrice(stats.revenue), icon: DollarSign, color: "text-green-600", bg: "bg-green-50", href: "/admin/orders" },
@@ -82,6 +84,69 @@ export default async function AdminDashboard() {
           <Link href="/admin/messages" className="ml-auto text-sm text-yellow-700 font-semibold hover:underline flex-shrink-0">View →</Link>
         </div>
       )}
+
+      {/* PDF catalog downloads, counted by src/app/catalog/[file]/route.ts. */}
+      <div className="bg-white rounded-2xl border mb-8">
+        <div className="flex items-center justify-between p-6 border-b">
+          <h2 className="font-bold text-gray-900 flex items-center gap-2">
+            <FileDown size={18} className="text-primary-600" aria-hidden="true" /> Catalog Downloads
+          </h2>
+          <Link href="/catalogs" className="text-sm text-primary-600 hover:underline font-medium">View catalogs</Link>
+        </div>
+        {downloads === null ? (
+          <p className="p-6 text-sm text-gray-500">Download counts are unavailable right now.</p>
+        ) : (
+          <div className="p-6 grid gap-8 lg:grid-cols-3">
+            <div className="grid grid-cols-3 gap-3 lg:col-span-1 content-start">
+              {[
+                { label: "Last 7 days", value: downloads.last7Days },
+                { label: "Last 30 days", value: downloads.last30Days },
+                { label: "All time", value: downloads.total },
+              ].map(({ label, value }) => (
+                <div key={label} className="rounded-xl bg-primary-50 p-3 text-center">
+                  <p className="text-2xl font-bold text-gray-900">{value.toLocaleString()}</p>
+                  <p className="text-xs text-gray-500 mt-1">{label}</p>
+                </div>
+              ))}
+            </div>
+            <div>
+              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">By catalog</h3>
+              <ul className="space-y-2">
+                {CATALOGS.map((catalog) => {
+                  const row = downloads.byCatalog.find((r) => r.catalog === catalog.specialty);
+                  return (
+                    <li key={catalog.specialty} className="flex items-center justify-between text-sm">
+                      <span className="text-gray-700">{catalog.name}</span>
+                      <span className="text-gray-900 font-semibold">
+                        {(row?.total ?? 0).toLocaleString()}
+                        <span className="text-gray-400 font-normal"> · {(row?.last30Days ?? 0).toLocaleString()} in 30 days</span>
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Where people downloaded from</h3>
+              {downloads.bySource.length === 0 ? (
+                <p className="text-sm text-gray-500">No downloads yet.</p>
+              ) : (
+                <ul className="space-y-2">
+                  {downloads.bySource.map((row) => (
+                    <li key={row.source} className="flex items-center justify-between text-sm">
+                      <span className="text-gray-700">{row.label}</span>
+                      <span className="text-gray-900 font-semibold">{row.total.toLocaleString()}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+        )}
+        <p className="px-6 pb-5 text-xs text-gray-400">
+          Each time someone opens a catalog PDF counts once. Link previews, search engines and a PDF viewer&apos;s partial page fetches are not counted. QR code scans show as &ldquo;QR code or shared link&rdquo;.
+        </p>
+      </div>
 
       <div className="bg-white rounded-2xl border">
         <div className="flex items-center justify-between p-6 border-b">

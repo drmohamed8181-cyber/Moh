@@ -1,23 +1,27 @@
 import { FileDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Catalog } from "@/lib/catalogs";
+import { catalogHref, type CatalogLinkSource } from "@/lib/catalogDownloads";
 
 // A plain <a>, not next/link: the target is a PDF from a route handler, not a
 // page. It opens in a new tab so the visitor keeps their place in the shop.
+// `source` says where the button sits, for the download counts.
 export default function CatalogDownloadButton({
   catalog,
+  source,
   label,
   variant = "outline",
   className,
 }: {
   catalog: Catalog;
+  source: CatalogLinkSource;
   label?: string;
   variant?: "outline" | "onDark";
   className?: string;
 }) {
   return (
     <a
-      href={catalog.href}
+      href={catalogHref(catalog.href, source)}
       target="_blank"
       rel="noopener"
       className={cn(

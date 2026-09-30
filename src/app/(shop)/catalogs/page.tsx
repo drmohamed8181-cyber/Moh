@@ -56,7 +56,7 @@ export default async function CatalogsPage() {
               </div>
               <p className="text-sm text-gray-600 mb-6 flex-1">{catalog.blurb}</p>
               <div className="flex flex-wrap gap-3">
-                <CatalogDownloadButton catalog={catalog} label="Open PDF catalog" />
+                <CatalogDownloadButton catalog={catalog} source="catalogs" label="Open PDF catalog" />
                 <Link
                   href={`/products?specialty=${catalog.specialty}`}
                   className="inline-flex items-center px-4 py-2.5 text-sm font-semibold text-gray-700 rounded-xl hover:text-primary-600 hover:bg-primary-50 transition-colors"
