@@ -440,3 +440,18 @@ enum CouponType {
   PERCENTAGE
   FIXED
 }
+
+// One row per PDF catalog download (src/app/catalog/[file]/route.ts), for the
+// admin dashboard's download counts. Deliberately anonymous: no IP address,
+// user agent or account is stored, only which catalog, where the link was
+// (a website placement, or "direct" for QR codes and shared links) and the
+// visitor's country as reported by Vercel.
+model CatalogDownload {
+  id        String   @id @default(dbgenerated("(gen_random_uuid())::text"))
+  catalog   String
+  source    String
+  country   String?
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([createdAt])
+}

@@ -32,7 +32,7 @@ export default async function CategoriesPage() {
           <p className="text-blue-100">Explore our range of ophthalmic and dental equipment</p>
           <div className="flex flex-wrap justify-center gap-3 mt-6">
             {CATALOGS.map((catalog) => (
-              <CatalogDownloadButton key={catalog.specialty} catalog={catalog} variant="onDark" />
+              <CatalogDownloadButton key={catalog.specialty} catalog={catalog} source="categories" variant="onDark" />
             ))}
           </div>
         </div>

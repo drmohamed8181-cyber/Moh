@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import {
+  getCatalogProducts,
   getFeaturedProducts,
   getHeroProducts,
   getHeroSlides,
@@ -14,6 +15,8 @@ import FeaturedProducts from "@/components/shop/FeaturedProducts";
 import HomeIntro from "@/components/shop/HomeIntro";
 import AboutSection from "@/components/shop/AboutSection";
 import NewsletterBox from "@/components/ui/NewsletterBox";
+import CatalogPromo from "@/components/home/CatalogPromo";
+import { CATALOGS } from "@/lib/catalogs";
 import { Truck, Shield, Award, Headphones } from "lucide-react";
 
 // The homepage is the same for every visitor, so it is prerendered and served
@@ -39,8 +42,12 @@ async function getHomeData() {
     // failure here almost certainly means the reads above have thrown too.
     getPublicBrands().catch(() => []),
   ]);
+  // Item counts on the catalog banner are a nicety: without them it still works.
+  const catalogCounts = await Promise.all(
+    CATALOGS.map((catalog) => getCatalogProducts(catalog.specialty).then((items) => items.length, () => null))
+  );
 
-  return { heroProducts, slides, categories, products, settings, brands };
+  return { heroProducts, slides, categories, products, settings, brands, catalogCounts };
 }
 
 // Only claims the business actually makes elsewhere on the site (see /about
@@ -54,7 +61,7 @@ const trustFeatures = [
 ];
 
 export default async function HomePage() {
-  const { heroProducts, slides, categories, products, settings, brands } = await getHomeData();
+  const { heroProducts, slides, categories, products, settings, brands, catalogCounts } = await getHomeData();
 
   // Products chosen in Admin → Products take over the hero; the hand-made
   // slides from Admin → Homepage are the fallback when none are chosen.
@@ -89,6 +96,8 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      <CatalogPromo counts={catalogCounts} />
 
       <HomeIntro brands={brands} />
       <SpecialtiesSection />

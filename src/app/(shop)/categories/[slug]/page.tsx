@@ -134,6 +134,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
           <p className="text-blue-200 text-sm mt-3">{products.length} product{products.length !== 1 ? "s" : ""} available</p>
           <CatalogDownloadButton
             catalog={catalogForCategory(slug)}
+            source="category"
             label={`Download the ${catalogForCategory(slug).name} catalog (PDF)`}
             variant="onDark"
             className="mt-5"

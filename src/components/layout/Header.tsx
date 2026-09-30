@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useSession, signOut } from "next-auth/react";
 import {
   Search, User, Menu, X, ChevronDown,
-  Heart, Phone, Mail, LogOut, Settings, Package,
+  Heart, Phone, Mail, LogOut, Settings, Package, FileDown,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useWishlistStore } from "@/store/wishlistStore";
@@ -82,6 +82,10 @@ export default function Header({ settings, categories = [] }: { settings?: Heade
             </a>
           </div>
           <div className="flex gap-4 text-xs">
+            <Link href="/catalogs" className="flex items-center gap-1.5 font-semibold text-gold-300 hover:text-gold-200 transition-colors">
+              <FileDown size={12} aria-hidden="true" /><span>Free PDF Catalogs</span>
+            </Link>
+            <span className="text-primary-400">|</span>
             <Link href="/account/orders" className="hover:text-primary-200 transition-colors">Track Order</Link>
             <span className="text-primary-400">|</span>
             <Link href="/contact" className="hover:text-primary-200 transition-colors">Support</Link>

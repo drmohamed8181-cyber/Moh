@@ -231,7 +231,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
             <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
               <p className="text-sm text-gray-500">{products.length} products</p>
               <div className="flex flex-wrap items-center gap-3">
-                {catalog && <CatalogDownloadButton catalog={catalog} />}
+                {catalog && <CatalogDownloadButton catalog={catalog} source="products" />}
                 <ProductsSortSelect />
               </div>
             </div>

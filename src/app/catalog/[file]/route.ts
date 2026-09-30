@@ -1,18 +1,19 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
 import sharp from "sharp";
 import { buildCatalogPdf } from "@/lib/catalogPdf";
-import { CATALOGS } from "@/lib/catalogs";
-import { getCatalogProducts, getSiteSettings } from "@/lib/publicData";
+import { CATALOGS, type Catalog } from "@/lib/catalogs";
+import { isCountableDownload, recordCatalogDownload } from "@/lib/catalogDownloads";
+import { getCatalogProducts, getSiteSettings, type CatalogProduct } from "@/lib/publicData";
 import { SITE_URL } from "@/lib/seo";
 
 // The downloadable equipment catalogs, one per specialty:
 //   /catalog/ophthalmology.pdf
 //   /catalog/dental.pdf
-// Printed QR codes point here, so the PDF is built from the live listings on
-// every (CDN-cached) request: a sold unit drops out and a new one appears
-// without anything being reprinted. The list of catalogs is src/lib/catalogs.ts.
+// Printed QR codes point here, so the PDF is built from the live listings: a
+// sold unit drops out and a new one appears without anything being reprinted.
+// Each download is counted for the admin dashboard. The list of catalogs is src/lib/catalogs.ts.
 
 // Reading and shrinking a few dozen photos takes a while on a cold start.
 export const maxDuration = 60;
@@ -96,6 +97,15 @@ async function mapLimited<T, R>(items: T[], limit: number, fn: (item: T) => Prom
   return results;
 }
 
+type BuiltCatalog = { key: string; pdf: Promise<Uint8Array> };
+
+// The last PDF built for each catalog on this server instance. Every request
+// has to reach this function to be counted (see src/lib/catalogDownloads.ts),
+// so the CDN can no longer cache the file; instead a PDF is rebuilt only when
+// its content would change: the listings, the contact details or the date on
+// the cover.
+const built = new Map<string, BuiltCatalog>();
+
 export async function GET(req: NextRequest, { params }: { params: Promise<{ file: string }> }) {
   const { file } = await params;
   const catalog = CATALOGS.find((c) => c.file === file);
@@ -106,20 +116,62 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ file
   try {
     products = await getCatalogProducts(catalog.specialty);
   } catch {
-    // Never serve (or let the CDN cache) an empty catalog because the
-    // database was briefly unreachable.
+    // Never serve an empty catalog because the database was briefly unreachable.
     return NextResponse.json({ error: "Catalog temporarily unavailable" }, { status: 503, headers: { "Retry-After": "60" } });
   }
+  const settings = await getSiteSettings();
+  const contact = {
+    phone: settings.phone || "929-349-8569",
+    email: settings.email || "info@mpmedpharma.com",
+  };
+  const today = new Date().toLocaleDateString("en-US", { timeZone: "America/New_York" });
+  const key = JSON.stringify([products, contact, today]);
 
-  const [settings, logo, photos] = await Promise.all([
-    getSiteSettings(),
+  let entry = built.get(file);
+  if (!entry || entry.key !== key) {
+    entry = { key, pdf: buildPdf(catalog, products, contact, origin) };
+    built.set(file, entry);
+  }
+  let pdf: Uint8Array;
+  try {
+    pdf = await entry.pdf;
+  } catch (error) {
+    // Don't keep serving a failed build.
+    if (built.get(file) === entry) built.delete(file);
+    throw error;
+  }
+
+  if (isCountableDownload(req)) {
+    after(() => recordCatalogDownload(req, catalog.specialty));
+  }
+
+  return new NextResponse(Buffer.from(pdf), {
+    headers: {
+      "Content-Type": "application/pdf",
+      "Content-Disposition": `inline; filename="MP-MedPharma-${catalog.specialty}-catalog.pdf"`,
+      // Not cached by the CDN or the browser, so every download is counted.
+      "Cache-Control": "private, no-store",
+      // The product pages are the ones that belong in search results, not a
+      // PDF duplicating them.
+      "X-Robots-Tag": "noindex",
+    },
+  });
+}
+
+async function buildPdf(
+  catalog: Catalog,
+  products: CatalogProduct[],
+  contact: { phone: string; email: string },
+  origin: string
+): Promise<Uint8Array> {
+  const [logo, photos] = await Promise.all([
     loadImage(LOGO_PATH, origin),
     mapLimited(products, PHOTO_CONCURRENCY, (product) => loadPhoto(product.image, origin)),
   ]);
 
   // Links inside the PDF are tagged so Google Analytics shows the visits it sends.
   const utm = `utm_source=catalog_pdf&utm_medium=pdf&utm_campaign=${catalog.specialty}`;
-  const pdf = await buildCatalogPdf({
+  return buildCatalogPdf({
     title: catalog.title,
     intro: catalog.intro,
     products: products.map((product, i) => ({
@@ -131,25 +183,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ file
       photo: photos[i],
     })),
     logo,
-    contact: {
-      phone: settings.phone || "929-349-8569",
-      email: settings.email || "info@mpmedpharma.com",
-      website: "www.mpmedpharma.com",
-      websiteUrl: `${SITE_URL}/?${utm}`,
-    },
+    contact: { ...contact, website: "www.mpmedpharma.com", websiteUrl: `${SITE_URL}/?${utm}` },
     generatedAt: new Date(),
-  });
-
-  return new NextResponse(Buffer.from(pdf), {
-    headers: {
-      "Content-Type": "application/pdf",
-      "Content-Disposition": `inline; filename="MP-MedPharma-${catalog.specialty}-catalog.pdf"`,
-      // Cached at the edge for an hour, so a burst of scans at a trade show
-      // doesn't rebuild the PDF each time; after a sale it can lag by that long.
-      "Cache-Control": "public, max-age=0, s-maxage=3600, stale-while-revalidate=3600",
-      // The product pages are the ones that belong in search results, not a
-      // PDF duplicating them.
-      "X-Robots-Tag": "noindex",
-    },
   });
 }
