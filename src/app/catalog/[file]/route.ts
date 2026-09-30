@@ -1,3 +1,5 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { NextRequest, NextResponse } from "next/server";
 import sharp from "sharp";
 import { buildCatalogPdf } from "@/lib/catalogPdf";
@@ -12,29 +14,18 @@ import { SITE_URL } from "@/lib/seo";
 // every (CDN-cached) request: a sold unit drops out and a new one appears
 // without anything being reprinted. The list of catalogs is src/lib/catalogs.ts.
 
-// Fetching and shrinking a few dozen photos takes a while on a cold start.
+// Reading and shrinking a few dozen photos takes a while on a cold start.
 export const maxDuration = 60;
 
 const LOGO_PATH = "/brand/mp-logo-full.png";
 const MAX_SOURCE_BYTES = 25 * 1024 * 1024;
 const PHOTO_CONCURRENCY = 6;
+// Large enough for the cover, where a few photos are shown big.
+const PHOTO_SIDE = 900;
 
-/**
- * Where to fetch a product photo from: this site's own files or its own
- * Cloudinary account, and nothing else, so the route can't be pointed at an
- * arbitrary host and never embeds a photo hotlinked from someone else's site.
- */
-function photoUrl(src: string, origin: string): URL | null {
-  if (src.includes("..")) return null;
-  if (src.startsWith("/") && !src.startsWith("//") && !src.startsWith("/api/") && !src.startsWith("/_next/")) {
-    return new URL(src, origin);
-  }
-  const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-  if (cloud && src.startsWith(`https://res.cloudinary.com/${cloud}/`)) {
-    // Ask Cloudinary for a small JPEG rather than downloading the full original.
-    return new URL(src.replace("/image/upload/", "/image/upload/c_limit,w_600,h_600,f_jpg,q_75/"));
-  }
-  return null;
+/** Whether src is a file this site serves from public/ (and not a route). */
+function isSiteFile(src: string): boolean {
+  return src.startsWith("/") && !src.startsWith("//") && !src.startsWith("/api/") && !src.startsWith("/_next/") && !src.includes("..");
 }
 
 async function fetchImage(url: URL): Promise<Buffer | null> {
@@ -49,19 +40,43 @@ async function fetchImage(url: URL): Promise<Buffer | null> {
   }
 }
 
-/** A product photo as a small JPEG for embedding, or null to show a placeholder. */
+/**
+ * The bytes of an image from this site's own files or its own Cloudinary
+ * account, and nothing else, so the route can't be pointed at an arbitrary
+ * host and never embeds a photo hotlinked from someone else's site.
+ *
+ * Site files are read from disk (next.config.ts bundles public/ with this
+ * route): fetching them over HTTP from our own origin fails on preview
+ * deployments, whose protection answers the server's request with a login
+ * page. The HTTP fetch stays as a fallback.
+ */
+async function loadImage(src: string, origin: string): Promise<Buffer | null> {
+  if (isSiteFile(src)) {
+    try {
+      return await readFile(path.join(process.cwd(), "public", decodeURIComponent(src)));
+    } catch {
+      return fetchImage(new URL(src, origin));
+    }
+  }
+  const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+  if (cloud && src.startsWith(`https://res.cloudinary.com/${cloud}/`)) {
+    // Ask Cloudinary for a smaller JPEG rather than downloading the full original.
+    return fetchImage(new URL(src.replace("/image/upload/", `/image/upload/c_limit,w_${PHOTO_SIDE},h_${PHOTO_SIDE},f_jpg,q_80/`)));
+  }
+  return null;
+}
+
+/** A product photo as a JPEG for embedding, or null to show a placeholder. */
 async function loadPhoto(src: string | null, origin: string): Promise<Uint8Array | null> {
-  const url = src ? photoUrl(src, origin) : null;
-  if (!url) return null;
-  const original = await fetchImage(url);
-  if (!original) return null;
+  const original = src ? await loadImage(src, origin) : null;
+  if (!original || original.length > MAX_SOURCE_BYTES) return null;
   try {
     // PDFs only embed JPEG and PNG; many product photos are WebP.
     return await sharp(original)
       .rotate()
-      .resize(600, 600, { fit: "inside", withoutEnlargement: true })
+      .resize(PHOTO_SIDE, PHOTO_SIDE, { fit: "inside", withoutEnlargement: true })
       .flatten({ background: "#ffffff" })
-      .jpeg({ quality: 75, mozjpeg: true })
+      .jpeg({ quality: 78, mozjpeg: true })
       .toBuffer();
   } catch {
     return null;
@@ -98,7 +113,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ file
 
   const [settings, logo, photos] = await Promise.all([
     getSiteSettings(),
-    fetchImage(new URL(LOGO_PATH, origin)),
+    loadImage(LOGO_PATH, origin),
     mapLimited(products, PHOTO_CONCURRENCY, (product) => loadPhoto(product.image, origin)),
   ]);
 
@@ -106,6 +121,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ file
   const utm = `utm_source=catalog_pdf&utm_medium=pdf&utm_campaign=${catalog.specialty}`;
   const pdf = await buildCatalogPdf({
     title: catalog.title,
+    intro: catalog.intro,
     products: products.map((product, i) => ({
       name: product.name,
       brand: product.brand,

@@ -1,3 +1,4 @@
+import type { CatalogPdfIntro } from "@/lib/catalogPdf";
 import type { CatalogSpecialty } from "@/lib/publicData";
 import { DENTAL_CATEGORY_SLUGS } from "@/lib/specialties";
 
@@ -11,6 +12,8 @@ export type Catalog = {
   file: string;
   href: string;
   blurb: string;
+  /** The cover tagline and "What we supply" copy, taken from the About page. */
+  intro: CatalogPdfIntro;
 };
 
 export const CATALOGS: Catalog[] = [
@@ -21,6 +24,20 @@ export const CATALOGS: Catalog[] = [
     file: "ophthalmology.pdf",
     href: "/catalog/ophthalmology.pdf",
     blurb: "Lasers, phaco and vitreoretinal systems, OCT and imaging, slit lamps, microscopes and diagnostics.",
+    intro: {
+      tagline: "New and certified refurbished ophthalmic equipment for hospitals, eye clinics and surgery centers.",
+      supply: [
+        {
+          heading: "Cataract & refractive surgery",
+          body: "Phacoemulsification and vitreoretinal platforms, excimer and femtosecond lasers, microkeratomes and topographers.",
+        },
+        {
+          heading: "Lasers & diagnostics",
+          body: "SLT and YAG lasers, retina and glaucoma photocoagulation, OCT and diagnostic imaging, slit lamps and surgical microscopes.",
+        },
+      ],
+      tradeIn: true,
+    },
   },
   {
     specialty: "dental",
@@ -29,6 +46,17 @@ export const CATALOGS: Catalog[] = [
     file: "dental.pdf",
     href: "/catalog/dental.pdf",
     blurb: "Dental chairs and treatment units.",
+    intro: {
+      tagline: "Integrated dental chair units for general, paediatric and multi-chair practice.",
+      supply: [
+        {
+          heading: "Dental operatory",
+          body: "Integrated dental chair units: patient chair, delivery system, operating light and assistant side, for general, paediatric and multi-chair practice.",
+        },
+      ],
+      // The About page's trade-in offer covers ophthalmic and surgical equipment only.
+      tradeIn: false,
+    },
   },
 ];
 
