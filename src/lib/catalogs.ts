@@ -40,3 +40,16 @@ export function catalogForSpecialty(specialty: string | undefined): Catalog | un
 export function catalogForCategory(categorySlug: string): Catalog {
   return catalogForSpecialty(DENTAL_CATEGORY_SLUGS.includes(categorySlug) ? "dental" : "ophthalmology")!;
 }
+
+// Brands kept out of every PDF catalog whatever category their products sit
+// in. A PDF can't be recalled once it's printed or forwarded, so this guards
+// against a listing being filed under a public category by mistake: LightMed
+// stays out until its distributor agreement is signed (its dental laser line
+// is withheld from the site for the same reason, see HIDDEN_CATEGORY_SLUGS).
+const WITHHELD_BRANDS = ["lightmed"];
+
+/** Whether a product's name or manufacturer names a withheld brand. */
+export function isWithheldFromCatalog(product: { name: string; manufacturer: string | null }): boolean {
+  const text = `${product.name} ${product.manufacturer ?? ""}`.toLowerCase().replace(/[^a-z0-9]/g, "");
+  return WITHHELD_BRANDS.some((brand) => text.includes(brand));
+}

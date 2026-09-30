@@ -32,6 +32,7 @@ import { prisma } from "@/lib/prisma";
 import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
 import { HIDDEN_CATEGORY_SLUGS, NON_OPHTHALMOLOGY_CATEGORY_SLUGS, PUBLIC_DENTAL_CATEGORY_SLUGS } from "@/lib/specialties";
 import { isSold } from "@/lib/partnerStock";
+import { isWithheldFromCatalog } from "@/lib/catalogs";
 import { productBrand } from "@/lib/brands";
 import { withEditorialContent } from "@/content/productContent";
 import { HERO_PRODUCTS_KEY, parseHeroProductIds } from "@/lib/heroProducts";
@@ -527,7 +528,8 @@ export type CatalogProduct = {
 /**
  * The equipment listed in a specialty's downloadable PDF catalog
  * (src/app/catalog/[file]/route.ts): what a visitor can buy today, so
- * unavailable and sold units are left out, as are hidden categories.
+ * unavailable and sold units are left out, as are hidden categories and
+ * withheld brands (see isWithheldFromCatalog in src/lib/catalogs.ts).
  *
  * Only the fields the catalog prints are returned. Prices are deliberately not
  * among them: a printed or forwarded PDF can't be taken back when a price
@@ -554,7 +556,7 @@ export const getCatalogProducts = unstable_cache(
       },
     });
     return products
-      .filter((product) => !isSold(product))
+      .filter((product) => !isSold(product) && !isWithheldFromCatalog(product))
       .map((product) => ({
         name: product.name,
         slug: product.slug,
