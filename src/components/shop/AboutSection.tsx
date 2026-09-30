@@ -17,10 +17,10 @@ const stats = [
 ];
 
 const points = [
-  "New and certified refurbished ophthalmic, surgical & dental equipment",
+  "New and certified refurbished ophthalmic equipment, and new dental chair units",
   "Documented service history and warranty on every unit",
-  "White-glove delivery, installation and clinical training",
-  "Fair, transparent offers on the equipment you are replacing",
+  "Ophthalmic equipment: white-glove delivery, installation and clinical training",
+  "Fair, transparent offers on the ophthalmic equipment you are replacing",
 ];
 
 export default function AboutSection({
