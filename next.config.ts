@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "lh3.googleusercontent.com" },
     ],
   },
+  // The PDF catalogs read product photos and the logo from disk (see
+  // src/app/catalog/[file]/route.ts), so those files ship with that function.
+  outputFileTracingIncludes: {
+    "/catalog/*": ["./public/devices/**/*", "./public/brand/**/*"],
+  },
   experimental: {
     serverActions: { allowedOrigins: ["localhost:3000"] },
   },

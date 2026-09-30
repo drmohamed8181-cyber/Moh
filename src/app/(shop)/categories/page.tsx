@@ -2,6 +2,8 @@ import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { getPublicCategories } from "@/lib/publicData";
+import { CATALOGS } from "@/lib/catalogs";
+import CatalogDownloadButton from "@/components/shop/CatalogDownloadButton";
 
 // Cached rather than dynamic so crawlers get this from the ISR cache; admin
 // category writes invalidate it via revalidateTag(CATEGORIES_TAG).
@@ -28,6 +30,11 @@ export default async function CategoriesPage() {
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl font-bold mb-3">Product Categories</h1>
           <p className="text-blue-100">Explore our range of ophthalmic and dental equipment</p>
+          <div className="flex flex-wrap justify-center gap-3 mt-6">
+            {CATALOGS.map((catalog) => (
+              <CatalogDownloadButton key={catalog.specialty} catalog={catalog} variant="onDark" />
+            ))}
+          </div>
         </div>
       </div>
       <div className="container mx-auto px-4 py-12">

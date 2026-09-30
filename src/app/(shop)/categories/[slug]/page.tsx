@@ -12,6 +12,8 @@ import { categoryDescription, categoryTitle } from "@/lib/seo";
 import { getCategoryContent } from "@/content/categoryContent";
 import ProductCard from "@/components/product/ProductCard";
 import RelatedGuides from "@/components/shop/RelatedGuides";
+import CatalogDownloadButton from "@/components/shop/CatalogDownloadButton";
+import { catalogForCategory } from "@/lib/catalogs";
 import { ChevronRight } from "lucide-react";
 
 // These pages were the ones sitting in Google's "Discovered - currently not
@@ -130,6 +132,12 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
             <p className="text-blue-100 text-lg max-w-3xl">{content?.summary ?? category.description}</p>
           )}
           <p className="text-blue-200 text-sm mt-3">{products.length} product{products.length !== 1 ? "s" : ""} available</p>
+          <CatalogDownloadButton
+            catalog={catalogForCategory(slug)}
+            label={`Download the ${catalogForCategory(slug).name} catalog (PDF)`}
+            variant="onDark"
+            className="mt-5"
+          />
         </div>
       </div>
 

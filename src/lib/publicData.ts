@@ -30,7 +30,9 @@
 import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { LISTING_PRODUCT_SELECT, withPublicPrice } from "@/lib/productSelect";
-import { HIDDEN_CATEGORY_SLUGS, PUBLIC_DENTAL_CATEGORY_SLUGS } from "@/lib/specialties";
+import { HIDDEN_CATEGORY_SLUGS, NON_OPHTHALMOLOGY_CATEGORY_SLUGS, PUBLIC_DENTAL_CATEGORY_SLUGS } from "@/lib/specialties";
+import { isSold } from "@/lib/partnerStock";
+import { isWithheldFromCatalog } from "@/lib/catalogs";
 import { productBrand } from "@/lib/brands";
 import { withEditorialContent } from "@/content/productContent";
 import { HERO_PRODUCTS_KEY, parseHeroProductIds } from "@/lib/heroProducts";
@@ -511,3 +513,59 @@ export async function getPublicBrandSlugs(): Promise<string[]> {
     return [];
   }
 }
+
+export type CatalogSpecialty = "ophthalmology" | "dental";
+
+export type CatalogProduct = {
+  name: string;
+  slug: string;
+  brand: string | null;
+  category: string;
+  summary: string | null;
+  image: string | null;
+};
+
+/**
+ * The equipment listed in a specialty's downloadable PDF catalog
+ * (src/app/catalog/[file]/route.ts): what a visitor can buy today, so
+ * unavailable and sold units are left out, as are hidden categories and
+ * withheld brands (see isWithheldFromCatalog in src/lib/catalogs.ts).
+ *
+ * Only the fields the catalog prints are returned. Prices are deliberately not
+ * among them: a printed or forwarded PDF can't be taken back when a price
+ * changes, so the catalog always says "pricing on request".
+ */
+export const getCatalogProducts = unstable_cache(
+  async (specialty: CatalogSpecialty): Promise<CatalogProduct[]> => {
+    if (!prisma) throw new DatabaseUnavailableError();
+    const categorySlugs =
+      specialty === "dental"
+        ? { in: PUBLIC_DENTAL_CATEGORY_SLUGS }
+        : { notIn: NON_OPHTHALMOLOGY_CATEGORY_SLUGS };
+    const products = await prisma.product.findMany({
+      where: { isAvailable: true, category: { isActive: true, slug: categorySlugs } },
+      orderBy: [{ category: { name: "asc" } }, { name: "asc" }],
+      select: {
+        name: true,
+        slug: true,
+        manufacturer: true,
+        images: true,
+        shortDesc: true,
+        seoDesc: true,
+        category: { select: { name: true, slug: true } },
+      },
+    });
+    return products
+      .filter((product) => !isSold(product) && !isWithheldFromCatalog(product))
+      .map((product) => ({
+        name: product.name,
+        slug: product.slug,
+        brand: productBrand(product)?.name ?? null,
+        category: product.category.name,
+        summary: product.shortDesc?.trim() || product.seoDesc?.trim() || null,
+        image: product.images[0] ?? null,
+      }));
+  },
+  ["public-catalog-products"],
+  { tags: [PRODUCTS_TAG, CATEGORIES_TAG], revalidate: ONE_HOUR }
+);

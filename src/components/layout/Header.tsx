@@ -23,7 +23,13 @@ const defaultNav = [
       { id: "2c", label: "Featured", href: "/products?featured=true" },
     ],
   },
-  { id: "3", label: "Categories", href: "/categories", children: [] },
+  {
+    id: "3", label: "Categories", href: "/categories",
+    children: [
+      { id: "3a", label: "All Categories", href: "/categories" },
+      { id: "3d", label: "Download Catalogs (PDF)", href: "/catalogs" },
+    ],
+  },
   { id: "3b", label: "Brands", href: "/brands", children: [] },
   { id: "3c", label: "Guides", href: "/guides", children: [] },
   { id: "4", label: "Sell Your Product", href: "/sell-your-product", children: [] },

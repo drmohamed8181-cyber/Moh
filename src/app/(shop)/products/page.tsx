@@ -10,6 +10,8 @@ import ProductsSortSelect from "@/components/shop/ProductsSortSelect";
 import InStockFilter from "@/components/shop/InStockFilter";
 import { isSold, partnerListLoaded } from "@/lib/partnerStock";
 import { SlidersHorizontal } from "lucide-react";
+import CatalogDownloadButton from "@/components/shop/CatalogDownloadButton";
+import { catalogForSpecialty } from "@/lib/catalogs";
 import {
   DENTAL_CATEGORY_SLUGS,
   HIDDEN_CATEGORY_SLUGS,
@@ -137,6 +139,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
   ]);
 
   const { products, total } = listing;
+  const catalog = catalogForSpecialty(activeSpecialty);
   const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
 
   const itemListJsonLd = {
@@ -225,9 +228,12 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
           </aside>
 
           <div className="flex-1">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
               <p className="text-sm text-gray-500">{products.length} products</p>
-              <ProductsSortSelect />
+              <div className="flex flex-wrap items-center gap-3">
+                {catalog && <CatalogDownloadButton catalog={catalog} />}
+                <ProductsSortSelect />
+              </div>
             </div>
 
             {products.length > 0 ? (
