@@ -62,7 +62,7 @@ interface HeroSliderProps {
 }
 
 function eyebrowFor(title: string) {
-  const known = ["Alcon", "Ellex", "Zeiss", "LightMed", "Bausch", "Lomb", "AMO", "Visx", "Topcon", "Nidek", "Haag-Streit"];
+  const known = ["Alcon", "Ellex", "Zeiss", "Bausch", "Lomb", "AMO", "Visx", "Topcon", "Nidek", "Haag-Streit"];
   const match = known.find((brand) => title.toLowerCase().includes(brand.toLowerCase()));
   return match || "Featured Instrument";
 }
