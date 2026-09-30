@@ -782,6 +782,158 @@ export const GUIDES: Guide[] = [
       { label: "Contact us", href: "/contact" },
     ],
   },
+  {
+    slug: "corneal-topographer-buying-guide",
+    title: "Corneal Topographer Buying Guide: What to Compare",
+    description:
+      "How corneal topographers differ by measurement method, what refractive and contact lens practices need from one, and what to check on a pre-owned unit.",
+    publishedAt: "2026-09-30",
+    intro:
+      "A corneal topographer maps the shape of the cornea. Refractive surgeons use it before and after surgery, and contact lens practices use it to fit specialty lenses. Topographers measure in different ways, and the method decides what the device can tell you. This guide explains the differences and what to check before buying.",
+    sections: [
+      {
+        heading: "How topographers measure",
+        paragraphs: [
+          "Placido-disc topographers project a pattern of rings onto the tear film and measure how the reflection is distorted. They map the front surface of the cornea in fine detail and are quick and easy to use. The Alcon WaveLight Topolyzer VARIO is an example.",
+          "Scanning-slit systems, such as the Bausch + Lomb Orbscan IIz, pass slits of light across the eye to measure the front and back surfaces of the cornea and its thickness. Some combine this with a Placido disc.",
+          "Scheimpflug systems use a rotating camera to image the whole anterior segment, including both corneal surfaces and thickness. They are a separate category from the two above.",
+        ],
+      },
+      {
+        heading: "Match the device to your work",
+        paragraphs: [
+          "If you mainly need front-surface curvature for contact lens fitting or routine assessment, a Placido-disc topographer is usually enough. Refractive practices often want back-surface and thickness data too, which points to a slit-scan or Scheimpflug system.",
+          "Some topographers export data to a specific laser for topography-guided treatment. If that is why you are buying, confirm the topographer model and software version are compatible with your laser and that the export licence is active.",
+        ],
+      },
+      {
+        heading: "Software and data",
+        paragraphs: [
+          "Check the installed software version, whether it still receives updates, and which analysis modules are licensed. Confirm the topographer can export to your electronic records or imaging system, and that the review software runs on your computers.",
+          "Patient data must not travel with the device. Get written confirmation that the existing database has been wiped before delivery.",
+        ],
+      },
+      {
+        heading: "What to check on a pre-owned unit",
+        paragraphs: ["Topographers are compact and well suited to the refurbished market. Confirm the following:"],
+        bullets: [
+          "Calibration against the manufacturer's test object, with the result.",
+          "A clean, undamaged Placido cone or optics.",
+          "Smooth joystick and chin rest movement.",
+          "The computer, software licence keys and instrument table included.",
+          "Patient data wiped, confirmed in writing.",
+        ],
+      },
+    ],
+    related: [
+      { label: "Topographers", href: "/categories/topographers" },
+      { label: "Alcon equipment", href: "/brands/alcon" },
+      { label: "Bausch + Lomb equipment", href: "/brands/bausch-lomb" },
+      { label: "Used excimer laser checklist", href: "/guides/buying-a-used-excimer-laser-checklist" },
+    ],
+  },
+  {
+    slug: "microkeratome-vs-femtosecond-laser-flaps",
+    title: "Microkeratome vs Femtosecond Laser for LASIK Flaps",
+    description:
+      "Microkeratomes and femtosecond lasers compared for LASIK flaps: capital cost, consumables, workflow, space, and what to check when buying either one used.",
+    publishedAt: "2026-09-30",
+    intro:
+      "Every LASIK procedure starts with a corneal flap, made either with a mechanical microkeratome or with a femtosecond laser. Practices setting up refractive surgery, or replacing ageing equipment, often weigh the two. This guide compares them from the practice's point of view. Clinical choice between them is for the surgeon.",
+    sections: [
+      {
+        heading: "How each one works",
+        paragraphs: [
+          "A microkeratome is a precision mechanical device: a suction ring holds the eye, and an oscillating blade passes across the cornea to cut the flap. Examples include the Bausch + Lomb Hansatome and Zyoptix XP.",
+          "A femtosecond laser creates the flap with focused laser pulses instead of a blade. The flap dimensions are programmed in software, and many platforms can make other corneal cuts too.",
+        ],
+      },
+      {
+        heading: "Capital and running costs",
+        paragraphs: [
+          "A microkeratome costs far less to buy and takes almost no space. Its running costs are blades and any single-use parts, plus regular servicing of the motor head.",
+          "A femtosecond laser is a major capital purchase with room requirements, a service contract and a patient interface for every procedure. Some platforms have also used per-procedure fees. Compare total cost per case over the years you expect to use the equipment, not only the purchase price.",
+        ],
+      },
+      {
+        heading: "Workflow and space",
+        paragraphs: [
+          "A microkeratome fits in the same room as the excimer laser and adds little time to the procedure. A femtosecond laser needs its own footprint, sometimes its own room, and a step in the patient flow to move between devices. Mobile femtosecond lasers reduce this but still need planning.",
+        ],
+      },
+      {
+        heading: "Buying either one used",
+        paragraphs: [
+          "For a pre-owned femtosecond laser, check the licensed applications, the laser source service history and the supply of patient interfaces. Our femtosecond buying guide covers this in detail.",
+          "Before buying a pre-owned microkeratome, confirm:",
+        ],
+        bullets: [
+          "The motor head has been serviced, with the record.",
+          "Which suction rings, heads and footswitch are included.",
+          "Blades and single-use parts are still available to you.",
+        ],
+      },
+    ],
+    related: [
+      { label: "Microkeratomes", href: "/categories/microkeratomes" },
+      { label: "Femtosecond lasers", href: "/categories/femtosecond-lasers" },
+      { label: "Bausch + Lomb equipment", href: "/brands/bausch-lomb" },
+      { label: "Used femtosecond laser guide", href: "/guides/buying-a-used-femtosecond-laser" },
+    ],
+  },
+  {
+    slug: "fundus-camera-buying-guide",
+    title: "How to Choose a Fundus Camera: What to Compare",
+    description:
+      "How to compare fundus cameras: field of view, mydriatic or non-mydriatic, imaging modes, software and records integration, and what to check on a used unit.",
+    publishedAt: "2026-09-30",
+    intro:
+      "A fundus camera photographs the retina to document findings and track change over time. Cameras differ widely in how much of the retina they capture, which imaging modes they offer and how easily they fit into a clinic's workflow. This guide sets out what to compare.",
+    sections: [
+      {
+        heading: "Field of view",
+        paragraphs: [
+          "Traditional fundus cameras capture a field of around 45 degrees in one image, and montage several images to cover more. Widefield and ultra-widefield cameras, such as the Zeiss Clarus family, capture much more of the retina in one or two images. Wider fields cost more, so weigh them against how often your clinic needs to see the peripheral retina.",
+        ],
+      },
+      {
+        heading: "Mydriatic or non-mydriatic",
+        paragraphs: [
+          "Non-mydriatic cameras can image through an undilated pupil of sufficient size, which speeds up screening and suits busy clinics. Mydriatic cameras need a dilated pupil but can give better images in some patients. Many modern cameras work either way.",
+        ],
+      },
+      {
+        heading: "Imaging modes",
+        paragraphs: [
+          "Colour imaging is standard. Depending on the model, cameras may also offer red-free imaging, fundus autofluorescence and angiography modes. Higher models in a family often add modes, so confirm exactly which ones the unit you are buying has, and whether any require a licence.",
+        ],
+      },
+      {
+        heading: "Software and records",
+        paragraphs: [
+          "Check that the camera's software runs on your computers and exports to your electronic records or imaging system, for example through DICOM. Ask whether the software is still supported and receives updates.",
+          "Patient images must not travel with the device. Get written confirmation that the existing database has been wiped before delivery.",
+        ],
+      },
+      {
+        heading: "What to check on a pre-owned unit",
+        paragraphs: ["Confirm the following before you buy:"],
+        bullets: [
+          "Image quality on a test capture, with no spots or haze from the optics.",
+          "Flash and illumination working in every mode listed.",
+          "The computer, software licences, table and chin rest included.",
+          "Service history and warranty coverage.",
+          "Patient data wiped, confirmed in writing.",
+        ],
+      },
+    ],
+    related: [
+      { label: "Diagnostic equipment", href: "/categories/diagnostic-equipment" },
+      { label: "Zeiss equipment", href: "/brands/zeiss" },
+      { label: "Buying a used OCT", href: "/guides/buying-a-used-oct-zeiss-cirrus-guide" },
+      { label: "Contact us", href: "/contact" },
+    ],
+  },
 ];
 
 /**
