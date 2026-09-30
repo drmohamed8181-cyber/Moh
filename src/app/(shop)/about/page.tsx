@@ -19,7 +19,7 @@ import { SITE_NAME, SITE_URL } from "@/lib/seo";
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "MP MedPharma is a New Jersey, USA based supplier of new and certified refurbished ophthalmic, surgical and dental equipment, serving hospitals and eye clinics since 2009 with warranty on every unit.",
+    "NJ supplier of new and certified refurbished ophthalmic equipment and new dental chair units, serving hospitals and eye clinics since 2009. Warranty on every unit.",
   alternates: { canonical: "/about" },
 };
 
@@ -27,7 +27,7 @@ const stats = [
   { icon: Award, value: "Since 2009", label: "Supplying eye care" },
   { icon: Shield, value: "Warranty", label: "On every unit we sell" },
   { icon: Wrench, value: "Documented", label: "Service history, per unit" },
-  { icon: Headphones, value: "Installed", label: "Delivery, setup and training" },
+  { icon: Headphones, value: "Installed", label: "Ophthalmic delivery, setup and training" },
 ];
 
 const whatWeSupply = [
@@ -51,7 +51,7 @@ const whatWeSupply = [
 const howWeWork = [
   {
     heading: "Every unit is inspected and documented",
-    body: "A refurbished device is only worth buying if someone can tell you what was done to it. Units ship with their service history, and we will tell you what was replaced and what was left alone.",
+    body: "A refurbished device is only worth buying if someone can tell you what was done to it. Refurbished units ship with their service history, and we will tell you what was replaced and what was left alone.",
   },
   {
     heading: "Warranty on new and refurbished alike",
@@ -59,7 +59,7 @@ const howWeWork = [
   },
   {
     heading: "Delivered, installed and handed over",
-    body: "Capital equipment does not finish at the loading dock. We arrange white-glove delivery, installation and clinical training so the room is working before we leave it.",
+    body: "Capital equipment does not finish at the loading dock. For ophthalmic equipment we arrange white-glove delivery, installation and clinical training so the room is working before we leave it.",
   },
   {
     heading: "Quoted per unit, not from a list",
@@ -99,8 +99,8 @@ export default function AboutPage() {
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">About MP MedPharma</h1>
           <p className="text-blue-100 text-lg max-w-2xl mx-auto">
-            A US supplier of new and certified refurbished ophthalmic, surgical and dental equipment,
-            serving hospitals and clinics since 2009
+            A US supplier of new and certified refurbished ophthalmic equipment and new dental chair
+            units, serving hospitals and clinics since 2009
           </p>
         </div>
       </div>
@@ -152,10 +152,10 @@ export default function AboutPage() {
 
               <ul className="space-y-3 mb-8">
                 {[
-                  "New and certified refurbished ophthalmic, surgical and dental equipment",
+                  "New and certified refurbished ophthalmic equipment, and new dental chair units",
                   "Documented service history and warranty on every unit",
-                  "White-glove delivery, installation and clinical training",
-                  "Fair, transparent offers on the equipment you are replacing",
+                  "White-glove delivery, installation and clinical training for ophthalmic equipment",
+                  "Fair, transparent offers on the ophthalmic equipment you are replacing",
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-3 text-gray-700">
                     <CheckCircle size={18} className="text-primary-600 flex-shrink-0 mt-0.5" />
