@@ -2,11 +2,13 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSession, signOut } from "next-auth/react";
 import {
   Search, User, Menu, X, ChevronDown,
   Heart, Phone, Mail, LogOut, Settings, Package, FileDown,
+  type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useWishlistStore } from "@/store/wishlistStore";
@@ -14,7 +16,16 @@ import { LogoMark } from "@/components/ui/Logo";
 import SiteSearchBox from "@/components/shop/SiteSearchBox";
 import { SPECIALTIES } from "@/lib/specialties";
 
-const defaultNav = [
+// Menu thumbnails for each specialty — the same product photos the Specialties
+// section and catalog promo already show, not manufacturer imagery.
+const SPECIALTY_THUMBS: Record<string, string> = {
+  ophthalmology: "/devices/CSO-900-Slit-Lamp-Real.jpg",
+  dental: "/devices/Dental-Chair-Unit-R4.webp",
+};
+
+type NavChild = { id: string; label: string; href: string; image?: string; icon?: LucideIcon };
+
+const defaultNav: { id: string; label: string; href: string; children: NavChild[] }[] = [
   { id: "1", label: "Home", href: "/", children: [] },
   {
     id: "2", label: "Products", href: "/products",
@@ -31,8 +42,9 @@ const defaultNav = [
       // "coming soon" specialty joins the menu once it launches.
       ...SPECIALTIES.filter((s) => !s.comingSoon).map((s) => ({
         id: `3-${s.slug}`, label: s.name, href: `/products?specialty=${s.slug}`,
+        image: SPECIALTY_THUMBS[s.slug],
       })),
-      { id: "3d", label: "Download Catalogs (PDF)", href: "/catalogs" },
+      { id: "3d", label: "Download Catalogs (PDF)", href: "/catalogs", icon: FileDown },
     ],
   },
   { id: "3b", label: "Brands", href: "/brands", children: [] },
@@ -145,14 +157,23 @@ export default function Header({ settings, categories = [] }: { settings?: Heade
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -6 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute top-full left-0 mt-2 w-52 bg-white/95 backdrop-blur-xl rounded-xl shadow-lg border border-gray-100 py-2 z-50"
+                        className="absolute top-full left-0 mt-2 w-72 bg-white/95 backdrop-blur-xl rounded-xl shadow-lg border border-gray-100 py-2 z-50"
                       >
                         {item.children.map((child) => (
                           <Link
                             key={child.id}
                             href={child.href}
-                            className="block px-4 py-2.5 text-sm text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-colors"
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-colors"
                           >
+                            {child.image && (
+                              // Decorative: the label beside it names the specialty.
+                              <Image src={child.image} alt="" width={40} height={40} className="w-10 h-10 rounded-lg object-cover shrink-0" />
+                            )}
+                            {child.icon && (
+                              <span className="w-10 h-10 rounded-lg bg-gold-50 text-gold-600 flex items-center justify-center shrink-0">
+                                <child.icon size={18} aria-hidden="true" />
+                              </span>
+                            )}
                             {child.label}
                           </Link>
                         ))}
@@ -258,9 +279,17 @@ export default function Header({ settings, categories = [] }: { settings?: Heade
                     <Link
                       key={child.id}
                       href={child.href}
-                      className="block px-8 py-2 text-sm text-gray-600 hover:text-primary-600"
+                      className="flex items-center gap-3 px-8 py-2 text-sm text-gray-600 hover:text-primary-600"
                       onClick={() => setMobileOpen(false)}
                     >
+                      {child.image && (
+                        <Image src={child.image} alt="" width={32} height={32} className="w-8 h-8 rounded-md object-cover shrink-0" />
+                      )}
+                      {child.icon && (
+                        <span className="w-8 h-8 rounded-md bg-gold-50 text-gold-600 flex items-center justify-center shrink-0">
+                          <child.icon size={16} aria-hidden="true" />
+                        </span>
+                      )}
                       {child.label}
                     </Link>
                   ))}
