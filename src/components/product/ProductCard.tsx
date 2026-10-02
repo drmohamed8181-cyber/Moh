@@ -72,7 +72,7 @@ export default function ProductCard({ product }: { product: Product }) {
           <div className="absolute top-3 left-3 flex flex-col gap-1.5">
             {product.isSold ? (
               <span className="bg-gray-800 text-white text-xs font-medium px-2 py-1 rounded-lg">
-                Sold
+                Unavailable
               </span>
             ) : !product.isAvailable && (
               <span className="bg-gray-800 text-white text-xs font-medium px-2 py-1 rounded-lg">
@@ -116,7 +116,7 @@ export default function ProductCard({ product }: { product: Product }) {
         <div>
           <p className="text-[10px] text-gray-400 uppercase tracking-wide font-medium">Pricing</p>
           {product.isSold ? (
-            <p className="text-sm font-semibold text-gray-500">Sold</p>
+            <p className="text-sm font-semibold text-gray-500">Unavailable</p>
           ) : product.publicPrice != null ? (
             <>
               {product.previousPublicPrice != null && (

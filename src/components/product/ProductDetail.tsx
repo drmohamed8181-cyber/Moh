@@ -132,7 +132,7 @@ export default function ProductDetail({ product }: { product: Product }) {
 
             <span className={`inline-flex items-center gap-1.5 text-sm font-medium mb-4 ${product.isAvailable && !product.isSold ? "text-green-600" : "text-gray-500"}`}>
               <CheckCircle2 size={15} />
-              {product.isSold ? "Sold – inquire for similar" : product.isAvailable ? "In Inventory" : "Currently Unavailable"}
+              {product.isSold ? "Unavailable at the moment" : product.isAvailable ? "In Inventory" : "Currently Unavailable"}
             </span>
 
             {product.shortDesc && (
@@ -151,7 +151,7 @@ export default function ProductDetail({ product }: { product: Product }) {
               <div className="flex-1">
                 <p className="text-[11px] text-gray-400 uppercase tracking-wide font-medium mb-0.5">Pricing</p>
                 {product.isSold ? (
-                  <p className="text-lg font-semibold text-gray-500">Sold</p>
+                  <p className="text-lg font-semibold text-gray-500">Unavailable</p>
                 ) : product.publicPrice != null ? (
                   <>
                     {product.previousPublicPrice != null && (
