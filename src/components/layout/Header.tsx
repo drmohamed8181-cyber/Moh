@@ -189,6 +189,7 @@ export default function Header({ settings, categories = [] }: { settings?: Heade
               {/* Search */}
               <button
                 onClick={() => setSearchOpen(true)}
+                aria-label="Search"
                 className="p-2.5 text-gray-600 hover:text-primary-600 hover:bg-primary-50/80 rounded-xl transition-all duration-200 hover:scale-105"
               >
                 <Search size={20} />
@@ -203,9 +204,11 @@ export default function Header({ settings, categories = [] }: { settings?: Heade
               </Link>
 
               {/* User */}
-              <div className="relative hidden sm:block">
+              <div className="relative">
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  aria-label={session ? "Account menu" : "Sign in or create account"}
+                  aria-expanded={userMenuOpen}
                   className="flex items-center gap-2 p-2.5 text-gray-600 hover:text-primary-600 hover:bg-primary-50/80 rounded-xl transition-all duration-200 hover:scale-105"
                 >
                   <User size={20} />
@@ -218,14 +221,14 @@ export default function Header({ settings, categories = [] }: { settings?: Heade
                           <p className="text-sm font-medium text-gray-900 truncate">{session.user?.name}</p>
                           <p className="text-xs text-gray-500 truncate">{session.user?.email}</p>
                         </div>
-                        <Link href="/account" className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600">
+                        <Link href="/account" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600">
                           <User size={14} /> My Account
                         </Link>
-                        <Link href="/account/orders" className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600">
+                        <Link href="/account/orders" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600">
                           <Package size={14} /> My Orders
                         </Link>
                         {["ADMIN", "SUPER_ADMIN", "CONTENT_MANAGER"].includes(session.user.role) && (
-                          <Link href="/admin" className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600">
+                          <Link href="/admin" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600">
                             <Settings size={14} /> Admin Panel
                           </Link>
                         )}
@@ -239,10 +242,10 @@ export default function Header({ settings, categories = [] }: { settings?: Heade
                       </>
                     ) : (
                       <>
-                        <Link href="/login" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600">
+                        <Link href="/login" onClick={() => setUserMenuOpen(false)} className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600">
                           Sign In
                         </Link>
-                        <Link href="/register" className="block px-4 py-2.5 text-sm text-primary-600 font-medium hover:bg-primary-50">
+                        <Link href="/register" onClick={() => setUserMenuOpen(false)} className="block px-4 py-2.5 text-sm text-primary-600 font-medium hover:bg-primary-50">
                           Create Account
                         </Link>
                       </>
@@ -255,6 +258,8 @@ export default function Header({ settings, categories = [] }: { settings?: Heade
               <button
                 className="lg:hidden p-2 text-gray-600 hover:text-primary-600 rounded-lg"
                 onClick={() => setMobileOpen(!mobileOpen)}
+                aria-label={mobileOpen ? "Close menu" : "Open menu"}
+                aria-expanded={mobileOpen}
               >
                 {mobileOpen ? <X size={20} /> : <Menu size={20} />}
               </button>
@@ -265,7 +270,23 @@ export default function Header({ settings, categories = [] }: { settings?: Heade
         {/* Mobile menu */}
         {mobileOpen && (
           <div className="lg:hidden container mx-auto px-4 mt-2">
-            <nav className="bg-white/95 backdrop-blur-xl rounded-2xl border border-white/60 shadow-lg py-4 flex flex-col gap-1 animate-slide-down">
+            <nav className="bg-white/95 backdrop-blur-xl rounded-2xl border border-white/60 shadow-lg py-4 flex flex-col gap-1 animate-slide-down max-h-[calc(100dvh-7rem)] overflow-y-auto">
+              {/* Account first, so Sign In is visible without scrolling */}
+              {session ? (
+                <>
+                  <Link href="/account" className="block px-4 py-3 text-sm font-medium text-gray-700 hover:bg-primary-50 rounded-lg" onClick={() => setMobileOpen(false)}>My Account</Link>
+                  {["ADMIN", "SUPER_ADMIN", "CONTENT_MANAGER"].includes(session.user.role) && (
+                    <Link href="/admin" className="block px-4 py-3 text-sm font-medium text-gray-700 hover:bg-primary-50 rounded-lg" onClick={() => setMobileOpen(false)}>Admin Panel</Link>
+                  )}
+                  <button onClick={() => signOut()} className="text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 rounded-lg">Sign Out</button>
+                </>
+              ) : (
+                <div className="grid grid-cols-2 gap-2 px-4">
+                  <Link href="/login" className="text-center px-4 py-3 text-sm font-medium text-gray-700 border border-gray-200 hover:bg-primary-50 rounded-lg" onClick={() => setMobileOpen(false)}>Sign In</Link>
+                  <Link href="/register" className="text-center px-4 py-3 text-sm font-medium text-primary-600 bg-primary-50 rounded-lg" onClick={() => setMobileOpen(false)}>Create Account</Link>
+                </div>
+              )}
+              <hr className="my-2" />
               {defaultNav.map((item) => (
                 <div key={item.id}>
                   <Link
@@ -295,18 +316,6 @@ export default function Header({ settings, categories = [] }: { settings?: Heade
                   ))}
                 </div>
               ))}
-              <hr className="my-2" />
-              {session ? (
-                <>
-                  <Link href="/account" className="block px-4 py-3 text-sm font-medium text-gray-700 hover:bg-primary-50 rounded-lg" onClick={() => setMobileOpen(false)}>My Account</Link>
-                  <button onClick={() => signOut()} className="text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 rounded-lg">Sign Out</button>
-                </>
-              ) : (
-                <>
-                  <Link href="/login" className="block px-4 py-3 text-sm font-medium text-gray-700 hover:bg-primary-50 rounded-lg" onClick={() => setMobileOpen(false)}>Sign In</Link>
-                  <Link href="/register" className="block px-4 py-3 text-sm font-medium text-primary-600 bg-primary-50 rounded-lg" onClick={() => setMobileOpen(false)}>Create Account</Link>
-                </>
-              )}
             </nav>
           </div>
         )}
