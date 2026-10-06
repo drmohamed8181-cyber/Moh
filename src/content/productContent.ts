@@ -29,6 +29,13 @@ export type ProductContent = {
    */
   match: string[];
   /**
+   * Keywords that disqualify the entry even when `match` succeeds. Accessories
+   * and parts carry their host system's name ("OZil Handpiece for Centurion",
+   * "WaveLight 400Hz Laser Cavity"), and without this they would be published
+   * under the whole system's title and description.
+   */
+  exclude?: string[];
+  /**
    * Search-result title and snippet for this exact model. Only set them on an
    * entry that matches a single product: a generic entry ("dentalchairunit")
    * would give several pages the same title, so those fall back to the
@@ -142,6 +149,7 @@ export const PRODUCT_CONTENT: ProductContent[] = [
   // ---------------------------------------------------------------- Alcon
   {
     match: ["centurion"],
+    exclude: ["handpiece"],
     seoTitle: "Alcon Centurion Phaco System for Sale",
     seoDesc: "Buy a refurbished Alcon Centurion Vision System: Active Fluidics IOP control and OZil torsional phaco for cataract surgery. Warranty included. Request a quote.",
     description: `The Alcon Centurion Vision System is a phacoemulsification platform for cataract surgery and the successor to the Infiniti. Its defining feature is Active Fluidics, which regulates intraocular pressure to a surgeon-set target rather than relying on bottle height, giving a more stable anterior chamber and less post-occlusion surge at higher vacuum settings. It uses torsional ultrasound through the OZil handpiece with balanced tip designs, and is operated from a touch-screen console with a wireless footpedal and remote.\n\nBuyers should confirm the included handpieces and tips, the software version, and the fluidic cassette supply, since these make up a meaningful share of the value of any unit. ${OFFER}`,
@@ -155,6 +163,7 @@ export const PRODUCT_CONTENT: ProductContent[] = [
   },
   {
     match: ["infiniti"],
+    exclude: ["handpiece"],
     seoTitle: "Alcon Infiniti Phaco System for Sale",
     seoDesc: "Refurbished Alcon Infiniti Vision System for cataract surgery, with OZil torsional and longitudinal ultrasound. Serviced, warranted units. Request a quote.",
     description: `The Alcon Infiniti Vision System is a proven phacoemulsification platform that introduced OZil torsional ultrasound and remained in service in operating rooms worldwide for well over a decade. It uses gravity-fed irrigation with bottle-height control, supports longitudinal and torsional ultrasound, and offers a broad ecosystem of handpieces, tips and consumables that keep it economical to run.\n\nFor practices with a routine cataract case mix the Infiniti remains a dependable, lower-cost entry into torsional phaco. Confirm the included handpieces, footpedal and the software version when comparing units. ${OFFER}`,
@@ -196,6 +205,7 @@ export const PRODUCT_CONTENT: ProductContent[] = [
   },
   {
     match: ["wavelight", "400"],
+    exclude: ["cavity"],
     seoTitle: "Alcon WaveLight 400 Hz Laser for Sale",
     seoDesc: "Refurbished Alcon WaveLight 400 Hz (Allegretto) excimer laser for LASIK and surface ablation, with eye tracking and wavefront-optimized profiles. Get a quote.",
     description: `The Alcon WaveLight 400 Hz excimer laser is the predecessor to the EX500 and remains a capable refractive platform for LASIK and surface ablation, with eye tracking and wavefront-optimised treatment profiles. Its lower pulse rate means slightly longer ablation times than the EX500, while its consumables and service infrastructure are well established.\n\nBuyers should verify the shot count, optics and gas service dates, and which treatment licences are active on the unit. ${OFFER}`,
@@ -212,7 +222,7 @@ export const PRODUCT_CONTENT: ProductContent[] = [
     indications: ["Refractive surgery planning", "Keratoconus and corneal screening", "Contact-lens fitting"],
   },
   {
-    match: ["laserex"],
+    match: ["laserex", "3000"],
     seoTitle: "Alcon Laserex 3000LX YAG Laser for Sale",
     seoDesc: "Alcon Laserex 3000LX Nd:YAG laser for sale, for posterior capsulotomy and peripheral iridotomy. Refurbished, calibrated and warranted. Request pricing today.",
     description: `The Alcon Laserex 3000LX (3000LE) is a compact Nd:YAG ophthalmic laser for posterior capsulotomy and peripheral iridotomy. It is a straightforward, reliable slit-lamp-mounted YAG that many practices use as their primary or backup capsulotomy laser.\n\nOn a used YAG, check the energy calibration, the aiming beam and the slit-lamp optics, and confirm the included table and safety filters. ${OFFER}`,
@@ -332,6 +342,7 @@ export const PRODUCT_CONTENT: ProductContent[] = [
   },
   {
     match: ["solitaire"],
+    exclude: ["lio", "ophthalmoscope"],
     seoTitle: "Ellex Solitaire Retinal Laser for Sale",
     seoDesc: "Ellex Solitaire 532 nm green photocoagulator for sale, for panretinal and focal photocoagulation and tear repair. Refurbished with warranty. Request a quote.",
     description: `The Ellex Solitaire is a 532 nm green photocoagulator for retina and glaucoma treatment, delivered through a slit-lamp and optionally a laser indirect ophthalmoscope. It is used for panretinal and focal photocoagulation, retinal tear repair and laser trabeculoplasty, and its solid-state design keeps it compact and low-maintenance.\n\nOn a used photocoagulator, check the output power calibration, the delivery devices included (slit-lamp adapter, indirect ophthalmoscope, endoprobe) and the fibre condition. ${OFFER}`,
@@ -528,7 +539,7 @@ export const PRODUCT_CONTENT: ProductContent[] = [
   },
   // ---------------------------------------------------------------- Others
   {
-    match: ["femtoldv"],
+    match: ["femtoldv", "z6"],
     seoTitle: "Ziemer FEMTO LDV Z6 Laser for Sale",
     seoDesc: "Ziemer FEMTO LDV Z6 mobile femtosecond laser for sale, for LASIK flaps and corneal procedures across more than one OR. Refurbished with warranty. Get a quote.",
     variants: [
@@ -570,13 +581,15 @@ export const PRODUCT_CONTENT: ProductContent[] = [
 const normalise = (text: string) => text.toLowerCase().replace(/[^a-z0-9]/g, "");
 
 /**
- * The entry whose every keyword appears in `name`, or undefined. Both sides are
+ * The entry whose every keyword appears in `name` and none of whose `exclude`
+ * keywords do, or undefined. Both sides are
  * reduced to lowercase alphanumerics first, so "IQ 810" matches "IQ-810".
  */
 export function findProductContent(name: string): ProductContent | undefined {
   const key = normalise(name);
   const matches = (keywords: string[]) => keywords.every((keyword) => key.includes(normalise(keyword)));
-  const entry = PRODUCT_CONTENT.find((candidate) => matches(candidate.match));
+  const excluded = (keywords: string[] = []) => keywords.some((keyword) => key.includes(normalise(keyword)));
+  const entry = PRODUCT_CONTENT.find((candidate) => matches(candidate.match) && !excluded(candidate.exclude));
   const variant = entry?.variants?.find((candidate) => matches(candidate.match));
   return entry && variant ? { ...entry, seoTitle: variant.seoTitle, seoDesc: variant.seoDesc } : entry;
 }
