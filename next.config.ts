@@ -24,6 +24,11 @@ const nextConfig: NextConfig = {
         destination: "https://www.mpmedpharma.com/:path*",
         permanent: true,
       },
+      // Brand pages that were split by manufacturer spelling and are now merged
+      // in src/lib/brands.ts. Google indexed the old URLs, so they redirect.
+      { source: "/brands/ellex-lumibird", destination: "/brands/ellex", permanent: true },
+      { source: "/brands/laserex-ellex", destination: "/brands/ellex", permanent: true },
+      { source: "/brands/scican-coltene", destination: "/brands/scican", permanent: true },
     ];
   },
 };
