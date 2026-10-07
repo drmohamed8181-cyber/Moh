@@ -361,6 +361,11 @@ export const PRODUCT_CONTENT: ProductContent[] = [
         seoDesc: "Ellex Integre Duo dual-wavelength slit-lamp-integrated photocoagulator for sale. Compact retinal laser with the slit lamp built in. Refurbished with warranty.",
       },
       {
+        match: ["progreen"],
+        seoTitle: "Ellex Integre Pro Green 532 Laser for Sale",
+        seoDesc: "Ellex Integre Pro Green 532 nm slit-lamp-integrated photocoagulator for sale. Compact retinal laser with the slit lamp built in. Refurbished with warranty.",
+      },
+      {
         match: ["532"],
         seoTitle: "Ellex Integre 532 Photocoagulator for Sale",
         seoDesc: "Ellex Integre 532 nm green slit-lamp-integrated photocoagulator for sale, supplied with table. Compact retinal laser in one unit. Refurbished with warranty.",
@@ -412,6 +417,23 @@ export const PRODUCT_CONTENT: ProductContent[] = [
     match: ["selecta", "duet"],
     seoTitle: "Lumenis Selecta Duet SLT/YAG for Sale",
     seoDesc: "Lumenis Selecta Duet combined SLT and Nd:YAG laser for sale: glaucoma SLT plus capsulotomy and iridotomy in one platform. Refurbished with warranty.",
+    variants: [
+      {
+        match: ["smart"],
+        seoTitle: "Lumenis Selecta SMART Duet SLT/YAG for Sale",
+        seoDesc: "Lumenis Selecta SMART Duet combined SLT and Nd:YAG laser for sale: glaucoma SLT plus capsulotomy and iridotomy in one platform. Refurbished with warranty.",
+      },
+      {
+        match: ["gen1"],
+        seoTitle: "Lumenis Selecta Duet SLT/YAG (Gen 1) for Sale",
+        seoDesc: "First-generation Lumenis Selecta Duet combined SLT and Nd:YAG laser for sale: glaucoma SLT plus capsulotomy and iridotomy. Refurbished with warranty.",
+      },
+      {
+        match: ["gen2"],
+        seoTitle: "Lumenis Selecta Duet SLT/YAG (Gen 2) for Sale",
+        seoDesc: "Second-generation Lumenis Selecta Duet combined SLT and Nd:YAG laser for sale: glaucoma SLT plus capsulotomy and iridotomy. Refurbished with warranty.",
+      },
+    ],
     description: `The Lumenis Selecta Duet is a combined SLT and YAG laser system, pairing a 532 nm selective laser trabeculoplasty mode with a 1064 nm Nd:YAG for capsulotomy and iridotomy in one slit-lamp-mounted platform. It lets a practice treat open-angle glaucoma and posterior capsule opacification with a single device.\n\nOn a pre-owned unit check energy calibration in both modes, aiming beam alignment and the slit-lamp optics. ${OFFER}`,
     features: ["SLT and YAG in one system", "Slit-lamp delivery", "Selectable energy and spot for each mode"],
     indications: ["Selective laser trabeculoplasty", "Posterior capsulotomy", "Peripheral iridotomy"],
@@ -517,6 +539,13 @@ export const PRODUCT_CONTENT: ProductContent[] = [
     match: ["zyoptix"],
     seoTitle: "Bausch + Lomb Zyoptix XP for Sale",
     seoDesc: "Bausch + Lomb Zyoptix XP microkeratome for sale, a cost-effective option for LASIK flap creation. Refurbished and tested, with warranty. Request a quote.",
+    variants: [
+      {
+        match: ["complete"],
+        seoTitle: "Bausch + Lomb Zyoptix XP Complete System for Sale",
+        seoDesc: "Complete Bausch + Lomb Zyoptix XP microkeratome system for sale, for LASIK flap creation. Refurbished and tested, with warranty. Request a quote.",
+      },
+    ],
     description: `The Bausch + Lomb Zyoptix XP is a mechanical microkeratome for LASIK flap creation, used with disposable heads and blades. Mechanical microkeratomes remain a cost-effective flap-creation option for practices without a femtosecond laser.\n\nCheck the motor and drive unit condition, the heads and rings included, and the availability of consumable blades for the model. ${OFFER}`,
     features: ["Mechanical LASIK flap creation", "Interchangeable heads for flap thickness", "Disposable blade system"],
     indications: ["LASIK flap creation"],

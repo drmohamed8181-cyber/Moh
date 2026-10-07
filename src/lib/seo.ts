@@ -53,7 +53,12 @@ export function productDisplayName(product: Pick<SeoProduct, "name" | "manufactu
   const name = product.name.trim();
   const manufacturer = product.manufacturer?.trim();
   if (!manufacturer) return name;
-  return name.toLowerCase().includes(manufacturer.toLowerCase()) ? name : `${manufacturer} ${name}`;
+  // "Laserex (Ellex)" or "Alcon / Laserex" is already named by "Laserex LQP3106":
+  // any one of the company's names in the product name is enough, otherwise
+  // the title reads "Laserex (Ellex) Laserex LQP3106".
+  const lowerName = name.toLowerCase();
+  const names = manufacturer.split(/[()/]/).map((part) => part.trim().toLowerCase()).filter(Boolean);
+  return names.some((part) => lowerName.includes(part)) ? name : `${manufacturer} ${name}`;
 }
 
 /** <title> for a product page, without the "| MP MedPharma" template suffix. */
@@ -86,11 +91,24 @@ export function productDescription(product: SeoProduct): string {
   return `${truncate(core, Math.max(90, DESCRIPTION_BUDGET - suffix.length))}${suffix}`;
 }
 
-type SeoCategory = { name: string; description?: string | null; summary?: string | null };
+type SeoCategory = { name: string; slug?: string; description?: string | null; summary?: string | null };
+
+/**
+ * Categories whose units are all sold new. Their titles must not promise
+ * refurbished stock: the dental chairs are new installations only.
+ */
+const NEW_ONLY_CATEGORY_SLUGS = ["dental-chairs"];
+
+/** "<subject> for Sale – <condition>", dropping the condition when it would overflow the title budget. */
+function forSaleTitle(subject: string, condition: string): string {
+  const full = `${subject} for Sale – ${condition}`;
+  return full.length <= TITLE_BUDGET ? full : `${subject} for Sale`;
+}
 
 /** <title> for a category page, without the template suffix. */
 export function categoryTitle(category: SeoCategory): string {
-  return `${category.name.trim()} for Sale – New & Refurbished`;
+  const condition = category.slug && NEW_ONLY_CATEGORY_SLUGS.includes(category.slug) ? "New" : "New & Refurbished";
+  return forSaleTitle(category.name.trim(), condition);
 }
 
 /** Meta description for a category page. */
@@ -114,7 +132,7 @@ type SeoBrand = { name: string; productCount: number };
 
 /** <title> for a brand page, without the template suffix. */
 export function brandTitle(brand: SeoBrand): string {
-  return `${brand.name} Equipment for Sale – New & Refurbished`;
+  return forSaleTitle(`${brand.name} Equipment`, "New & Refurbished");
 }
 
 /** Meta description for a brand page. `categories` are the category names the brand's products fall under. */

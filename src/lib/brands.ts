@@ -7,6 +7,8 @@
 //   "Zeiss"                          "Carl Zeiss Meditec"
 //   "Johnson & Johnson"              "Johnson & Johnson (Intralase)"
 //                                    "AMO / Johnson & Johnson Vision"
+//   "Ellex"                          "Ellex (Lumibird)", "Laserex (Ellex)"
+//   "SciCan"                         "SciCan (Coltene)"
 //
 // Deriving a brand page per distinct spelling gave three companies seven pages
 // between them, each holding a fraction of that company's equipment. That is
@@ -49,6 +51,11 @@ const BRAND_RULES: BrandRule[] = [
   // Both spellings already collapse to one slug; this pins which name is shown
   // rather than leaving it to whichever product the database returns first.
   { name: "Bausch + Lomb", slug: "bausch-lomb", match: ["bauschlomb"] },
+  // Covers "Ellex (Lumibird)" and "Laserex (Ellex)": Laserex was Ellex's own
+  // earlier name. Listed after Alcon so "Alcon / Laserex" stays with Alcon.
+  { name: "Ellex", slug: "ellex", match: ["ellex"] },
+  // Covers "SciCan (Coltene)".
+  { name: "SciCan", slug: "scican", match: ["scican"] },
 ];
 
 const normalise = (text: string) => text.toLowerCase().replace(/[^a-z0-9]/g, "");
