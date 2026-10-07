@@ -21,3 +21,7 @@ Before building or shipping anything for MP MedPharma, check that it doesn't bre
 - **Accessibility**: images keep meaningful alt text; interactive elements work by keyboard.
 
 When unsure, say so and recommend checking with the relevant party (lawyer, partner, platform docs) rather than guessing.
+
+## LightMed is out of scope
+
+Leave LightMed (including the Sapphire dental laser and the hidden Dental Lasers category) out of all improvement work: don't count it in audits or to-do lists (missing photos, content, SEO, pricing), don't suggest sourcing photos or text for it, and don't add, edit or unhide its listings. Keep the existing guards that withhold it from the site and catalogs. Only work on it if the owner explicitly asks.
