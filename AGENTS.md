@@ -21,3 +21,18 @@ Before building or shipping anything for MP MedPharma, check that it doesn't bre
 - **Accessibility**: images keep meaningful alt text; interactive elements work by keyboard.
 
 When unsure, say so and recommend checking with the relevant party (lawyer, partner, platform docs) rather than guessing.
+
+# The owner's Google account
+
+The business's Google accounts (Google Search Console, Google Business Profile,
+Analytics, and the Gmail inbox those services email) are on
+**dr.mohamed8181@gmail.com**. Before advising on search visibility, the Business
+Profile or any Google service:
+
+- Check that inbox first (it is connected as the Gmail connector) for Search
+  Console, Business Profile and Analytics messages, and base the advice on what
+  they say.
+- Never suggest creating a new Google account or a second Business Profile; one
+  already exists on this account.
+- Read earlier work in `docs/` (for example `docs/GOOGLE_BUSINESS_PROFILE.md`
+  and `docs/EXPOSURE_PLAYBOOK.md`) before repeating steps the owner has done.
