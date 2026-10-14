@@ -33,15 +33,16 @@ function isInternalRecipient(to: string) {
 /**
  * `internal: true` marks a staff notification; everything else is treated as going to a customer and is
  * refused if it contains a price. `pricing: true` marks the owner's pricing reminder, which is refused
- * unless it is addressed to PRICING_EMAIL.
+ * unless it is addressed to PRICING_EMAIL. `adminWritten: true` marks a reply or email an admin typed
+ * themselves on the Messages page, which may quote a price to that customer.
  */
-export async function sendMail(options: { to: string; subject: string; html: string; text?: string; from?: string; replyTo?: string; internal?: boolean; pricing?: boolean }) {
+export async function sendMail(options: { to: string; subject: string; html: string; text?: string; from?: string; replyTo?: string; internal?: boolean; pricing?: boolean; adminWritten?: boolean }) {
   if (options.pricing && options.to.trim().toLowerCase() !== PRICING_EMAIL) {
     console.error(`Pricing email not sent: it may only go to ${PRICING_EMAIL}.`);
     return false;
   }
   const toStaff = options.pricing === true || (options.internal === true && isInternalRecipient(options.to));
-  if (!toStaff && emailContainsPrice(options)) {
+  if (!toStaff && !options.adminWritten && emailContainsPrice(options)) {
     console.error(`Email not sent: it contains a price and is not addressed to a staff inbox (subject: "${options.subject}").`);
     return false;
   }
