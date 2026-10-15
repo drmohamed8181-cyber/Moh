@@ -24,6 +24,8 @@ interface ContactMessage {
   sentByAdmin: boolean;
   leadStatus: LeadStatus;
   statusUpdatedAt: string | null;
+  // Where the lead came from ("Website form", "Google", "Referral"…); null when unknown.
+  source: string | null;
   createdAt: string;
   customer: MessageCustomer | null;
 }
@@ -119,6 +121,7 @@ function detailFields(msg: ContactMessage) {
     { label: "Workplace", value: msg.organization, href: null },
     { label: "Address", value: msg.address, href: null },
     { label: "Work Location", value: msg.workLocation, href: null },
+    { label: "Source", value: msg.source, href: null },
     { label: msg.sentByAdmin ? "Sent" : "Received", value: formatDateTime(msg.createdAt), href: null },
   ];
 }
@@ -158,7 +161,7 @@ export default function MessagesList({ initialMessages, customers }: { initialMe
       {
         ...sent,
         phone: null, jobTitle: null, organization: null, address: null, workLocation: null,
-        isRead: true, reply: null, sentByAdmin: true, leadStatus: "NEW", statusUpdatedAt: null,
+        isRead: true, reply: null, sentByAdmin: true, leadStatus: "NEW", statusUpdatedAt: null, source: null,
         // Reuse the customer tag from an earlier message; otherwise it appears on the next page load.
         customer: prev.find((m) => m.customer?.email.toLowerCase() === sent.email.toLowerCase())?.customer ?? null,
       },
@@ -426,6 +429,9 @@ export default function MessagesList({ initialMessages, customers }: { initialMe
                   <span className={cn("px-2 py-0.5 rounded-full text-xs font-semibold", STATUS_META[msg.leadStatus].badge)}>
                     {STATUS_META[msg.leadStatus].label}
                   </span>
+                  {!msg.sentByAdmin && msg.source && (
+                    <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">via {msg.source}</span>
+                  )}
                   {msg.sentByAdmin && (
                     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-primary-50 text-primary-700">
                       <Forward size={12} /> Sent by you

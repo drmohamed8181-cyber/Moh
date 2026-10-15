@@ -7,6 +7,7 @@ import { Phone, Mail, MapPin, Clock, Facebook, Twitter, Instagram, Youtube, Load
 import { LogoMark } from "@/components/ui/Logo";
 import EmailSuggestion from "@/components/ui/EmailSuggestion";
 import { trackNewsletterSignup } from "@/lib/analytics";
+import { websiteMailto } from "@/lib/mailto";
 
 type FooterSettings = {
   phone?: string;
@@ -165,7 +166,7 @@ export default function Footer({ settings }: { settings?: FooterSettings }) {
               </li>
               <li className="flex items-start gap-3">
                 <Mail size={15} className="text-primary-400 mt-0.5 flex-shrink-0" />
-                <a href={`mailto:${email}`} className="text-sm text-gray-400 hover:text-primary-400 transition-colors break-all">
+                <a href={websiteMailto(email)} className="text-sm text-gray-400 hover:text-primary-400 transition-colors break-all">
                   {email}
                 </a>
               </li>

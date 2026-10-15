@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
 import EmailSuggestion from "@/components/ui/EmailSuggestion";
 import { trackLead } from "@/lib/analytics";
+import { websiteMailto } from "@/lib/mailto";
 
 function InquiryPrefill({ onPrefill }: { onPrefill: (subject: string, message: string, productSlug: string) => void }) {
   const searchParams = useSearchParams();
@@ -98,7 +99,7 @@ export default function ContactSection({ settings }: { settings?: ContactSetting
           <div className="space-y-6">
             {[
               { icon: Phone, title: "Phone", content: phone, href: `tel:${phone.replace(/[^\d+]/g, "")}` },
-              { icon: Mail, title: "Email", content: email, href: `mailto:${email}` },
+              { icon: Mail, title: "Email", content: email, href: websiteMailto(email) },
               { icon: MapPin, title: "Address", content: address, href: "#" },
               { icon: Clock, title: "Hours", content: `Mon – Fri: ${hoursWeekday}\nSaturday: ${hoursSaturday}\nSunday: ${hoursSunday}`, href: null },
             ].map(({ icon: Icon, title, content, href }) => (

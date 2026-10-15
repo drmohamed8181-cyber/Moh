@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { websiteMailto } from "@/lib/mailto";
 
 export const metadata: Metadata = {
   title: "Shipping Policy",
@@ -56,7 +57,7 @@ export default function ShippingPage() {
           <h2 className="text-xl font-bold text-gray-900 mb-3">Questions About Your Shipment</h2>
           <p className="text-gray-600 leading-relaxed">
             For shipping updates on an existing order, visit My Account → My Orders, or contact us at{" "}
-            <a href="mailto:info@mpmedpharma.com" className="text-primary-600 hover:underline">info@mpmedpharma.com</a>{" "}
+            <a href={websiteMailto("info@mpmedpharma.com")} className="text-primary-600 hover:underline">info@mpmedpharma.com</a>{" "}
             or <a href="tel:9293498569" className="text-primary-600 hover:underline">929-349-8569</a>.
           </p>
         </section>

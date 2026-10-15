@@ -7,6 +7,7 @@ import { z } from "zod";
 import { Phone, Mail, MapPin, Send, CheckCircle } from "lucide-react";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
+import { websiteMailto } from "@/lib/mailto";
 
 const schema = z.object({
   fullName: z.string().min(2, "Name must be at least 2 characters"),
@@ -70,7 +71,7 @@ export default function ContactSection({
           <div className="lg:col-span-2 space-y-5">
             {[
               { icon: Phone, title: "Call Us", value: "929-349-8569", href: "tel:929-349-8569" },
-              { icon: Mail, title: "Email Us", value: "info@mpmedpharma.com", href: "mailto:info@mpmedpharma.com" },
+              { icon: Mail, title: "Email Us", value: "info@mpmedpharma.com", href: websiteMailto("info@mpmedpharma.com") },
               { icon: MapPin, title: "Location", value: "New Jersey, NJ, USA", href: "#" },
             ].map(({ icon: Icon, title, value, href }) => (
               <a
