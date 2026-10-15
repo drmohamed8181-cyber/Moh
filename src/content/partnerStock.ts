@@ -12,7 +12,7 @@
 // Changes reach the site on the next deploy; cached pages catch up within an
 // hour, or at once after any product is saved in the admin.
 
-export const PARTNER_STOCK_UPDATED = "2026-10-02 (Laser Locators distributor list, early October 2026)";
+export const PARTNER_STOCK_UPDATED = "2026-10-15 (Laser Locators distributor list, mid-October 2026)";
 
 // Our product slugs for every unit on that list. Slugs rather than the
 // partner's wording, because the matcher treats one entry's words being a
@@ -35,6 +35,10 @@ export const PARTNER_STOCK: string[] = [
   "amo-visx-s4-ir-excimer-3xxx-sn",
   "amo-visx-s4-ir-excimer-5xxx-sn",
   "bausch-lomb-hansatome-microkeratome",
+  // Stellaris PC with integrated laser (model BL14304). Not its slug: the slug's
+  // words contain all of the plain Stellaris PC's, which would keep that sold
+  // unit listed too.
+  "Bausch Lomb Stellaris w laser",
   "bausch-lomb-stellaris-phaco-handpiece-refurbished",
   "bausch-lomb-zyoptix-xp-microkeratome",
   "bausch-lomb-zyoptix-xp-microkeratome-system-complete",
@@ -54,9 +58,6 @@ export const PARTNER_STOCK: string[] = [
   "iridex-532-810-lio",
   "iridex-cyclo-g6-laser",
   "iridex-iq-532-green-laser",
-  "iridex-oculight-gl-laser-console",
-  "iridex-oculight-gl-laser-with-lio",
-  "iridex-oculight-gl-laser-with-slit-lamp-adapter",
   "iridex-oculight-glx-laser-with-cso-slit-lamp-table",
   "iridex-oculight-slx-810-laser-console",
   "iridex-oculight-slx-810-laser-with-lio",
@@ -68,7 +69,6 @@ export const PARTNER_STOCK: string[] = [
   "jj-intralase-fs60-model-2-femtosecond-laser",
   "j-j-intralase-ifs-150hz-femtosecond",
   "johnson-johnson-whitestar-pro",
-  "konan-cellchek-sl-specular-microscope",
   "konan-cellchek-specular-microscope-stand-alone",
   "konan-cellchek-xl-specular-microscope",
   "laserex-lqp3106-yag-laser",
@@ -80,16 +80,13 @@ export const PARTNER_STOCK: string[] = [
   "moria-evolution-3-microkeratome-console",
   "moria-evolution-3e-microkeratome-console",
   "moria-m2-metal-head-size-130",
-  "moria-m2-motor-handpiece",
   "nidek-mc-500-lio",
   "nidek-mc-500-multicolor-pattern-scanning-laser",
-  "nidek-mk-2000-motor-handpiece",
   "nidek-yc-1600-yag-laser",
   "nidek-yc-1800-yag-laser",
   "quantel-vitra-532-laser-with-slit-lamp-adapter",
   "scican-statim-2000-g4-sterilizer-new",
   "scican-statim-5000-g4-sterilizer-new",
-  "scican-statim-5000-g4-sterilizer-refurbished",
   "topcon-pascal-streamline-532-pattern-scanning-laser",
   "zeiss-atlas-500-corneal-topographer",
   "zeiss-atlas-9000-topographer-windows-10",
@@ -103,6 +100,7 @@ export const PARTNER_STOCK: string[] = [
   "zeiss-clarus-700-fundus-camera",
   "zeiss-humphrey-hfa-750i-visual-field-analyzer",
   "zeiss-iolmaster-500-optical-biometer",
+  "zeiss-visu-200-microscope-on-s8-rolling-stand",
   "zeiss-visulas-532-laser-with-lsl-slit-lamp-previous-model",
   "zeiss-visulas-532s-laser-console",
   "zeiss-visulas-532s-laser-with-lio",
