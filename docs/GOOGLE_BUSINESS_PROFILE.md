@@ -1,9 +1,20 @@
 # Google Business Profile listing — ready to paste
 
-Create the profile at https://business.google.com while signed in as
-mpmedpharma@gmail.com. Every field below is written from what the website
-already says, so the name, phone and details match everywhere (Google checks
-this). Items marked **CONFIRM** are facts only you know.
+> **Status (Oct 15, 2026): on hold — not eligible as things stand.**
+> A profile for MP MedPharma already exists under **dr.mohamed8181@gmail.com**
+> (store code 05578733469117127274, status "Verification required"). Do not
+> create another one. Google only allows Business Profiles for businesses that
+> meet customers face to face; MP MedPharma currently sells online only, so
+> the profile is not being verified. If the business starts serving customers
+> in person (deliveries or visits), verify the existing profile as a
+> service-area business — Google hides the address for those.
+> Online visibility is being handled through Search Console, Merchant Center
+> (account 5875287296) and Analytics instead, all on dr.mohamed8181@gmail.com.
+
+All Google services for the business live on **dr.mohamed8181@gmail.com**;
+mpmedpharma@gmail.com is not used for them. Every field below is written from
+what the website already says, so the name, phone and details match everywhere
+(Google checks this). Items marked **CONFIRM** are facts only you know.
 
 ---
 

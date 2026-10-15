@@ -39,6 +39,10 @@ You cannot improve what you cannot see. Today the site has no analytics at all.
 ## 2. Be findable as a business, not just a website (one afternoon)
 
 1. **Google Business Profile** – https://business.google.com
+   - **On hold (Oct 15, 2026):** a profile already exists under
+     dr.mohamed8181@gmail.com but is not eligible to verify while the business
+     sells online only. See `GOOGLE_BUSINESS_PROFILE.md`. Never create a second
+     one. The notes below apply only if in-person service starts.
    - Create the listing for MP MedPharma at the New Jersey address, category
      "Medical equipment supplier", add phone, hours, website, logo and a few
      photos of real devices. This is the single biggest local-search lever and
