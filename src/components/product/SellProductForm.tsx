@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import EmailSuggestion from "@/components/ui/EmailSuggestion";
 import { trackLead } from "@/lib/analytics";
+import { websiteMailto } from "@/lib/mailto";
 
 const CATEGORIES = [
   "Diagnostic Equipment",
@@ -288,7 +289,7 @@ export default function SellProductForm() {
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-gray-500">Support Email</span>
-            <a href={`mailto:${result.supportEmail}`} className="font-semibold text-primary-600 hover:underline">{result.supportEmail}</a>
+            <a href={websiteMailto(result.supportEmail)} className="font-semibold text-primary-600 hover:underline">{result.supportEmail}</a>
           </div>
         </div>
         <p className="text-[11px] text-gray-400 leading-relaxed mb-8">

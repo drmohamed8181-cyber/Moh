@@ -15,6 +15,7 @@ import { useWishlistStore } from "@/store/wishlistStore";
 import { LogoMark } from "@/components/ui/Logo";
 import SiteSearchBox from "@/components/shop/SiteSearchBox";
 import { SPECIALTIES } from "@/lib/specialties";
+import { websiteMailto } from "@/lib/mailto";
 
 // Menu thumbnails for each specialty — the same product photos the Specialties
 // section and catalog promo already show, not manufacturer imagery.
@@ -94,7 +95,7 @@ export default function Header({ settings, categories = [] }: { settings?: Heade
             <a href={phoneHref} className="flex items-center gap-1.5 hover:text-primary-200 transition-colors">
               <Phone size={12} /><span>{phone}</span>
             </a>
-            <a href={`mailto:${email}`} className="flex items-center gap-1.5 hover:text-primary-200 transition-colors">
+            <a href={websiteMailto(email)} className="flex items-center gap-1.5 hover:text-primary-200 transition-colors">
               <Mail size={12} /><span>{email}</span>
             </a>
           </div>

@@ -51,6 +51,7 @@ export async function POST(req: NextRequest) {
         workLocation: workLocation || null,
         subject: finalSubject,
         message,
+        source: "Website form",
       },
     }));
     if (!saved) {
