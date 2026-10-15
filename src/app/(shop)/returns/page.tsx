@@ -2,7 +2,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Return Policy",
-  description: "MP MedPharma's return, cancellation, and warranty claim policy for medical equipment orders.",
+  description: "MP MedPharma's return policy: all sales are final. Damaged-on-arrival, warranty and cancellation terms for medical equipment orders.",
   alternates: { canonical: "/returns" },
 };
 
@@ -18,12 +18,11 @@ export default function ReturnsPage() {
 
       <div className="container mx-auto px-4 py-16 max-w-3xl">
         <section className="mb-10">
-          <h2 className="text-xl font-bold text-gray-900 mb-3">Equipment Returns</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-3">All Sales Final</h2>
           <p className="text-gray-600 leading-relaxed">
-            Because much of our equipment is quoted and configured to a specific order, returns are evaluated on a
-            case-by-case basis. Unopened, uninstalled equipment in its original packaging may generally be returned
-            within 14 days of delivery, subject to a restocking fee to cover freight and handling. Custom-configured,
-            special-order, or installed equipment is not eligible for return unless it arrives defective.
+            We do not accept returns. Every unit is inspected, tested, and documented before it ships, and capital
+            equipment is installed and verified on site, so all sales are final once an order has shipped. Equipment
+            that arrives damaged or defective is covered under the section below.
           </p>
         </section>
 
@@ -32,7 +31,7 @@ export default function ReturnsPage() {
           <p className="text-gray-600 leading-relaxed">
             If your equipment arrives damaged or is not functioning as expected, contact us within 48 hours of
             delivery with your order number and photos or a description of the issue. We will arrange an
-            inspection, repair, replacement, or refund as appropriate.
+            inspection and repair or replace the equipment as appropriate.
           </p>
         </section>
 

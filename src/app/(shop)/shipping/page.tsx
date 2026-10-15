@@ -29,18 +29,18 @@ export default function ShippingPage() {
         <section className="mb-10">
           <h2 className="text-xl font-bold text-gray-900 mb-3">Freight &amp; White-Glove Delivery</h2>
           <p className="text-gray-600 leading-relaxed">
-            Smaller diagnostic and handheld devices ship via standard courier. Larger surgical and imaging systems
-            are shipped via specialized medical equipment freight carriers, with white-glove delivery, uncrating,
-            and placement available on request. Shipping costs are calculated based on equipment size, weight,
-            destination, and delivery service level, and are included in your formal quote.
+            Equipment ships within the United States at a flat freight rate per item. Larger surgical and imaging
+            systems travel by specialized medical equipment freight with white-glove delivery, uncrating, and
+            placement; smaller diagnostic and handheld devices ship by standard courier. For capital equipment, the
+            flat rate also covers on-site installation, staff training, and in-service at your facility.
           </p>
         </section>
 
         <section className="mb-10">
           <h2 className="text-xl font-bold text-gray-900 mb-3">Installation &amp; Training</h2>
           <p className="text-gray-600 leading-relaxed">
-            For applicable capital equipment, we coordinate on-site installation, calibration, and clinical
-            training with your facility. This is scheduled directly with your representative after delivery.
+            For capital equipment, on-site installation, calibration, and clinical training are included in the
+            freight rate and scheduled directly with your representative after delivery.
           </p>
         </section>
 
