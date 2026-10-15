@@ -439,7 +439,9 @@ export const getDefaultProductListing = unstable_cache(
 // happens to be read first.
 // ---------------------------------------------------------------------------
 
-export type PublicBrand = { name: string; slug: string; productCount: number };
+// updatedAt is the newest updatedAt among the brand's visible products, as an ISO
+// string so it survives the JSON round-trip of the cache unchanged.
+export type PublicBrand = { name: string; slug: string; productCount: number; updatedAt: string };
 
 const publicProductWhere = {
   isAvailable: true,
@@ -459,15 +461,18 @@ export const getPublicBrands = unstable_cache(
     if (!prisma) throw new DatabaseUnavailableError();
     const rows = await prisma.product.findMany({
       where: publicProductWhere,
-      select: { name: true, manufacturer: true },
+      select: { name: true, manufacturer: true, updatedAt: true },
     });
     const bySlug = new Map<string, PublicBrand>();
     for (const row of rows) {
       const brand = productBrand(row);
       if (!brand) continue;
+      const updatedAt = new Date(row.updatedAt).toISOString();
       const existing = bySlug.get(brand.slug);
-      if (existing) existing.productCount += 1;
-      else bySlug.set(brand.slug, { ...brand, productCount: 1 });
+      if (existing) {
+        existing.productCount += 1;
+        if (updatedAt > existing.updatedAt) existing.updatedAt = updatedAt;
+      } else bySlug.set(brand.slug, { ...brand, productCount: 1, updatedAt });
     }
     return [...bySlug.values()].sort((a, b) => a.name.localeCompare(b.name));
   },

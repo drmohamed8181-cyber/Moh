@@ -5,6 +5,9 @@ import { STATIC_PATHS } from "@/lib/siteUrls";
 
 const BASE_URL = "https://www.mpmedpharma.com";
 
+// Static paths whose content is the product catalogue itself.
+const CATALOGUE_PATHS = new Set(["", "/products", "/categories", "/catalogs", "/brands"]);
+
 // The entries come from a tagged cached read, so the product and category write
 // routes expire this the moment the admin changes the catalogue. This TTL is
 // only a backstop for changes that bypass those routes.
@@ -13,9 +16,17 @@ export const revalidate = 3600;
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [{ categories, products }, brands] = await Promise.all([getSitemapEntries(), getPublicBrands()]);
 
+  // lastmod must be truthful or Google stops trusting it for the whole site.
+  // Pages that list the catalogue change when a product does; the rest have no
+  // tracked edit date, so they carry no lastmod rather than a made-up one.
+  const catalogueUpdated = products.reduce<Date | undefined>((latest, product) => {
+    const date = new Date(product.updatedAt);
+    return !latest || date > latest ? date : latest;
+  }, undefined);
+
   const staticEntries: MetadataRoute.Sitemap = STATIC_PATHS.map((route) => ({
     url: `${BASE_URL}${route.path}`,
-    lastModified: new Date(),
+    ...(CATALOGUE_PATHS.has(route.path) && catalogueUpdated ? { lastModified: catalogueUpdated } : {}),
     changeFrequency: route.changeFrequency,
     priority: route.priority,
   }));
@@ -41,7 +52,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const brandEntries: MetadataRoute.Sitemap = brands.map((brand) => ({
     url: `${BASE_URL}/brands/${brand.slug}`,
-    lastModified: new Date(),
+    lastModified: new Date(brand.updatedAt),
     changeFrequency: "weekly",
     priority: 0.7,
   }));
