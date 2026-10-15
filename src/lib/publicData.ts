@@ -219,12 +219,14 @@ export const getSitemapEntries = unstable_cache(
       }),
       prisma.product.findMany({
         where: { isAvailable: true, category: { slug: { notIn: HIDDEN_CATEGORY_SLUGS } } },
-        select: { slug: true, updatedAt: true, images: true },
+        select: { slug: true, name: true, updatedAt: true, images: true },
+        orderBy: { name: "asc" },
       }),
     ]);
     return { categories, products };
   },
-  ["sitemap-entries"],
+  // Key bumped when `name` was added, so a cached entry without it is never served.
+  ["sitemap-entries-v2"],
   { tags: [PRODUCTS_TAG, CATEGORIES_TAG], revalidate: ONE_HOUR }
 );
 

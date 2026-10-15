@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { getPublicBrands, getPublicCategories } from "@/lib/publicData";
+import { getPublicBrands, getPublicCategories, getSitemapEntries } from "@/lib/publicData";
 import { GUIDES } from "@/content/guides";
 
 export const revalidate = 3600;
@@ -11,7 +11,14 @@ export const metadata: Metadata = {
 };
 
 export default async function SitemapPage() {
-  const [categories, brands] = await Promise.all([getPublicCategories(), getPublicBrands()]);
+  // Every product is listed here because the footer links this page from every
+  // page: it puts each product two clicks from anywhere, instead of only being
+  // reachable by paging deep into the catalogue.
+  const [categories, brands, { products }] = await Promise.all([
+    getPublicCategories(),
+    getPublicBrands(),
+    getSitemapEntries(),
+  ]);
 
   const sections: { title: string; links: { label: string; href: string }[] }[] = [
     {
@@ -115,6 +122,21 @@ export default async function SitemapPage() {
             </div>
           )}
         </div>
+
+        {products.length > 0 && (
+          <div className="mt-12">
+            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">All Equipment</h2>
+            <ul className="grid sm:grid-cols-2 gap-x-10 gap-y-2.5">
+              {products.map((product) => (
+                <li key={product.slug}>
+                  <Link href={`/products/${product.slug}`} className="text-sm text-gray-700 hover:text-primary-600 transition-colors">
+                    {product.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );
