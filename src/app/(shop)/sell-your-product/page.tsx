@@ -1,13 +1,33 @@
 import { Metadata } from "next";
+import Link from "next/link";
 import { ClipboardList, Camera, UserCheck, ShieldCheck, ArrowDown } from "lucide-react";
 import SellProductForm from "@/components/product/SellProductForm";
 
+// Search Console (Aug–Oct 2026) shows this page and the selling guide ranking
+// at positions 13–16 for "sell ophthalmology equipment", "sell used ophthalmic
+// equipment" and close variants: the top of page two. The old title and copy
+// ("medical device, healthcare product, or pharmaceutical-related item") named
+// none of those words, and the business only buys ophthalmic equipment, so the
+// title, heading and copy now say what sellers actually search for.
 export const metadata: Metadata = {
-  title: "Sell Your Product to MP MedPharma",
+  title: "Sell Used Ophthalmic Equipment – Lasers, Phaco, OCT",
   description:
-    "Submit your medical device, healthcare product, or pharmaceutical-related item to MP MedPharma for review, resale, trade-in, acquisition, or quotation.",
+    "Sell your used ophthalmic equipment: excimer, femtosecond, YAG and SLT lasers, phaco systems, OCT and surgical microscopes. Send details and photos for a fair offer.",
   alternates: { canonical: "/sell-your-product" },
 };
+
+const deviceTypes = [
+  "Excimer and femtosecond lasers",
+  "YAG, SLT and photocoagulation lasers",
+  "Phaco and vitrectomy systems",
+  "OCT, topographers and diagnostic imaging",
+  "Ophthalmic surgical microscopes",
+  "Microkeratomes, slit lamps, handpieces and parts",
+];
+
+// Named to describe the equipment we buy, not to suggest any relationship with
+// the manufacturers (see the note under the list).
+const brands = ["Alcon", "Carl Zeiss Meditec", "Johnson & Johnson Vision", "Bausch + Lomb", "Ellex", "Lumenis", "Iridex", "Topcon", "Nidek", "Ziemer"];
 
 const steps = [
   {
@@ -39,12 +59,12 @@ export default function SellYourProductPage() {
         <div className="container mx-auto px-4 text-center relative">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gold-400 mb-5">MP MedPharma Trade-In &amp; Acquisition</p>
           <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-6">
-            Sell Your Product to <span className="text-gold-400">MP MedPharma</span>
+            Sell Your Used <span className="text-gold-400">Ophthalmic Equipment</span>
           </h1>
           <p className="text-primary-100/90 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto mb-10">
-            Have a medical device, healthcare product, or pharmaceutical-related item to sell? Submit your product
-            details and photos to our team for review. Providing complete and accurate information helps us
-            evaluate your request more efficiently.
+            Replacing a laser, phaco system, OCT or surgical microscope? We buy pre-owned ophthalmic equipment from
+            hospitals, eye clinics and surgery centers. Send us the model, condition and a few photos, and we will
+            come back with a fair, transparent offer.
           </p>
           <a
             href="#sell-form"
@@ -52,6 +72,53 @@ export default function SellYourProductPage() {
           >
             Submit Your Product <ArrowDown size={16} />
           </a>
+        </div>
+      </div>
+
+      {/* What we buy */}
+      <div className="py-20 sm:py-24">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gold-600 mb-3">What We Buy</p>
+            <h2 className="font-display text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight mb-4">
+              Used Ophthalmic Equipment We Purchase
+            </h2>
+            <p className="text-sm text-gray-500 leading-relaxed">
+              Working units, units that need service and complete systems being retired after an upgrade.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
+              <h3 className="font-display text-lg font-bold text-gray-900 mb-4">Device types</h3>
+              <ul className="space-y-2 text-sm text-gray-600 list-disc pl-5">
+                {deviceTypes.map((d) => (
+                  <li key={d}>{d}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
+              <h3 className="font-display text-lg font-bold text-gray-900 mb-4">Manufacturers</h3>
+              <p className="text-sm text-gray-600 leading-relaxed mb-4">{brands.join(" · ")}</p>
+              <p className="text-xs text-gray-400 leading-relaxed">
+                Manufacturer names describe the equipment we buy. MP MedPharma is an independent supplier and is not
+                affiliated with or authorized by these manufacturers.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-8 bg-gray-50 rounded-2xl p-8">
+            <h3 className="font-display text-lg font-bold text-gray-900 mb-3">What sets the offer</h3>
+            <p className="text-sm text-gray-600 leading-relaxed">
+              The platform and its generation, the unit&apos;s condition and service history, and how complete it is:
+              handpieces, footswitches, tables, software licences and manuals all count. Units with documented
+              maintenance and their accessories receive the strongest offers.{" "}
+              <Link href="/guides/how-to-sell-used-ophthalmic-equipment" className="text-primary-700 font-medium underline underline-offset-2 hover:text-primary-900">
+                Read our guide to selling used ophthalmic equipment
+              </Link>
+              .
+            </p>
+          </div>
         </div>
       </div>
 
