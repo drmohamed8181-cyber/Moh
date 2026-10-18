@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { safeDb } from "@/lib/prisma";
 import { sendMail } from "@/lib/mail";
-import { INFO_EMAIL } from "@/lib/emailSignature";
+import { INFO_EMAIL, infoSignatureHtml, infoSignatureText } from "@/lib/emailSignature";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { escapeHtml, generateSubmissionReference } from "@/lib/utils";
 import { saveContactAsCustomer } from "@/lib/customers";
@@ -171,8 +171,9 @@ export async function POST(req: NextRequest) {
             MP MedPharma approval.
           </p>
           <p style="color:#667;font-size:13px;">Questions? Contact us at ${escapeHtml(SUPPORT_EMAIL)}.</p>
+          ${infoSignatureHtml}
         </div>`,
-      text: `Thank you for submitting your product to MP MedPharma (reference ${referenceNumber}). Estimated review time: ${REVIEW_TIMEFRAME}. Questions? ${SUPPORT_EMAIL}`,
+      text: `Thank you for submitting your product to MP MedPharma (reference ${referenceNumber}). Estimated review time: ${REVIEW_TIMEFRAME}. Questions? ${SUPPORT_EMAIL}\n\n${infoSignatureText}`,
     });
 
     return NextResponse.json({

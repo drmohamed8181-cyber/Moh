@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { safeDb } from "@/lib/prisma";
 import { PRICING_EMAIL, sendMail } from "@/lib/mail";
-import { INFO_EMAIL } from "@/lib/emailSignature";
+import { INFO_EMAIL, infoSignatureHtml, infoSignatureText } from "@/lib/emailSignature";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { escapeHtml } from "@/lib/utils";
 import { saveContactAsCustomer } from "@/lib/customers";
@@ -145,9 +145,9 @@ export async function POST(req: NextRequest) {
               : `We've received your message and a member of the MP MedPharma team will respond soon.`}
           </p>
           <p style="color:#333;line-height:1.6;">Have something to add? Just reply to this email.</p>
-          <p style="color:#667;font-size:13px;margin-top:24px;">— MP MedPharma</p>
+          ${infoSignatureHtml}
         </div>`,
-      text: `Thank you, ${firstName}!\n\n${isInquiry ? `We've received your inquiry about the ${product!.name} and a member of the MP MedPharma team will respond soon.` : `We've received your message and a member of the MP MedPharma team will respond soon.`}\n\nHave something to add? Just reply to this email.\n\n— MP MedPharma`,
+      text: `Thank you, ${firstName}!\n\n${isInquiry ? `We've received your inquiry about the ${product!.name} and a member of the MP MedPharma team will respond soon.` : `We've received your message and a member of the MP MedPharma team will respond soon.`}\n\nHave something to add? Just reply to this email.\n\n${infoSignatureText}`,
     });
 
     return NextResponse.json({ success: true });
