@@ -1,6 +1,6 @@
 import { SITE_URL } from "@/lib/seo";
 
-// Company signature for mail that goes out as info@mpmedpharma.com (admin replies).
+// Company signature for mail to customers: admin replies and inquiry/submission confirmations.
 // Keep it in sync with docs/email-signature-info.html, which is the copy pasted into Zoho.
 // The logo is loaded from the live site so it isn't sent as an attachment on every reply.
 
