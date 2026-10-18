@@ -16,7 +16,7 @@ function getTransport() {
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /** The only inbox that ever receives prices: the owner's inquiry pricing reminder. */
-export const PRICING_EMAIL = (process.env.PRICING_NOTIFY_EMAIL || "ma@mpmedpharma.com").trim().toLowerCase();
+export const PRICING_EMAIL = (process.env.PRICING_NOTIFY_EMAIL || "info@mpmedpharma.com").trim().toLowerCase();
 
 // Staff inboxes. Staff notifications may quote what a customer typed, amounts included.
 function isInternalRecipient(to: string) {
