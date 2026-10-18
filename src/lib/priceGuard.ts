@@ -1,7 +1,7 @@
-// Prices must never reach a customer by email: quotes go out by other means, and
-// dealer/retail figures live only in the internal pricing email. This is the check
-// sendMail runs on every customer-facing message, plus helpers for the routes that
-// put admin- or catalogue-written text into an email.
+// Prices reach a customer by email only as a quote the admin confirmed on the Messages
+// page ("This is a price quote"); dealer/retail figures live only in the internal pricing
+// email. This is the check sendMail runs on every other customer-facing message, plus
+// helpers for the routes that put admin- or catalogue-written text into an email.
 
 // A money amount: a currency sign or code next to a number ("$4,500", "USD 4500",
 // "4,500 USD", "4500$", "12k dollars"). Plain numbers (phone numbers, model numbers,
@@ -36,5 +36,5 @@ export function redactPrices(text: string): string {
   return text.replace(global, "[price removed]");
 }
 
-export const PRICE_BLOCKED_ERROR =
-  "Emails to customers can't include prices. Remove the amount (for example \"$4,500\" or \"4500 USD\") and send again.";
+export const PRICE_CONFIRM_ERROR =
+  "This email includes a price. Tick \"This is a price quote\" to send it, or remove the amount.";

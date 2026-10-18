@@ -4,6 +4,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Mail, PenSquare, Send, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { PRICE_CONFIRM_ERROR, containsPrice } from "@/lib/priceGuard";
 
 export type ComposeRecipient = { name: string | null; email: string };
 
@@ -41,6 +42,7 @@ export default function ComposeMessageDialog({
   const [name, setName] = useState(to?.name ?? "");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
+  const [priceConfirmed, setPriceConfirmed] = useState(false);
   const [sending, setSending] = useState(false);
   const firstFieldRef = useRef<HTMLInputElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -69,14 +71,20 @@ export default function ComposeMessageDialog({
     if (match?.name) setName(match.name);
   };
 
+  const hasPrice = containsPrice(subject) || containsPrice(message);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (hasPrice && !priceConfirmed) {
+      toast.error(PRICE_CONFIRM_ERROR);
+      return;
+    }
     setSending(true);
     try {
       const res = await fetch("/api/admin/messages", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, name, subject, message }),
+        body: JSON.stringify({ email, name, subject, message, priceQuote: hasPrice && priceConfirmed }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
@@ -87,6 +95,7 @@ export default function ComposeMessageDialog({
       if (data.message) onSent?.({ ...data.message, createdAt: new Date(data.message.createdAt).toISOString() });
       setSubject("");
       setMessage("");
+      setPriceConfirmed(false);
       if (!to) {
         setEmail("");
         setName("");
@@ -196,6 +205,18 @@ export default function ComposeMessageDialog({
                 />
                 <p className="text-xs text-slate-400 mt-1">Signed &ldquo;— MP MedPharma&rdquo;. A copy is saved on the Messages page.</p>
               </div>
+
+              {hasPrice && (
+                <label className="flex items-start gap-2 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                  <input
+                    type="checkbox"
+                    checked={priceConfirmed}
+                    onChange={(e) => setPriceConfirmed(e.target.checked)}
+                    className="mt-0.5 h-4 w-4 accent-amber-600"
+                  />
+                  <span>This is a price quote. This email includes a price; tick to confirm you want to send it.</span>
+                </label>
+              )}
 
               <div className="flex justify-end gap-3 pt-2">
                 <button

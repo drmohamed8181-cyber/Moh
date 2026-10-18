@@ -5,7 +5,7 @@ import { safeDb } from "@/lib/prisma";
 import { sendMail } from "@/lib/mail";
 import { INFO_EMAIL, infoSignatureHtml, infoSignatureText } from "@/lib/emailSignature";
 import { escapeHtml } from "@/lib/utils";
-import { PRICE_BLOCKED_ERROR, containsPrice, redactPrices } from "@/lib/priceGuard";
+import { PRICE_CONFIRM_ERROR, containsPrice, redactPrices } from "@/lib/priceGuard";
 
 async function checkAdmin() {
   const session = await auth();
@@ -21,8 +21,10 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   const message = await safeDb((db) => db.contactMessage.findUnique({ where: { id } }));
   if (!message) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  if (typeof body.reply === "string" && containsPrice(body.reply)) {
-    return NextResponse.json({ error: PRICE_BLOCKED_ERROR }, { status: 400 });
+  // A price goes out only when the admin ticked "This is a price quote".
+  const priceQuote = typeof body.reply === "string" && containsPrice(body.reply);
+  if (priceQuote && body.priceQuote !== true) {
+    return NextResponse.json({ error: PRICE_CONFIRM_ERROR }, { status: 400 });
   }
 
   const data: { isRead?: boolean; reply?: string; leadStatus?: LeadStatus; statusUpdatedAt?: Date } = {};
@@ -52,6 +54,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
         <p style="color:#888;font-size:12px;">${quoteLabel}: "${escapeHtml(quoted)}"</p>
       `,
       text: `${replyText}\n\n${infoSignatureText}\n\n---\n${quoteLabel}: "${quoted}"`,
+      priceQuote,
     });
   }
 

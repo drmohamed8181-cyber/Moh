@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Mail, MailOpen, MessageSquare, Send, ChevronDown, CheckCircle2, Copy, ExternalLink, Trash2, UserRound, AlarmClock, Forward } from "lucide-react";
 import { cn, formatDate } from "@/lib/utils";
 import { DAY_MS, FOLLOW_UP_DAYS } from "@/lib/leads";
+import { PRICE_CONFIRM_ERROR, containsPrice } from "@/lib/priceGuard";
 import ComposeMessageDialog, { type ComposeRecipient, type SentMessage } from "@/components/admin/ComposeMessageDialog";
 
 interface ContactMessage {
@@ -138,6 +139,8 @@ export default function MessagesList({ initialMessages, customers }: { initialMe
   const [messages, setMessages] = useState(initialMessages);
   const [openId, setOpenId] = useState<string | null>(null);
   const [replyDrafts, setReplyDrafts] = useState<Record<string, string>>({});
+  // Message ids whose reply draft the admin confirmed as a price quote.
+  const [priceConfirmed, setPriceConfirmed] = useState<Record<string, boolean>>({});
   const [sending, setSending] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<ContactMessage | null>(null);
@@ -191,17 +194,23 @@ export default function MessagesList({ initialMessages, customers }: { initialMe
       toast.error("Write a reply message first.");
       return;
     }
+    const priceQuote = containsPrice(reply);
+    if (priceQuote && !priceConfirmed[id]) {
+      toast.error(PRICE_CONFIRM_ERROR);
+      return;
+    }
     setSending(id);
     try {
       const res = await fetch(`/api/admin/messages/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reply }),
+        body: JSON.stringify({ reply, priceQuote }),
       });
       const data = await res.json();
       if (res.ok) {
         setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, isRead: true, reply } : m)));
         setReplyDrafts((prev) => ({ ...prev, [id]: "" }));
+        setPriceConfirmed((prev) => ({ ...prev, [id]: false }));
         toast.success(data.emailSent ? "Reply sent to customer's email." : "Reply saved (email could not be sent).");
       } else {
         toast.error(data.error ?? "Failed to send reply.");
@@ -558,6 +567,17 @@ export default function MessagesList({ initialMessages, customers }: { initialMe
                     {sending === msg.id ? "Sending..." : msg.sentByAdmin ? "Send Follow-up" : "Send Reply"}
                   </button>
                 </div>
+                {containsPrice(replyDrafts[msg.id]) && (
+                  <label className="flex items-start gap-2 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                    <input
+                      type="checkbox"
+                      checked={priceConfirmed[msg.id] ?? false}
+                      onChange={(e) => setPriceConfirmed((prev) => ({ ...prev, [msg.id]: e.target.checked }))}
+                      className="mt-0.5 h-4 w-4 accent-amber-600"
+                    />
+                    <span>This is a price quote. This reply includes a price; tick to confirm you want to send it.</span>
+                  </label>
+                )}
 
                 <div className="flex justify-end">
                   <button
