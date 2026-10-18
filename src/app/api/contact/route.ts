@@ -6,6 +6,7 @@ import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { escapeHtml } from "@/lib/utils";
 import { saveContactAsCustomer } from "@/lib/customers";
 import { getPriceDrop } from "@/lib/priceDrops";
+import { publicListPrice } from "@/lib/publicPricing";
 
 const NOTIFY_EMAIL = process.env.CONTACT_NOTIFY_EMAIL || process.env.PRODUCT_SUBMISSION_NOTIFY_EMAIL || "dr.mohamed8181@gmail.com";
 const INQUIRY_NOTIFY_EMAIL = "info@mpmedpharma.com";
@@ -30,7 +31,7 @@ export async function POST(req: NextRequest) {
     const product = productSlug
       ? await safeDb((db) => db.product.findUnique({
           where: { slug: productSlug },
-          select: { id: true, name: true, dealerPrice: true, retailPrice: true },
+          select: { id: true, name: true, dealerPrice: true, retailPrice: true, retailPricePublic: true },
         }))
       : null;
     const isInquiry = Boolean(product);
@@ -99,6 +100,10 @@ export async function POST(req: NextRequest) {
     if (isInquiry) {
       const dealer = product!.dealerPrice != null ? formatUsd(product!.dealerPrice) : "Not on file — check current distributor sheet";
       const retail = product!.retailPrice != null ? formatUsd(product!.retailPrice) : "Not on file — check current distributor sheet";
+      const listPrice = publicListPrice(product!.retailPrice);
+      const list = listPrice != null
+        ? `${formatUsd(listPrice)} (${product!.retailPricePublic ? "shown on the website" : "not shown on the website"})`
+        : "Not on file";
       // A partner price drop lowers only our cost; the owner sees it here and decides whether to pass it on.
       const drop = await getPriceDrop(product!.id);
       const dropText = drop
@@ -121,11 +126,12 @@ export async function POST(req: NextRequest) {
             <p style="color:#333;">For the inquiry from ${escapeHtml(name)} about <strong>${escapeHtml(product!.name)}</strong>:</p>
             <table style="width:100%;border-collapse:collapse;font-size:14px;">
               <tr><td style="padding:4px 12px 4px 0;color:#667;">My Price (dealer)</td><td>${escapeHtml(dealer)}</td></tr>
-              <tr><td style="padding:4px 12px 4px 0;color:#667;">End User Price (retail)</td><td>${escapeHtml(retail)}</td></tr>
+              <tr><td style="padding:4px 12px 4px 0;color:#667;">List Price (retail + 10%)</td><td>${escapeHtml(list)}</td></tr>
+              <tr><td style="padding:4px 12px 4px 0;color:#667;">End User Price (retail, your floor)</td><td>${escapeHtml(retail)}</td></tr>
             </table>
             ${dropText ? `<p style="background:#fff6e0;color:#7a5200;padding:10px 14px;border-radius:6px;margin-top:12px;"><strong>Price drop:</strong> ${escapeHtml(dropText)}</p>` : ""}
           </div>`,
-        text: `INTERNAL ONLY — do not forward or reply to the customer from this email.\n\nInquiry from ${name} about ${product!.name}\nMy Price (dealer): ${dealer}\nEnd User Price (retail): ${retail}${dropText ? `\nPrice drop: ${dropText}` : ""}`,
+        text: `INTERNAL ONLY — do not forward or reply to the customer from this email.\n\nInquiry from ${name} about ${product!.name}\nMy Price (dealer): ${dealer}\nList Price (retail + 10%): ${list}\nEnd User Price (retail, your floor): ${retail}${dropText ? `\nPrice drop: ${dropText}` : ""}`,
       });
     }
 

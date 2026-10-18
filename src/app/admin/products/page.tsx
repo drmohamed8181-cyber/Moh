@@ -5,6 +5,7 @@ import Image from "next/image";
 import { safeDb } from "@/lib/prisma";
 import { ADMIN_PRODUCT_SELECT } from "@/lib/productSelect";
 import { formatPrice } from "@/lib/utils";
+import { publicListPrice } from "@/lib/publicPricing";
 import { Plus, Pencil, Package } from "lucide-react";
 import DeleteProductButton from "@/components/admin/DeleteProductButton";
 import PublishPriceToggle from "@/components/admin/PublishPriceToggle";
@@ -125,6 +126,9 @@ export default async function AdminProductsPage({ searchParams }: { searchParams
                     <td className="px-6 py-4 text-sm text-gray-600">
                       <div className="flex flex-col items-start">
                         <EditableRetailPrice id={p.id} price={p.retailPrice} />
+                        {publicListPrice(p.retailPrice) != null && (
+                          <span className="text-xs text-gray-400">Site price: {formatPrice(publicListPrice(p.retailPrice)!)}</span>
+                        )}
                         <PublishPriceToggle id={p.id} published={p.retailPricePublic} hasPrice={p.retailPrice != null} />
                       </div>
                     </td>

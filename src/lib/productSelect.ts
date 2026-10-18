@@ -1,4 +1,5 @@
 import { isSold } from "@/lib/partnerStock";
+import { publicListPrice } from "@/lib/publicPricing";
 
 // Fields safe to expose on public/customer-facing pages. Deliberately
 // excludes dealerPrice/retailPrice — confidential distributor pricing that
@@ -84,8 +85,9 @@ export function withPublicPrice<
   const { retailPrice, previousRetailPrice, retailPricePublic, ...rest } = product;
   return {
     ...rest,
-    publicPrice: retailPricePublic ? retailPrice : null,
-    previousPublicPrice: retailPricePublic ? previousRetailPrice : null,
+    // Marked up from the partner's price; see src/lib/publicPricing.ts.
+    publicPrice: retailPricePublic ? publicListPrice(retailPrice) : null,
+    previousPublicPrice: retailPricePublic ? publicListPrice(previousRetailPrice) : null,
     isSold: isSold(product),
     watermark: watermarkIds?.has(product.id) ?? false,
   };
