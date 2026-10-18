@@ -94,7 +94,7 @@ export async function POST(req: NextRequest) {
       text: `${isInquiry ? "New product inquiry" : "New contact message"} from ${name} (${email}${phone ? `, ${phone}` : ""})${isInquiry ? `\nProduct: ${product!.name}` : ""}${jobTitle ? `\nJob Title: ${jobTitle}` : ""}${organization ? `\nWorkplace: ${organization}` : ""}${address ? `\nAddress: ${address}` : ""}${workLocation ? `\nWork Location: ${workLocation}` : ""}\nSubject: ${finalSubject}\n\n${message}`,
     });
 
-    // Pricing goes in a separate email to the owner only (PRICING_EMAIL, never the shared info@ inbox),
+    // Pricing goes in a separate email to PRICING_EMAIL only (the info@ inbox by default),
     // with Reply-To set to that same address, so replying to or quoting it can never reach the customer.
     if (isInquiry) {
       const dealer = product!.dealerPrice != null ? formatUsd(product!.dealerPrice) : "Not on file — check current distributor sheet";
