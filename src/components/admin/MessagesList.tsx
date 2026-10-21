@@ -102,7 +102,7 @@ function PricingPanel({ pricing }: { pricing: InquiryPricing }) {
     <section aria-label="Internal pricing" className="bg-amber-50 border border-amber-200 rounded-xl">
       <div className="px-4 py-2.5 border-b border-amber-200">
         <h3 className="text-sm font-semibold text-amber-900">Internal pricing — {pricing.productName}</h3>
-        <p className="text-xs text-amber-800">For you only. Never share with the customer.</p>
+        <p className="text-xs text-amber-800">For you only. It is never added to your reply: the customer gets only what you type in the reply box.</p>
       </div>
       <dl className="divide-y divide-amber-100">
         {rows.map((r) => (
@@ -603,6 +603,7 @@ export default function MessagesList({ initialMessages, customers }: { initialMe
                     value={replyDrafts[msg.id] ?? ""}
                     onChange={(e) => setReplyDrafts((prev) => ({ ...prev, [msg.id]: e.target.value }))}
                     placeholder={msg.sentByAdmin ? `Follow up with ${msg.name}...` : `Reply to ${msg.name}...`}
+                    aria-describedby={`reply-note-${msg.id}`}
                     className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
                   />
                   <button
@@ -614,6 +615,9 @@ export default function MessagesList({ initialMessages, customers }: { initialMe
                     {sending === msg.id ? "Sending..." : msg.sentByAdmin ? "Send Follow-up" : "Send Reply"}
                   </button>
                 </div>
+                <p id={`reply-note-${msg.id}`} className="-mt-2 text-xs text-gray-500">
+                  The email contains only what you type here, your signature and the customer&apos;s own message quoted below it. Internal pricing is never included.
+                </p>
                 {containsPrice(replyDrafts[msg.id]) && (
                   <label className="flex items-start gap-2 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-900">
                     <input
