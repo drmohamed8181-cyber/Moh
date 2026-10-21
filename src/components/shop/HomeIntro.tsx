@@ -28,7 +28,8 @@ export default function HomeIntro({ brands }: { brands: PublicBrand[] }) {
               and assistant side as one installation — for general, paediatric and multi-chair operatory fit-outs.
             </p>
             <p className="text-slate-600 leading-relaxed mb-6">
-              Every unit ships with documented service history and warranty coverage. Prices are quoted on request, and we make
+              Every unit ships with documented service history and warranty coverage (terms vary by product and country). Prices
+              are quoted on request, and we make
               fair, transparent offers on the ophthalmic equipment you are replacing.
             </p>
             <div className="flex flex-wrap gap-3">

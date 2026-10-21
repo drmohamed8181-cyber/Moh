@@ -27,7 +27,7 @@ const faqs = [
   },
   {
     q: "What is your warranty coverage?",
-    a: "Warranty terms vary by manufacturer and product. Factory warranty details are provided with every quote, and extended service plans are available on most equipment.",
+    a: "Every unit comes with a warranty, but the terms vary by product and by the country where the unit is installed. We confirm the warranty for your unit and location with your quote, and extended service plans are available on most equipment.",
   },
   {
     q: "How long does shipping take?",

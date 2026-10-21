@@ -143,7 +143,8 @@ export default function ProductDetail({ product }: { product: Product }) {
             <div className="text-xs text-gray-500 space-y-1 mb-6">
               <p>SKU: <span className="text-gray-700">{product.sku}</span></p>
               {product.manufacturer && <p>Manufacturer: <span className="text-gray-700">{product.manufacturer}</span></p>}
-              {product.warranty && <p>Warranty: <span className="text-gray-700">{product.warranty}</span></p>}
+              {/* Warranty terms differ by product and country, so the page never states one fixed term. */}
+              <p>Warranty: <span className="text-gray-700">terms vary by product and country, confirmed with your quote</span></p>
             </div>
 
             {/* Pricing + Inquiry */}
@@ -185,7 +186,7 @@ export default function ProductDetail({ product }: { product: Product }) {
               {[
                 { icon: Shield, text: "Certified Quality" },
                 { icon: Truck, text: "White-Glove Delivery" },
-                { icon: RotateCcw, text: "Factory Warranty" },
+                { icon: RotateCcw, text: "Warranty Included" },
               ].map(({ icon: Icon, text }) => (
                 <div key={text} className="flex flex-col items-center text-center gap-1">
                   <Icon size={18} className="text-primary-600" />

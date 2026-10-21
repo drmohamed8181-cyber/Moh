@@ -101,7 +101,7 @@ const SERVICES: ({ heading: string; body: string } & Claim)[] = [
   },
   {
     heading: "Warranty on new and refurbished alike",
-    body: "Warranty coverage applies to every unit we supply, not only the new ones.",
+    body: "Warranty coverage applies to every unit we supply, not only the new ones. Warranty terms vary by product and by the country where the unit is installed, and are confirmed with your quote.",
   },
   {
     heading: "Delivered, installed and handed over",
