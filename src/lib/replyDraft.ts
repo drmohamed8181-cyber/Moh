@@ -6,7 +6,6 @@ export interface DraftProduct {
   name: string;
   /** Product.retailPrice: the partner's suggested end-user price. */
   endUserPrice: number | null;
-  warranty: string | null;
   isAvailable: boolean;
 }
 
@@ -45,7 +44,6 @@ export function buildReplyDraft({ name, product, similar }: { name: string; prod
     } else {
       lines.push(`I'm confirming the current price of the ${product.name} and will send it to you shortly.`);
     }
-    if (product.warranty) lines.push(`It comes with the following warranty: ${product.warranty}.`);
     lines.push(
       "",
       "Shipping and installation depend on your location; let me know if you'd like a quote for those as well.",

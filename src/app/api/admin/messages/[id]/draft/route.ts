@@ -9,7 +9,7 @@ async function checkAdmin() {
   return ["SUPER_ADMIN", "ADMIN", "CONTENT_MANAGER"].includes(role ?? "");
 }
 
-const PRODUCT_SELECT = { name: true, retailPrice: true, warranty: true, isAvailable: true } as const;
+const PRODUCT_SELECT = { name: true, retailPrice: true, isAvailable: true } as const;
 
 // A suggested reply for the admin to review; nothing is sent from here.
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -28,7 +28,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
       : null;
 
   const product = found
-    ? { name: found.name, endUserPrice: found.retailPrice, warranty: found.warranty, isAvailable: found.isAvailable }
+    ? { name: found.name, endUserPrice: found.retailPrice, isAvailable: found.isAvailable }
     : null;
 
   return NextResponse.json({
