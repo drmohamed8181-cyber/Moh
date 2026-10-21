@@ -5,6 +5,7 @@ import { safeDb } from "@/lib/prisma";
 import Badge from "@/components/ui/Badge";
 import Image from "next/image";
 import CustomerEditModal from "@/components/admin/CustomerEditModal";
+import CustomerDeleteButton from "@/components/admin/CustomerDeleteButton";
 import ComposeMessageDialog from "@/components/admin/ComposeMessageDialog";
 import CustomerSearchBar from "@/components/admin/CustomerSearchBar";
 import CustomerListControls from "@/components/admin/CustomerListControls";
@@ -211,6 +212,9 @@ export default async function AdminCustomersPage({ searchParams }: { searchParam
                               customerType: customer.customerType,
                               addresses: customer.addresses,
                             }}
+                          />
+                          <CustomerDeleteButton
+                            customer={{ id: customer.id, name: customer.name, email: customer.email, orderCount: customer._count.orders }}
                           />
                         </div>
                       </td>

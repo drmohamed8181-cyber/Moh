@@ -3,7 +3,8 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Trash2, UserPlus, X } from "lucide-react";
+import { UserPlus, X } from "lucide-react";
+import CustomerDeleteButton from "@/components/admin/CustomerDeleteButton";
 
 type Customer = {
   id: string;
@@ -28,7 +29,6 @@ export default function CustomerEditModal({ customer }: { customer?: Customer })
   const isNew = !customer;
   const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [deleting, setDeleting] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
 
   const address = customer?.addresses[0];
@@ -94,27 +94,6 @@ export default function CustomerEditModal({ customer }: { customer?: Customer })
       toast.error("Network error");
     } finally {
       setSaving(false);
-    }
-  };
-
-  const handleDelete = async () => {
-    if (!customer) return;
-    if (!window.confirm(`Delete ${customer.name || customer.email}? This can't be undone.`)) return;
-    setDeleting(true);
-    try {
-      const res = await fetch(`/api/admin/customers/${customer.id}`, { method: "DELETE" });
-      if (res.ok) {
-        toast.success("Customer deleted");
-        setOpen(false);
-        router.refresh();
-      } else {
-        const data = await res.json().catch(() => ({}));
-        toast.error(data.error ?? "Failed to delete customer");
-      }
-    } catch {
-      toast.error("Network error");
-    } finally {
-      setDeleting(false);
     }
   };
 
@@ -242,16 +221,7 @@ export default function CustomerEditModal({ customer }: { customer?: Customer })
 
               <div className="flex items-center justify-between gap-3 pt-2">
                 {!isNew ? (
-                  <button
-                    type="button"
-                    onClick={handleDelete}
-                    disabled={deleting || customer.orderCount > 0}
-                    title={customer.orderCount > 0 ? "Customers with orders can't be deleted. Uncheck Active to disable them." : undefined}
-                    className="flex items-center gap-1.5 px-3 py-2.5 text-sm font-medium text-red-600 hover:text-red-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-40 disabled:cursor-not-allowed"
-                  >
-                    <Trash2 size={14} />
-                    {deleting ? "Deleting..." : "Delete"}
-                  </button>
+                  <CustomerDeleteButton customer={customer} variant="button" onDeleted={() => setOpen(false)} />
                 ) : <span />}
                 <div className="flex gap-3">
                   <button
