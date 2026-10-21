@@ -119,11 +119,14 @@ export default async function AdminCustomersPage({ searchParams }: { searchParam
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-xl font-bold text-slate-900">Customers</h1>
-        <p className="text-slate-400 text-sm mt-0.5">
-          {customers.length} {customers.length === 1 ? "customer" : "customers"}{q && ` matching "${q}"`}
-        </p>
+      <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h1 className="text-xl font-bold text-slate-900">Customers</h1>
+          <p className="text-slate-400 text-sm mt-0.5">
+            {customers.length} {customers.length === 1 ? "customer" : "customers"}{q && ` matching "${q}"`}
+          </p>
+        </div>
+        <CustomerEditModal />
       </div>
 
       <CustomerSearchBar customers={allCustomers} />
@@ -200,6 +203,10 @@ export default async function AdminCustomersPage({ searchParams }: { searchParam
                             customer={{
                               id: customer.id,
                               name: customer.name,
+                              email: customer.email,
+                              phone: customer.phone,
+                              isActive: customer.isActive,
+                              orderCount: customer._count.orders,
                               organization: customer.organization,
                               customerType: customer.customerType,
                               addresses: customer.addresses,
