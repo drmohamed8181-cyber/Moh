@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import Link from "next/link";
-import { Mail, MailOpen, MessageSquare, Send, ChevronDown, CheckCircle2, Copy, ExternalLink, Trash2, UserRound, AlarmClock, Forward } from "lucide-react";
+import { Mail, MailOpen, MessageSquare, Send, ChevronDown, CheckCircle2, Copy, ExternalLink, Trash2, UserRound, AlarmClock, Forward, Sparkles } from "lucide-react";
 import { cn, formatDate } from "@/lib/utils";
 import { DAY_MS, FOLLOW_UP_DAYS } from "@/lib/leads";
 import { PRICE_CONFIRM_ERROR, containsPrice } from "@/lib/priceGuard";
@@ -81,6 +81,12 @@ function CustomerTag({ customer }: { customer: MessageCustomer | null }) {
 
 type Filter = "ALL" | LeadStatus | "FOLLOW_UP";
 
+/** What the suggested reply was built from, shown to the admin above the draft. */
+interface DraftInfo {
+  product: { name: string; endUserPrice: number | null; isAvailable: boolean } | null;
+  similar: boolean;
+}
+
 function formatDateTime(date: string) {
   return new Intl.DateTimeFormat("en-US", { dateStyle: "long", timeStyle: "short" }).format(new Date(date));
 }
@@ -127,6 +133,16 @@ function detailFields(msg: ContactMessage) {
   ];
 }
 
+function draftNote({ product, similar }: DraftInfo) {
+  if (!product) return "Suggested reply ready. No product found in this message, so it has no price. Review before sending.";
+  if (similar) return `Suggested reply ready. ${product.name} is sold, so no price is quoted. Review before sending.`;
+  const stock = product.isAvailable ? "" : " This product is marked unavailable.";
+  if (product.endUserPrice == null || !(product.endUserPrice > 0)) {
+    return `Suggested reply ready. ${product.name} has no End User Price on file, so add the price yourself.${stock}`;
+  }
+  return `Suggested reply includes the End User Price of ${product.name}: ${formatUsd(product.endUserPrice)}.${stock} Review before sending.`;
+}
+
 function allDetailsText(msg: ContactMessage) {
   const lines = detailFields(msg)
     .filter((f) => f.value)
@@ -142,6 +158,8 @@ export default function MessagesList({ initialMessages, customers }: { initialMe
   // Message ids whose reply draft the admin confirmed as a price quote.
   const [priceConfirmed, setPriceConfirmed] = useState<Record<string, boolean>>({});
   const [sending, setSending] = useState<string | null>(null);
+  const [drafting, setDrafting] = useState<string | null>(null);
+  const [draftInfo, setDraftInfo] = useState<Record<string, DraftInfo>>({});
   const [deleting, setDeleting] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<ContactMessage | null>(null);
   const [filter, setFilter] = useState<Filter>("ALL");
@@ -182,10 +200,28 @@ export default function MessagesList({ initialMessages, customers }: { initialMe
     });
   };
 
+  const loadDraft = async (msg: ContactMessage) => {
+    setDrafting(msg.id);
+    try {
+      const res = await fetch(`/api/admin/messages/${msg.id}/draft`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setReplyDrafts((prev) => ({ ...prev, [msg.id]: data.draft }));
+      setPriceConfirmed((prev) => ({ ...prev, [msg.id]: false }));
+      setDraftInfo((prev) => ({ ...prev, [msg.id]: { product: data.product, similar: data.similar } }));
+    } catch {
+      toast.error("Could not build a suggested reply.");
+    } finally {
+      setDrafting(null);
+    }
+  };
+
   const handleToggle = (msg: ContactMessage) => {
     const opening = openId !== msg.id;
     setOpenId(opening ? msg.id : null);
     if (opening && !msg.isRead) markAsRead(msg.id);
+    // Customer messages not yet answered open with a suggested reply; it is never sent without the admin.
+    if (opening && !msg.sentByAdmin && !msg.reply && !replyDrafts[msg.id]?.trim()) loadDraft(msg);
   };
 
   const handleSendReply = async (id: string) => {
@@ -550,9 +586,32 @@ export default function MessagesList({ initialMessages, customers }: { initialMe
                     <p className="text-sm text-green-800 whitespace-pre-line">{msg.reply}</p>
                   </div>
                 )}
+                {!msg.sentByAdmin && (
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <p className="text-xs text-gray-500" aria-live="polite">
+                      {drafting === msg.id
+                        ? "Writing a suggested reply…"
+                        : draftInfo[msg.id]
+                          ? draftNote(draftInfo[msg.id])
+                          : "Get a suggested reply you can edit before sending."}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (replyDrafts[msg.id]?.trim() && !confirm("Replace your reply with a new suggested reply?")) return;
+                        loadDraft(msg);
+                      }}
+                      disabled={drafting === msg.id}
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-primary-700 bg-primary-50 rounded-lg hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-60"
+                    >
+                      <Sparkles size={12} /> {draftInfo[msg.id] ? "Rebuild suggested reply" : "Suggest a reply"}
+                    </button>
+                  </div>
+                )}
                 <div className="flex gap-2">
                   <textarea
-                    rows={3}
+                    rows={replyDrafts[msg.id] ? 10 : 3}
+                    aria-label={msg.sentByAdmin ? `Follow-up to ${msg.name}` : `Reply to ${msg.name}`}
                     value={replyDrafts[msg.id] ?? ""}
                     onChange={(e) => setReplyDrafts((prev) => ({ ...prev, [msg.id]: e.target.value }))}
                     placeholder={msg.sentByAdmin ? `Follow up with ${msg.name}...` : `Reply to ${msg.name}...`}
