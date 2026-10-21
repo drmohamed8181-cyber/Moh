@@ -27,7 +27,7 @@ const faqs = [
   },
   {
     q: "What is your warranty coverage?",
-    a: "Every unit comes with a warranty, but the terms vary by product and by the country where the unit is installed. We confirm the warranty for your unit and location with your quote, and extended service plans are available on most equipment.",
+    a: "Every unit comes with a warranty, but the terms vary by product and by the country where the unit is installed. We confirm the warranty for your unit and location with your quote, and extended service plans are available on most equipment, depending on your location.",
   },
   {
     q: "How long does shipping take?",

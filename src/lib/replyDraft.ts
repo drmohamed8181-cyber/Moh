@@ -48,7 +48,7 @@ export function buildReplyDraft({ name, product, similar }: { name: string; prod
       "",
       "Shipping and installation depend on your location; let me know if you'd like a quote for those as well.",
       "",
-      "Extended service plans are also available; let me know if you'd like the options for this unit.",
+      "Extended service plans are also available, depending on your location; let me know if you'd like the options for this unit.",
       "",
       "I'm happy to answer any questions about the unit.",
     );
