@@ -55,7 +55,7 @@ const howWeWork = [
   },
   {
     heading: "Warranty on new and refurbished alike",
-    body: "Warranty coverage applies to every unit we supply, not only the new ones. Refurbished equipment that cannot be stood behind is simply used equipment.",
+    body: "Warranty coverage applies to every unit we supply, not only the new ones. Refurbished equipment that cannot be stood behind is simply used equipment. Warranty terms vary by product and by the country where the unit is installed, and are confirmed with your quote.",
   },
   {
     heading: "Delivered, installed and handed over",

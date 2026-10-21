@@ -28,7 +28,7 @@ export default function AboutSection({
   // The 2009 date belongs to the eye care line and stays attached to it: the
   // dental range is new, and a sentence that reads as fifteen years of dental
   // supply would be untrue.
-  description = "MP MedPharma has supplied hospitals and eye clinics since 2009 with new and certified refurbished ophthalmic and surgical equipment: phaco and vitrectomy systems, refractive, retina and glaucoma lasers, OCT and imaging, slit lamps and surgical microscopes. The catalogue now also carries integrated dental chair units for general and paediatric practice. Every unit comes with documented service history and warranty coverage.",
+  description = "MP MedPharma has supplied hospitals and eye clinics since 2009 with new and certified refurbished ophthalmic and surgical equipment: phaco and vitrectomy systems, refractive, retina and glaucoma lasers, OCT and imaging, slit lamps and surgical microscopes. The catalogue now also carries integrated dental chair units for general and paediatric practice. Every unit comes with documented service history and warranty coverage. Warranty terms vary by product and by the country where the unit is installed, and are confirmed with your quote.",
   image = "https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=700&q=80",
 }: AboutSectionProps) {
   return (

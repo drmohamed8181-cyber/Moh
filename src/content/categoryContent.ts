@@ -27,7 +27,7 @@ export type CategoryContent = {
 };
 
 const WARRANTY_NOTE =
-  "Every unit MP MedPharma sells, new or certified refurbished, comes with documented service history and warranty coverage.";
+  "Every unit MP MedPharma sells, new or certified refurbished, comes with documented service history and warranty coverage. Warranty terms vary by product and by the country where the unit is installed, and are confirmed with your quote.";
 
 export const CATEGORY_CONTENT: CategoryContent[] = [
   {

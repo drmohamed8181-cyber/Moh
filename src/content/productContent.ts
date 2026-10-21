@@ -60,7 +60,7 @@ export type ProductContent = {
 };
 
 const OFFER =
-  "Available from MP MedPharma as a new or certified refurbished unit with documented service history and warranty coverage. Pricing is quoted per unit according to configuration, included accessories and condition.";
+  "Available from MP MedPharma as a new or certified refurbished unit with documented service history and warranty coverage. Warranty terms vary by product and country and are confirmed with your quote. Pricing is quoted per unit according to configuration, included accessories and condition.";
 
 const DENTAL_CHAIR_DESCRIPTION = `An integrated dental chair unit: the patient chair, delivery system, operating light, spittoon and assistant side supplied and installed as one platform for routine chair-side treatment.\n\nDelivery style is the specification that shapes daily work, since it is designed into the chassis rather than added later. Confirm handedness, the electrical supply and safety listing required where you practise, whether you are on central compressed air and suction, and exactly which tubings, syringes and accessories a quoted price includes. ${OFFER}`;
 
