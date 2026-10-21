@@ -8,3 +8,8 @@ export const FOLLOW_UP_DAYS = 7;
 
 export const HOUR_MS = 60 * 60 * 1000;
 export const DAY_MS = 24 * HOUR_MS;
+
+/** Product inquiries include a "Link: /products/<slug>" line; null for other messages. */
+export function inquiryProductPath(message: string) {
+  return message.match(/^Link: (\/products\/[\w-]+)\s*$/m)?.[1] ?? null;
+}

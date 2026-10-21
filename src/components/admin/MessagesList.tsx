@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { Mail, MailOpen, MessageSquare, Send, ChevronDown, CheckCircle2, Copy, ExternalLink, Trash2, UserRound, AlarmClock, Forward } from "lucide-react";
 import { cn, formatDate } from "@/lib/utils";
-import { DAY_MS, FOLLOW_UP_DAYS } from "@/lib/leads";
+import { DAY_MS, FOLLOW_UP_DAYS, inquiryProductPath } from "@/lib/leads";
 import { PRICE_CONFIRM_ERROR, containsPrice } from "@/lib/priceGuard";
 import ComposeMessageDialog, { type ComposeRecipient, type SentMessage } from "@/components/admin/ComposeMessageDialog";
 
@@ -29,6 +29,18 @@ interface ContactMessage {
   source: string | null;
   createdAt: string;
   customer: MessageCustomer | null;
+  pricing: InquiryPricing | null;
+}
+
+// Internal prices for the product an inquiry is about. Never part of "Copy all details",
+// since that text may be pasted into a reply.
+export interface InquiryPricing {
+  productName: string;
+  dealerPrice: number | null;
+  listPrice: number | null;
+  listPricePublic: boolean;
+  retailPrice: number | null;
+  drop: { previousDealerPrice: number; dealerPrice: number; previousListRetail: number | null; listRetail: number | null; list: string } | null;
 }
 
 type LeadStatus = "NEW" | "QUOTED" | "WON" | "LOST";
@@ -79,6 +91,43 @@ function CustomerTag({ customer }: { customer: MessageCustomer | null }) {
   );
 }
 
+function PricingPanel({ pricing }: { pricing: InquiryPricing }) {
+  const rows = [
+    { label: "Partner price (our cost)", value: pricing.dealerPrice, note: "LaserLocators / supplier" },
+    { label: "Our list price", value: pricing.listPrice, note: pricing.listPricePublic ? "Shown on the website" : "Not shown on the website" },
+    { label: "End-user price (floor)", value: pricing.retailPrice, note: "Lowest to quote" },
+  ];
+  const { drop } = pricing;
+  return (
+    <section aria-label="Internal pricing" className="bg-amber-50 border border-amber-200 rounded-xl">
+      <div className="px-4 py-2.5 border-b border-amber-200">
+        <h3 className="text-sm font-semibold text-amber-900">Internal pricing — {pricing.productName}</h3>
+        <p className="text-xs text-amber-800">For you only. Never share with the customer.</p>
+      </div>
+      <dl className="divide-y divide-amber-100">
+        {rows.map((r) => (
+          <div key={r.label} className="grid grid-cols-[minmax(0,11rem)_1fr] items-baseline gap-3 px-4 py-2">
+            <dt className="text-xs font-medium text-amber-900">{r.label}</dt>
+            <dd className="text-sm text-gray-900">
+              {r.value != null ? <span className="font-semibold">{formatUsd(r.value)}</span> : <span className="text-gray-500">Not on file</span>}
+              <span className="ml-2 text-xs text-gray-500">{r.note}</span>
+            </dd>
+          </div>
+        ))}
+      </dl>
+      {drop && (
+        <p className="px-4 py-2.5 border-t border-amber-200 text-xs text-amber-900">
+          <strong>Price drop:</strong> our cost {formatUsd(drop.previousDealerPrice)} → {formatUsd(drop.dealerPrice)}
+          {drop.previousListRetail != null && drop.listRetail != null && (
+            <>; partner&apos;s suggested end-user price {formatUsd(drop.previousListRetail)} → {formatUsd(drop.listRetail)}</>
+          )}{" "}
+          ({drop.list}). Our end-user price was left unchanged.
+        </p>
+      )}
+    </section>
+  );
+}
+
 type Filter = "ALL" | LeadStatus | "FOLLOW_UP";
 
 function formatDateTime(date: string) {
@@ -108,10 +157,6 @@ function CopyButton({ text, label }: { text: string; label: string }) {
   );
 }
 
-/** Inquiry messages include a "Link: /products/<slug>" line; surface it as a real link. */
-function productPath(message: string) {
-  return message.match(/^Link: (\/products\/[\w-]+)\s*$/m)?.[1] ?? null;
-}
 
 function detailFields(msg: ContactMessage) {
   return [
@@ -164,7 +209,7 @@ export default function MessagesList({ initialMessages, customers }: { initialMe
       {
         ...sent,
         phone: null, jobTitle: null, organization: null, address: null, workLocation: null,
-        isRead: true, reply: null, sentByAdmin: true, leadStatus: "NEW", statusUpdatedAt: null, source: null,
+        isRead: true, reply: null, sentByAdmin: true, leadStatus: "NEW", statusUpdatedAt: null, source: null, pricing: null,
         // Reuse the customer tag from an earlier message; otherwise it appears on the next page load.
         customer: prev.find((m) => m.customer?.email.toLowerCase() === sent.email.toLowerCase())?.customer ?? null,
       },
@@ -522,13 +567,15 @@ export default function MessagesList({ initialMessages, customers }: { initialMe
                   </dl>
                 </div>
 
+                {msg.pricing && <PricingPanel pricing={msg.pricing} />}
+
                 <div className="bg-white border border-gray-200 rounded-xl">
                   <div className="flex items-center justify-between gap-3 px-4 py-2.5 border-b border-gray-100">
                     <h3 className="text-sm font-semibold text-gray-900 break-words min-w-0">{msg.subject}</h3>
                     <div className="flex items-center gap-1 flex-shrink-0">
-                      {productPath(msg.message) && (
+                      {inquiryProductPath(msg.message) && (
                         <Link
-                          href={productPath(msg.message)!}
+                          href={inquiryProductPath(msg.message)!}
                           target="_blank"
                           className="flex items-center gap-1 px-2 py-1 text-xs font-medium text-primary-700 hover:underline"
                         >

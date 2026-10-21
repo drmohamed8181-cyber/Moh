@@ -2,7 +2,10 @@ export const dynamic = "force-dynamic";
 import { Metadata } from "next";
 import { safeDb } from "@/lib/prisma";
 import { getSalesByUser } from "@/lib/customers";
-import MessagesList, { type MessageCustomer } from "@/components/admin/MessagesList";
+import { inquiryProductPath } from "@/lib/leads";
+import { PRICE_DROPS_KEY, parsePriceDrops } from "@/lib/priceDrops";
+import { publicListPrice } from "@/lib/publicPricing";
+import MessagesList, { type InquiryPricing, type MessageCustomer } from "@/components/admin/MessagesList";
 
 export const metadata: Metadata = { title: "Messages – Admin" };
 
@@ -32,11 +35,40 @@ export default async function AdminMessagesPage() {
     orderBy: { name: "asc" },
   })) ?? [];
 
+  // Internal prices for each inquiry's product, the same figures as the pricing email.
+  const slugOf = (message: string) => inquiryProductPath(message)?.slice("/products/".length) ?? null;
+  const slugs = [...new Set(rows.map((m) => slugOf(m.message)).filter((s): s is string => s != null))];
+  const products = slugs.length
+    ? await safeDb((db) => db.product.findMany({
+        where: { slug: { in: slugs } },
+        select: { id: true, slug: true, name: true, dealerPrice: true, retailPrice: true, retailPricePublic: true },
+      })) ?? []
+    : [];
+  const drops = products.length
+    ? parsePriceDrops((await safeDb((db) => db.siteSetting.findUnique({ where: { key: PRICE_DROPS_KEY } })))?.value)
+    : {};
+  const pricingBySlug = new Map<string, InquiryPricing>(
+    products.map((p) => {
+      const drop = drops[p.id];
+      return [p.slug, {
+        productName: p.name,
+        dealerPrice: p.dealerPrice,
+        listPrice: publicListPrice(p.retailPrice),
+        listPricePublic: p.retailPricePublic,
+        retailPrice: p.retailPrice,
+        drop: drop
+          ? { ...drop, previousListRetail: drop.previousListRetail ?? null, listRetail: drop.listRetail ?? null }
+          : null,
+      }];
+    }),
+  );
+
   const messages = rows.map((m) => ({
     ...m,
     createdAt: m.createdAt.toISOString(),
     statusUpdatedAt: m.statusUpdatedAt?.toISOString() ?? null,
     customer: customerByEmail.get(m.email.trim().toLowerCase()) ?? null,
+    pricing: pricingBySlug.get(slugOf(m.message) ?? "") ?? null,
   }));
 
   return (
