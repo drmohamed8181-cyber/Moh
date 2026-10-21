@@ -36,6 +36,10 @@ interface ContactMessage {
 // since that text may be pasted into a reply.
 export interface InquiryPricing {
   productName: string;
+  productPath: string;
+  manufacturer: string | null;
+  sku: string;
+  partner: "LaserLocators" | "Supplier";
   dealerPrice: number | null;
   listPrice: number | null;
   listPricePublic: boolean;
@@ -91,40 +95,63 @@ function CustomerTag({ customer }: { customer: MessageCustomer | null }) {
   );
 }
 
-function PricingPanel({ pricing }: { pricing: InquiryPricing }) {
-  const rows = [
-    { label: "Partner price (our cost)", value: pricing.dealerPrice, note: "LaserLocators / supplier" },
-    { label: "Our list price", value: pricing.listPrice, note: pricing.listPricePublic ? "Shown on the website" : "Not shown on the website" },
-    { label: "End-user price (floor)", value: pricing.retailPrice, note: "Lowest to quote" },
+/** The inquired product and its internal prices, shown under the customer details. */
+function ProductDetails({ pricing }: { pricing: InquiryPricing }) {
+  const prices = [
+    { label: `${pricing.partner} price`, value: pricing.dealerPrice, note: "Our cost" },
+    { label: "Our listing price", value: pricing.listPrice, note: pricing.listPricePublic ? "Shown on the website" : "Not shown on the website" },
+    { label: "End-user floor", value: pricing.retailPrice, note: "Lowest to quote" },
   ];
   const { drop } = pricing;
   return (
-    <section aria-label="Internal pricing" className="bg-amber-50 border border-amber-200 rounded-xl">
-      <div className="px-4 py-2.5 border-b border-amber-200">
-        <h3 className="text-sm font-semibold text-amber-900">Internal pricing — {pricing.productName}</h3>
-        <p className="text-xs text-amber-800">For you only. It is never added to your reply: the customer gets only what you type in the reply box.</p>
+    <>
+      <div className="px-4 py-2.5 border-y border-gray-100 bg-gray-50">
+        <h4 className="text-xs font-semibold uppercase tracking-wide text-gray-600">Product inquired about</h4>
       </div>
-      <dl className="divide-y divide-amber-100">
-        {rows.map((r) => (
-          <div key={r.label} className="grid grid-cols-[minmax(0,11rem)_1fr] items-baseline gap-3 px-4 py-2">
-            <dt className="text-xs font-medium text-amber-900">{r.label}</dt>
-            <dd className="text-sm text-gray-900">
-              {r.value != null ? <span className="font-semibold">{formatUsd(r.value)}</span> : <span className="text-gray-500">Not on file</span>}
-              <span className="ml-2 text-xs text-gray-500">{r.note}</span>
-            </dd>
-          </div>
-        ))}
+      <dl className="divide-y divide-gray-100">
+        <div className="grid grid-cols-[7.5rem_1fr] items-center gap-3 px-4 py-2">
+          <dt className="text-xs font-medium text-gray-500">Product</dt>
+          <dd className="text-sm text-gray-900 break-words min-w-0">
+            <Link href={pricing.productPath} target="_blank" className="inline-flex items-center gap-1 font-semibold text-primary-700 hover:underline">
+              {pricing.productName} <ExternalLink size={12} />
+            </Link>
+          </dd>
+        </div>
+        <div className="grid grid-cols-[7.5rem_1fr] items-center gap-3 px-4 py-2">
+          <dt className="text-xs font-medium text-gray-500">Manufacturer</dt>
+          <dd className="text-sm text-gray-900">{pricing.manufacturer ?? <span className="text-gray-400">Not on file</span>}</dd>
+        </div>
+        <div className="grid grid-cols-[7.5rem_1fr] items-center gap-3 px-4 py-2">
+          <dt className="text-xs font-medium text-gray-500">SKU</dt>
+          <dd className="text-sm text-gray-900 break-words">{pricing.sku}</dd>
+        </div>
       </dl>
-      {drop && (
-        <p className="px-4 py-2.5 border-t border-amber-200 text-xs text-amber-900">
-          <strong>Price drop:</strong> our cost {formatUsd(drop.previousDealerPrice)} → {formatUsd(drop.dealerPrice)}
-          {drop.previousListRetail != null && drop.listRetail != null && (
-            <>; partner&apos;s suggested end-user price {formatUsd(drop.previousListRetail)} → {formatUsd(drop.listRetail)}</>
-          )}{" "}
-          ({drop.list}). Our end-user price was left unchanged.
+      <section aria-label="Internal pricing" className="bg-amber-50 border-t border-amber-200 rounded-b-xl">
+        <dl className="divide-y divide-amber-100">
+          {prices.map((r) => (
+            <div key={r.label} className="grid grid-cols-[7.5rem_1fr] items-baseline gap-3 px-4 py-2">
+              <dt className="text-xs font-medium text-amber-900">{r.label}</dt>
+              <dd className="text-sm text-gray-900">
+                {r.value != null ? <span className="font-semibold">{formatUsd(r.value)}</span> : <span className="text-gray-500">Not on file</span>}
+                <span className="ml-2 text-xs text-gray-500">{r.note}</span>
+              </dd>
+            </div>
+          ))}
+        </dl>
+        {drop && (
+          <p className="px-4 py-2 border-t border-amber-100 text-xs text-amber-900">
+            <strong>Price drop:</strong> our cost {formatUsd(drop.previousDealerPrice)} → {formatUsd(drop.dealerPrice)}
+            {drop.previousListRetail != null && drop.listRetail != null && (
+              <>; partner&apos;s suggested end-user price {formatUsd(drop.previousListRetail)} → {formatUsd(drop.listRetail)}</>
+            )}{" "}
+            ({drop.list}). Our end-user price was left unchanged.
+          </p>
+        )}
+        <p className="px-4 py-2 border-t border-amber-200 text-xs text-amber-800">
+          Prices are for you only and are never added to your reply or to &quot;Copy all&quot;.
         </p>
-      )}
-    </section>
+      </section>
+    </>
   );
 }
 
@@ -565,9 +592,8 @@ export default function MessagesList({ initialMessages, customers }: { initialMe
                       </div>
                     ))}
                   </dl>
+                  {msg.pricing && <ProductDetails pricing={msg.pricing} />}
                 </div>
-
-                {msg.pricing && <PricingPanel pricing={msg.pricing} />}
 
                 <div className="bg-white border border-gray-200 rounded-xl">
                   <div className="flex items-center justify-between gap-3 px-4 py-2.5 border-b border-gray-100">

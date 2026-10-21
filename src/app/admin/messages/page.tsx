@@ -5,6 +5,7 @@ import { getSalesByUser } from "@/lib/customers";
 import { inquiryProductPath } from "@/lib/leads";
 import { PRICE_DROPS_KEY, parsePriceDrops } from "@/lib/priceDrops";
 import { publicListPrice } from "@/lib/publicPricing";
+import { NON_OPHTHALMOLOGY_CATEGORY_SLUGS } from "@/lib/specialties";
 import MessagesList, { type InquiryPricing, type MessageCustomer } from "@/components/admin/MessagesList";
 
 export const metadata: Metadata = { title: "Messages – Admin" };
@@ -41,7 +42,7 @@ export default async function AdminMessagesPage() {
   const products = slugs.length
     ? await safeDb((db) => db.product.findMany({
         where: { slug: { in: slugs } },
-        select: { id: true, slug: true, name: true, dealerPrice: true, retailPrice: true, retailPricePublic: true },
+        select: { id: true, slug: true, name: true, manufacturer: true, sku: true, category: { select: { slug: true } }, dealerPrice: true, retailPrice: true, retailPricePublic: true },
       })) ?? []
     : [];
   const drops = products.length
@@ -52,6 +53,11 @@ export default async function AdminMessagesPage() {
       const drop = drops[p.id];
       return [p.slug, {
         productName: p.name,
+        productPath: `/products/${p.slug}`,
+        manufacturer: p.manufacturer,
+        sku: p.sku,
+        // Ophthalmology units come from LaserLocators; dental and others from their own supplier.
+        partner: p.category && !NON_OPHTHALMOLOGY_CATEGORY_SLUGS.includes(p.category.slug) ? "LaserLocators" : "Supplier",
         dealerPrice: p.dealerPrice,
         listPrice: publicListPrice(p.retailPrice),
         listPricePublic: p.retailPricePublic,
