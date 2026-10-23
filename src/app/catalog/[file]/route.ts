@@ -121,7 +121,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ file
   }
   const settings = await getSiteSettings();
   const contact = {
-    phone: settings.phone || "929-349-8569",
+    phone: settings.phone || "917-582-4568",
     email: settings.email || "info@mpmedpharma.com",
   };
   const today = new Date().toLocaleDateString("en-US", { timeZone: "America/New_York" });

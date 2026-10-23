@@ -82,7 +82,7 @@ export default function TermsPage() {
           <p className="text-gray-600 leading-relaxed">
             Questions about these terms can be sent to{" "}
             <a href={websiteMailto("info@mpmedpharma.com")} className="text-primary-600 hover:underline">info@mpmedpharma.com</a>{" "}
-            or <a href="tel:9293498569" className="text-primary-600 hover:underline">929-349-8569</a>.
+            or <a href="tel:9175824568" className="text-primary-600 hover:underline">917-582-4568</a>.
           </p>
         </section>
       </div>

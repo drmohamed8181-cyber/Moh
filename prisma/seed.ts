@@ -33,7 +33,7 @@ async function main() {
   // Site settings
   const siteSettings = [
     { key: "companyName", value: "MP MedPharma" },
-    { key: "phone", value: "929-349-8569" },
+    { key: "phone", value: "917-582-4568" },
     { key: "email", value: "info@mpmedpharma.com" },
     { key: "address", value: "New York, NY 10001, USA" },
     { key: "footerText", value: "© MP MedPharma. All Rights Reserved." },

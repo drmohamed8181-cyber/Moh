@@ -59,7 +59,7 @@ export default function ReturnsPage() {
           <p className="text-gray-600 leading-relaxed">
             Reach out to our team at{" "}
             <a href={websiteMailto("info@mpmedpharma.com")} className="text-primary-600 hover:underline">info@mpmedpharma.com</a>{" "}
-            or <a href="tel:9293498569" className="text-primary-600 hover:underline">929-349-8569</a> with your order
+            or <a href="tel:9175824568" className="text-primary-600 hover:underline">917-582-4568</a> with your order
             number, and we&apos;ll walk you through the next steps.
           </p>
         </section>

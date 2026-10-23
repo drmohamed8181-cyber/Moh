@@ -5,7 +5,7 @@ import { SITE_URL } from "@/lib/seo";
 // The logo is loaded from the live site so it isn't sent as an attachment on every reply.
 
 export const INFO_EMAIL = "info@mpmedpharma.com";
-const PHONE = "929-349-8569";
+const PHONE = "917-582-4568";
 const LOCATION = "New Jersey, NJ 07675, USA";
 const TAGLINE = "New & refurbished ophthalmic equipment · New dental chairs";
 

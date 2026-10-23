@@ -7,7 +7,7 @@ import { Save, Globe, Phone, Share2, Clock, type LucideIcon } from "lucide-react
 const defaultSettings = {
   companyName: "MP MedPharma",
   tagline: "Premium Medical Equipment",
-  phone: "929-349-8569",
+  phone: "917-582-4568",
   email: "info@mpmedpharma.com",
   address: "New Jersey, NJ 07675, USA",
   hoursWeekday: "8:00 AM – 6:00 PM",
