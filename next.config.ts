@@ -13,6 +13,17 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "/catalog/*": ["./public/devices/**/*", "./public/brand/**/*"],
   },
+  // Vercel Functions run on glibc Linux x64, so sharp only needs
+  // @img/sharp-linux-x64. The musl and WebAssembly builds npm also installs
+  // would add about 28 MB to every function that uses sharp, in every
+  // stored deployment.
+  outputFileTracingExcludes: {
+    "/*": [
+      "./node_modules/@img/sharp-libvips-linuxmusl-x64/**/*",
+      "./node_modules/@img/sharp-linuxmusl-x64/**/*",
+      "./node_modules/@img/sharp-wasm32/**/*",
+    ],
+  },
   experimental: {
     serverActions: { allowedOrigins: ["localhost:3000"] },
   },
