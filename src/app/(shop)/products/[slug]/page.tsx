@@ -103,6 +103,14 @@ export default async function ProductPage({ params }: Props) {
                 ? "https://schema.org/InStock"
                 : "https://schema.org/OutOfStock",
             seller: { "@type": "Organization", name: "MP MedPharma" },
+            // Mirrors /returns: all sales are final. Shipping details are left
+            // out on purpose: the flat freight rate is quoted per order and not
+            // published, and Google requires markup to match what the site says.
+            hasMerchantReturnPolicy: {
+              "@type": "MerchantReturnPolicy",
+              applicableCountry: "US",
+              returnPolicyCategory: "https://schema.org/MerchantReturnNotPermitted",
+            },
           },
         }
       : null;
