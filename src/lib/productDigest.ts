@@ -47,8 +47,8 @@ const FONT_SANS = "-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-ser
 
 const CONTACT = {
   name: "MP MedPharma",
-  phone: "929-349-8569",
-  phoneHref: "tel:9293498569",
+  phone: "917-582-4568",
+  phoneHref: "tel:9175824568",
   email: "info@mpmedpharma.com",
   address: "New Jersey, NJ 07675, USA",
 };

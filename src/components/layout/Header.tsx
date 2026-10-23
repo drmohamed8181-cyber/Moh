@@ -61,7 +61,7 @@ type HeaderSettings = {
 };
 
 export default function Header({ settings, categories = [] }: { settings?: HeaderSettings; categories?: { name: string; slug: string }[] }) {
-  const phone = settings?.phone || "929-349-8569";
+  const phone = settings?.phone || "917-582-4568";
   const email = settings?.email || "info@mpmedpharma.com";
   const phoneHref = `tel:${phone.replace(/[^\d+]/g, "")}`;
 

@@ -70,7 +70,7 @@ export default function ContactSection({
           {/* Contact info */}
           <div className="lg:col-span-2 space-y-5">
             {[
-              { icon: Phone, title: "Call Us", value: "929-349-8569", href: "tel:929-349-8569" },
+              { icon: Phone, title: "Call Us", value: "917-582-4568", href: "tel:9175824568" },
               { icon: Mail, title: "Email Us", value: "info@mpmedpharma.com", href: websiteMailto("info@mpmedpharma.com") },
               { icon: MapPin, title: "Location", value: "New Jersey, NJ, USA", href: "#" },
             ].map(({ icon: Icon, title, value, href }) => (

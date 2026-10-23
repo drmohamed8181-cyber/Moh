@@ -62,7 +62,7 @@ Surgical supply store
 
 | Field | Value |
 |---|---|
-| Phone | `(929) 349-8569` |
+| Phone | `(917) 582-4568` |
 | Website | `https://www.mpmedpharma.com` |
 | Appointment / inquiry link | `https://www.mpmedpharma.com/contact` |
 | WhatsApp (Chat) | `+1 929-349-8569` |

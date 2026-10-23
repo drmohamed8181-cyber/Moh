@@ -36,7 +36,7 @@ export default function ContactSection({ settings }: { settings?: ContactSetting
   const [loading, setLoading] = useState(false);
   const isInquiry = Boolean(form.productSlug);
 
-  const phone = settings?.phone || "929-349-8569";
+  const phone = settings?.phone || "917-582-4568";
   const email = settings?.email || "info@mpmedpharma.com";
   const address = settings?.address || "New Jersey, NJ 07675, USA";
   const hoursWeekday = settings?.hoursWeekday || "8:00 AM – 6:00 PM";
