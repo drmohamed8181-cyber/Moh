@@ -9,10 +9,17 @@ import SellProductForm from "@/components/product/SellProductForm";
 // ("medical device, healthcare product, or pharmaceutical-related item") named
 // none of those words, and the business only buys ophthalmic equipment, so the
 // title, heading and copy now say what sellers actually search for.
+//
+// Nov 2026: after that change both this page and the selling guide were titled
+// "(How to) Sell Used Ophthalmic Equipment", and the "sell ophthalmology
+// equipment" searches slid from ~15 to 20–27 as Google split them between the
+// two. Each page now has its own job: this one is where a seller asks for an
+// offer; the guide (/guides/how-to-sell-used-ophthalmic-equipment) answers
+// "what is my used equipment worth". Keep the two titles distinct.
 export const metadata: Metadata = {
-  title: "Sell Used Ophthalmic Equipment – Lasers, Phaco, OCT",
+  title: "Sell Your Ophthalmic Equipment – Get a Fair Offer",
   description:
-    "Sell your used ophthalmic equipment: excimer, femtosecond, YAG and SLT lasers, phaco systems, OCT and surgical microscopes. Send details and photos for a fair offer.",
+    "Get an offer for your used excimer, femtosecond, YAG or SLT laser, phaco system, OCT or surgical microscope. Send the model, condition and photos; we reply with an offer.",
   alternates: { canonical: "/sell-your-product" },
 };
 

@@ -183,9 +183,11 @@ export const GUIDES: Guide[] = [
   },
   {
     slug: "how-to-sell-used-ophthalmic-equipment",
-    title: "How to Sell Used Ophthalmic Equipment: Valuation, Paperwork and Logistics",
+    // Kept distinct from the sell page's title (see sell-your-product/page.tsx):
+    // this page answers the valuation question, the sell page takes the offer.
+    title: "What Is Used Ophthalmic Equipment Worth? A Valuation Guide",
     description:
-      "How a pre-owned phaco system, laser or OCT is valued, what documents raise the offer, and how de-installation and shipping work when you sell to a dealer.",
+      "What sets the value of a used phaco system, laser or OCT, which documents raise a dealer's offer, and how de-installation and shipping work when you sell.",
     publishedAt: "2026-09-12",
     intro:
       "Upgrading a laser or a phaco platform usually leaves a working device in the corner of a room. Sold well, it funds a meaningful part of the replacement. This guide explains how dealers value used ophthalmic equipment and what you can do to get a better offer.",
