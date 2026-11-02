@@ -44,7 +44,9 @@ const BRAND_RULES: BrandRule[] = [
   {
     name: "Johnson & Johnson Vision",
     slug: "johnson-johnson-vision",
-    match: ["johnsonjohnson", "jjvision"],
+    // "J&J iDESIGN" and "J&J Intralase" are product names, for units whose
+    // manufacturer field is blank.
+    match: ["johnsonjohnson", "jjvision", "jjidesign", "jjintralase"],
   },
   // Covers "Alcon" and "Alcon / Laserex".
   { name: "Alcon", slug: "alcon", match: ["alcon"] },

@@ -91,7 +91,9 @@ export default async function ProductPage({ params }: Props) {
             img.startsWith("http") ? img : `https://www.mpmedpharma.com${img}`
           ),
           ...(product.category ? { category: product.category.name } : {}),
-          ...(product.manufacturer ? { brand: { "@type": "Brand", name: product.manufacturer } } : {}),
+          // productBrand falls back to a company named in the product name, so
+          // a unit with a blank manufacturer field still tells Google its brand.
+          ...(brand ? { brand: { "@type": "Brand", name: brand.name } } : {}),
           offers: {
             "@type": "Offer",
             url: `https://www.mpmedpharma.com/products/${slug}`,
