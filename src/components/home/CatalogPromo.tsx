@@ -2,11 +2,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { FileDown, RefreshCw, Printer, Share2 } from "lucide-react";
 import { CATALOGS } from "@/lib/catalogs";
-import { catalogHref } from "@/lib/catalogDownloads";
+import CatalogRequestLink from "@/components/shop/CatalogRequestLink";
 
 // Homepage banner inviting visitors to download the PDF catalogs. Each catalog
 // is drawn as a small brochure cover, so it reads as a thing to take away
-// rather than one more link. Links carry ?src=home for the download counts.
+// rather than one more link. Links carry ?src=home for the download counts,
+// and ask first-time visitors for their details (see CatalogRequestLink).
 //
 // Cover photos are the same product photos the Specialties section already
 // shows, not manufacturer imagery.
@@ -43,11 +44,10 @@ export default function CatalogPromo({ counts }: { counts: (number | null)[] }) 
 
         <div className="grid grid-cols-2 gap-5 sm:gap-8 max-w-lg lg:ml-auto w-full">
           {CATALOGS.map((catalog, i) => (
-            <a
+            <CatalogRequestLink
               key={catalog.specialty}
-              href={catalogHref(catalog.href, "home")}
-              target="_blank"
-              rel="noopener"
+              catalog={catalog}
+              source="home"
               className={`group block rounded-xl bg-white text-[#0F1B33] shadow-2xl overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:rotate-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold-400 ${
                 i % 2 === 0 ? "-rotate-2" : "rotate-2 mt-6"
               }`}
@@ -74,7 +74,7 @@ export default function CatalogPromo({ counts }: { counts: (number | null)[] }) 
                 </span>
               </div>
               <span className="sr-only">Download the {catalog.name} catalog as a PDF (opens in a new tab)</span>
-            </a>
+            </CatalogRequestLink>
           ))}
         </div>
       </div>
