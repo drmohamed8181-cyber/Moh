@@ -6,7 +6,7 @@ import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { escapeHtml } from "@/lib/utils";
 import { saveContactAsCustomer } from "@/lib/customers";
 import { CATALOGS } from "@/lib/catalogs";
-import { CATALOG_LINK_SOURCES, SOURCE_LABELS, catalogHref } from "@/lib/catalogDownloads";
+import { CATALOG_LINK_SOURCES, SOURCE_LABELS, catalogHref, type CatalogLinkSource } from "@/lib/catalogDownloads";
 import { SITE_URL } from "@/lib/seo";
 
 // A catalog requested from a button on the website. The visitor gives their
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     const organization = clean(body.organization, 200);
     const catalog = CATALOGS.find((c) => c.specialty === body.catalog);
     const src = clean(body.source, 20);
-    const source = (CATALOG_LINK_SOURCES as readonly string[]).includes(src) ? src : null;
+    const source = (CATALOG_LINK_SOURCES as readonly string[]).includes(src) ? (src as CatalogLinkSource) : null;
 
     if (!name || !organization || !EMAIL_RE.test(email)) {
       return NextResponse.json({ error: "Please enter your name, a valid email and your clinic or hospital." }, { status: 400 });
