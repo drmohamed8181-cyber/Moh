@@ -119,6 +119,11 @@ export default function ProductDetail({ product }: { product: Product }) {
                 ))}
               </div>
             )}
+            {product.images.length > 0 && (
+              <p className="mt-3 text-xs text-gray-500">
+                Representative image. The unit supplied may differ in appearance and configuration.
+              </p>
+            )}
           </div>
 
           {/* Details */}
