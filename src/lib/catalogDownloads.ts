@@ -14,7 +14,9 @@ import type { CatalogSpecialty } from "@/lib/publicData";
 
 // Where on the website a catalog link sits, passed as ?src= on the link. A
 // request without one came from a printed QR code or a link someone shared.
-export const CATALOG_LINK_SOURCES = ["home", "header", "catalogs", "categories", "category", "products", "footer"] as const;
+// "email" is the link in the email sent after someone requests a catalog on
+// the website (src/app/api/catalog-request/route.ts).
+export const CATALOG_LINK_SOURCES = ["home", "header", "catalogs", "categories", "category", "products", "footer", "email"] as const;
 export type CatalogLinkSource = (typeof CATALOG_LINK_SOURCES)[number];
 const DIRECT = "direct";
 
@@ -26,6 +28,7 @@ export const SOURCE_LABELS: Record<string, string> = {
   category: "A category page",
   products: "Products listing",
   footer: "Footer",
+  email: "Link in the catalog email",
   [DIRECT]: "QR code or shared link",
 };
 

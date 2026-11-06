@@ -1,11 +1,13 @@
 import { FileDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Catalog } from "@/lib/catalogs";
-import { catalogHref, type CatalogLinkSource } from "@/lib/catalogDownloads";
+import type { CatalogLinkSource } from "@/lib/catalogDownloads";
+import CatalogRequestLink from "@/components/shop/CatalogRequestLink";
 
-// A plain <a>, not next/link: the target is a PDF from a route handler, not a
-// page. It opens in a new tab so the visitor keeps their place in the shop.
-// `source` says where the button sits, for the download counts.
+// The PDF opens in a new tab so the visitor keeps their place in the shop.
+// First-time visitors are asked for their name, email and clinic before it
+// opens (see CatalogRequestLink). `source` says where the button sits, for
+// the download counts.
 export default function CatalogDownloadButton({
   catalog,
   source,
@@ -20,10 +22,9 @@ export default function CatalogDownloadButton({
   className?: string;
 }) {
   return (
-    <a
-      href={catalogHref(catalog.href, source)}
-      target="_blank"
-      rel="noopener"
+    <CatalogRequestLink
+      catalog={catalog}
+      source={source}
       className={cn(
         "inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-xl transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
         variant === "onDark"
@@ -35,6 +36,6 @@ export default function CatalogDownloadButton({
       <FileDown size={16} aria-hidden="true" />
       {label ?? `${catalog.name} catalog (PDF)`}
       <span className="sr-only"> (opens in a new tab)</span>
-    </a>
+    </CatalogRequestLink>
   );
 }
