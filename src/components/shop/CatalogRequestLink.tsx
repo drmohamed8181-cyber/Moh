@@ -105,10 +105,12 @@ export default function CatalogRequestLink({
         {children}
       </a>
 
+      {/* m-auto: the global CSS reset sets margin: 0 on every element, which
+          pins a modal <dialog> to the top-left instead of centering it. */}
       <dialog
         ref={dialogRef}
         aria-labelledby={titleId}
-        className="w-[calc(100%-2rem)] max-w-md rounded-2xl p-0 shadow-2xl backdrop:bg-slate-900/60 text-left"
+        className="m-auto w-[calc(100%-2rem)] max-w-md max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-2xl p-0 shadow-2xl backdrop:bg-slate-900/60 text-left"
       >
         <div className="p-6 sm:p-7">
           <div className="flex items-start justify-between gap-4 mb-4">
