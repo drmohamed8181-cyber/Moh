@@ -64,7 +64,7 @@ export default function ProductCard({ product }: { product: Product }) {
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-primary-50 via-white to-primary-100/50">
-              <span className="text-xs text-gray-400 font-medium uppercase tracking-wide">No Image</span>
+              <span className="text-xs text-gray-400 font-medium uppercase tracking-wide">Photo on request</span>
             </div>
           )}
 

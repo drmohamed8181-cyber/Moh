@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { Mail, Heart, Shield, Truck, RotateCcw, ChevronRight, ZoomIn, CheckCircle2 } from "lucide-react";
+import { Mail, Heart, Shield, Truck, RotateCcw, ChevronRight, ZoomIn, CheckCircle2, Camera } from "lucide-react";
 import { toast } from "sonner";
 import { buildInquiryHref, formatPrice } from "@/lib/utils";
 import { useWishlistStore } from "@/store/wishlistStore";
@@ -91,19 +91,39 @@ export default function ProductDetail({ product }: { product: Product }) {
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Images */}
           <div>
-            <div className="relative aspect-square bg-gray-50 rounded-2xl overflow-hidden mb-4 group">
-              <Image
-                src={images[selectedImage] ?? "/placeholder.jpg"}
-                alt={product.name}
-                fill
-                className="object-contain p-8"
-                priority
-                onError={stamped ? () => setStampFailed(true) : undefined}
-              />
-              <button className="absolute top-4 right-4 w-9 h-9 bg-white shadow rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                <ZoomIn size={16} className="text-gray-600" />
-              </button>
-            </div>
+            {images.length > 0 ? (
+              <div className="relative aspect-square bg-gray-50 rounded-2xl overflow-hidden mb-4 group">
+                <Image
+                  src={images[selectedImage] ?? images[0]}
+                  alt={product.name}
+                  fill
+                  className="object-contain p-8"
+                  priority
+                  onError={stamped ? () => setStampFailed(true) : undefined}
+                />
+                <button className="absolute top-4 right-4 w-9 h-9 bg-white shadow rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <ZoomIn size={16} className="text-gray-600" />
+                </button>
+              </div>
+            ) : (
+              // No photo on file yet. This used to point at /placeholder.jpg,
+              // which doesn't exist, so the page showed a broken image. Nothing
+              // stands in for a product photo here (no stock or generated
+              // image): Google requires product images to show the product.
+              <div className="aspect-square bg-gradient-to-br from-primary-50 via-white to-primary-100/60 rounded-2xl mb-4 flex flex-col items-center justify-center text-center px-8">
+                <Camera size={36} className="text-primary-300 mb-4" aria-hidden="true" />
+                <p className="text-base font-semibold text-gray-800 mb-1">Photo available on request</p>
+                <p className="text-sm text-gray-500 mb-5 max-w-xs">
+                  Ask us and we&apos;ll send photos and details of this {product.isSold ? "model" : "unit"}.
+                </p>
+                <Link
+                  href={inquiryHref}
+                  className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl bg-white border border-primary-200 text-primary-700 hover:border-primary-400 hover:bg-primary-50"
+                >
+                  <Mail size={15} aria-hidden="true" /> Request photos
+                </Link>
+              </div>
+            )}
             {product.images.length > 1 && (
               <div className="flex gap-3 overflow-x-auto scrollbar-hide">
                 {images.map((img, i) => (
