@@ -18,6 +18,6 @@ jobs:
       - run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898499+github-actions[bot]@users.noreply.github.com"
-          git add photo-candidates/out
+          git add -f photo-candidates/out
           git commit -m "Fetched photo candidates" || echo "nothing new"
           git push
