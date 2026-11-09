@@ -1,18 +1,7 @@
 [
-  {
-    "name": "integre-pro-menu",
-    "url": "https://ophthalmology.lumibirdmedical.com/uploads/images/products/image-clone-integre-pro-laser-range-682ae14e0b391137795001.webp"
-  },
-  {
-    "name": "integre-pro-all-in-one",
-    "url": "https://ophthalmology.lumibirdmedical.com/uploads/images/technical_advantage_info/all-in-one-laser-slit-lamp-design-63a430ea52e7c185298448.webp"
-  },
-  {
-    "name": "statim-5000-g4",
-    "url": "https://assets.scican.com/images/autoclaves/statim/statim_model_5000_compliant.png"
-  },
-  {
-    "name": "pascal-streamline-pslt-flyer",
-    "url": "https://topconhealthcare.com/us/wp-content/uploads/sites/8/2020/07/18165_PSLT-Flyer_0522_2018.pdf"
-  }
+  {"name": "statim-5000-us", "url": "https://assets.scican.com/images/autoclaves/statim/statim_model_5000_us.png"},
+  {"name": "lumibird-pro-laser-brochure", "url": "https://ophthalmology.lumibirdmedical.com/uploads/images/products/page-par-page-brochure-pro-laser-range-an-2026-6a83192ad47a1382903612.pdf"},
+  {"name": "zeiss-lio-flyer", "url": "https://asset-downloads.zeiss.com/catalogs/download/med2/245398a8-63be-4a43-b595-2496f7d544e6/ZEISS-LIO-Flyer-en-OUS_31_200_0305I.pdf"},
+  {"name": "nidek-mc500-vixi-brochure", "url": "https://www.avnetmedical.com/wp-content/uploads/2019/05/MC-500-Vixi.pdf"},
+  {"name": "eye-prime-press-release", "url": "https://pressat.co.uk/releases/haag-streit-uk-announce-the-launch-of-the-ellex-eye-prime-8daf9ec178c6a0854462db077a78aec2/pdf"}
 ]
