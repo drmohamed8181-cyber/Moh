@@ -27,6 +27,25 @@ for src in json.loads((here / "sources.json").read_text()):
                 n += 1
                 im.convert("RGBA" if im.mode in ("RGBA","LA","P") else "RGB").save(out / f"{name}-p{pno+1}-{n}.png")
         print(f"OK {name}: pdf, {n} images")
+    elif b"<html" in data[:2000].lower() or b"<!doctype" in data[:200].lower():
+        import re, urllib.parse
+        html = data.decode("utf-8", "ignore")
+        (out / f"{name}.html").write_text(html)
+        urls = set(re.findall(r'(?:src|data-src|href|content)=["\']([^"\']+\.(?:jpe?g|png|webp)(?:\?[^"\']*)?)', html, re.I))
+        urls |= set(re.findall(r'https?://[^"\'\s,]+\.(?:jpe?g|png|webp)', html, re.I))
+        n = 0
+        for u in sorted(urls):
+            u = urllib.parse.urljoin(url, u.replace("&amp;", "&"))
+            try:
+                b = urllib.request.urlopen(urllib.request.Request(u, headers=UA), timeout=30).read()
+                im = Image.open(io.BytesIO(b))
+                if min(im.size) < 300: continue
+                n += 1
+                im.convert("RGBA" if im.mode in ("RGBA","LA","P") else "RGB").save(out / f"{name}-img{n}.png")
+                print(f"   {name}-img{n}: {u} {im.size}")
+            except Exception:
+                pass
+        print(f"OK {name}: html, {n} images")
     else:
         im = Image.open(io.BytesIO(data))
         im.save(out / f"{name}.png")
