@@ -1,13 +1,174 @@
 [
-  {"name": "zeiss-visulas-it-brochure", "url": "https://asset-downloads.zeiss.com/catalogs/download/med/fc60408d-f965-4c7f-8c60-9242262ddce5/VISULAS-Therapeutic-Lasers-it-INT_31_020_0034I.indd.pdf"},
-  {"name": "mx-zeiss-532s", "url": "https://www.medicalexpo.com/prod/carl-zeiss-meditec/product-67959-670648.html"},
-  {"name": "mx-alcon-lio", "url": "https://pdf.medicalexpo.com/pdf/alcon/alcon-lio-featuring-purepoint-laser-technology/80586-221852.html"},
-  {"name": "mx-alcon-purepoint", "url": "https://pdf.medicalexpo.com/pdf/alcon/purepoint-laser/80586-117429.html"},
-  {"name": "mx-nidek-mc500", "url": "https://medicalexpo.com/prod/nidek/product-70665-616083.html"},
-  {"name": "mx-lumenis-aura", "url": "https://www.medicalexpo.com/prod/lumenis/product-78177-2805187.html"},
-  {"name": "mx-keeler-accutome", "url": "https://www.medicalexpo.com/prod/keeler/product-80326-1147980.html"},
-  {"name": "eyewire-eye-prime", "url": "https://eyewire.news/news/ellex-launches-eye-prime-new-ultrasound-solution"},
-  {"name": "crst-eye-prime", "url": "https://crstodayeurope.com/news/haag-streit-uk-announces-the-launch-of-the-ellex-eye-prime/2476912/"},
-  {"name": "myalcon-centurion", "url": "https://www.myalcon.com/se/professional/cataract-surgery/surgical-equipment/centurion/"},
-  {"name": "jnj-phaco", "url": "https://www.jnjvisionpro.com/en-eu/single-use-instruments/"}
+ {
+  "name": "mx-alcon-lio-p1",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/80586/alcon-lio-featuring-purepoint-laser-technology-221852_1b.jpg"
+ },
+ {
+  "name": "mx-alcon-lio-p2",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/80586/alcon-lio-featuring-purepoint-laser-technology-221852_2b.jpg"
+ },
+ {
+  "name": "mx-alcon-lio-p3",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/80586/alcon-lio-featuring-purepoint-laser-technology-221852_3b.jpg"
+ },
+ {
+  "name": "mx-alcon-lio-p4",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/80586/alcon-lio-featuring-purepoint-laser-technology-221852_4b.jpg"
+ },
+ {
+  "name": "mx-purepoint-a-p1",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/80586/purepoint-221854_1b.jpg"
+ },
+ {
+  "name": "mx-purepoint-a-p2",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/80586/purepoint-221854_2b.jpg"
+ },
+ {
+  "name": "mx-purepoint-a-p3",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/80586/purepoint-221854_3b.jpg"
+ },
+ {
+  "name": "mx-purepoint-a-p4",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/80586/purepoint-221854_4b.jpg"
+ },
+ {
+  "name": "mx-purepoint-b-p1",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/80586/purepoint-laser-117429_1b.jpg"
+ },
+ {
+  "name": "mx-purepoint-b-p2",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/80586/purepoint-laser-117429_2b.jpg"
+ },
+ {
+  "name": "mx-purepoint-b-p3",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/80586/purepoint-laser-117429_3b.jpg"
+ },
+ {
+  "name": "mx-purepoint-b-p4",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/80586/purepoint-laser-117429_4b.jpg"
+ },
+ {
+  "name": "mx-jj-ifs-a-p1",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/78008/ifs-279095_1b.jpg"
+ },
+ {
+  "name": "mx-jj-ifs-a-p2",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/78008/ifs-279095_2b.jpg"
+ },
+ {
+  "name": "mx-jj-ifs-a-p3",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/78008/ifs-279095_3b.jpg"
+ },
+ {
+  "name": "mx-jj-ifs-a-p4",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/78008/ifs-279095_4b.jpg"
+ },
+ {
+  "name": "mx-jj-ifs-b-p1",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/78008/ifs-182263_1b.jpg"
+ },
+ {
+  "name": "mx-jj-ifs-b-p2",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/78008/ifs-182263_2b.jpg"
+ },
+ {
+  "name": "mx-jj-ifs-b-p3",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/78008/ifs-182263_3b.jpg"
+ },
+ {
+  "name": "mx-jj-ifs-b-p4",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/78008/ifs-182263_4b.jpg"
+ },
+ {
+  "name": "mx-jj-ifs-c-p1",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/78008/ifs-171709_1b.jpg"
+ },
+ {
+  "name": "mx-jj-ifs-c-p2",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/78008/ifs-171709_2b.jpg"
+ },
+ {
+  "name": "mx-jj-ifs-c-p3",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/78008/ifs-171709_3b.jpg"
+ },
+ {
+  "name": "mx-jj-ifs-c-p4",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/78008/ifs-171709_4b.jpg"
+ },
+ {
+  "name": "mx-jj-ellips-fx-p1",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/78008/ellips-fx-technology-159517_1b.jpg"
+ },
+ {
+  "name": "mx-jj-ellips-fx-p2",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/78008/ellips-fx-technology-159517_2b.jpg"
+ },
+ {
+  "name": "mx-jj-ellips-fx-p3",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/78008/ellips-fx-technology-159517_3b.jpg"
+ },
+ {
+  "name": "mx-jj-ellips-fx-p4",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/78008/ellips-fx-technology-159517_4b.jpg"
+ },
+ {
+  "name": "mx-jj-sovereign-p1",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/78008/sovereign-101263_1b.jpg"
+ },
+ {
+  "name": "mx-jj-sovereign-p2",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/78008/sovereign-101263_2b.jpg"
+ },
+ {
+  "name": "mx-jj-sovereign-p3",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/78008/sovereign-101263_3b.jpg"
+ },
+ {
+  "name": "mx-jj-sovereign-p4",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/78008/sovereign-101263_4b.jpg"
+ },
+ {
+  "name": "mx-jj-wssp-p1",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/78008/whitestar-signature-pro-182266_1b.jpg"
+ },
+ {
+  "name": "mx-jj-wssp-p2",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/78008/whitestar-signature-pro-182266_2b.jpg"
+ },
+ {
+  "name": "mx-jj-wssp-p3",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/78008/whitestar-signature-pro-182266_3b.jpg"
+ },
+ {
+  "name": "mx-jj-wssp-p4",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/78008/whitestar-signature-pro-182266_4b.jpg"
+ },
+ {
+  "name": "mx-keeler-us-p1",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/80326/keeler-ultrasound-range-flyer-289698_1b.jpg"
+ },
+ {
+  "name": "mx-keeler-us-p2",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/80326/keeler-ultrasound-range-flyer-289698_2b.jpg"
+ },
+ {
+  "name": "mx-keeler-us-p3",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/80326/keeler-ultrasound-range-flyer-289698_3b.jpg"
+ },
+ {
+  "name": "mx-keeler-us-p4",
+  "url": "https://img.medicalexpo.com/pdf/repository_me/80326/keeler-ultrasound-range-flyer-289698_4b.jpg"
+ },
+ {
+  "name": "zeiss-visulas-fr",
+  "url": "https://asset-downloads.zeiss.com/catalogs/download/med2/4efbf317-dda5-4063-9101-ac121eca0857/VISULAS_Therapeutic_Lasers_Brochure_FR.pdf"
+ },
+ {
+  "name": "zeiss-yag-family-fr",
+  "url": "https://asset-downloads.zeiss.com/catalogs/download/med/11811ce0-a135-4833-ae1b-09bb209c7102/000000-1990-171_YAG_Laserfamily_FR.indd.pdf"
+ },
+ {
+  "name": "lumibird-integre-lio",
+  "url": "https://ophthalmology.lumibirdmedical.com/uploads/images/products/page-par-page-integrelio-2026-6a0c36af039cf184557510.pdf"
+ }
 ]
