@@ -76,20 +76,26 @@ export default async function ProductPage({ params }: Props) {
   const publicPrice = product.publicPrice;
   const brand = productBrand(product);
 
+  const imageUrls = product.images
+    .filter((img) => img.trim() !== "")
+    .map((img) => (img.startsWith("http") ? img : `https://www.mpmedpharma.com${img}`));
+
   // Google requires a Product to carry at least one of offers/review/aggregateRating.
   // Quote-only products (no public price, no reviews) can satisfy none of the three,
   // so we omit Product markup for them entirely rather than emit an incomplete one.
+  // A priced Product is also a merchant listing, where "image" is required: a
+  // priced unit still waiting on a photo ("Photo available on request") left
+  // Search Console reporting Missing field "image" (Nov 2026), so it gets no
+  // Product markup until a photo is added.
   const productJsonLd =
-    publicPrice != null
+    publicPrice != null && imageUrls.length > 0
       ? {
           "@context": "https://schema.org",
           "@type": "Product",
           name: product.name,
           sku: product.sku,
           description: product.shortDesc ?? product.description ?? undefined,
-          image: product.images.map((img) =>
-            img.startsWith("http") ? img : `https://www.mpmedpharma.com${img}`
-          ),
+          image: imageUrls,
           ...(product.category ? { category: product.category.name } : {}),
           // productBrand falls back to a company named in the product name, so
           // a unit with a blank manufacturer field still tells Google its brand.
