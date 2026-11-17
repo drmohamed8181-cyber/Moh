@@ -936,6 +936,78 @@ export const GUIDES: Guide[] = [
       { label: "Contact us", href: "/contact" },
     ],
   },
+  {
+    // Search Console (Aug–Nov 2026): "is refurbished medical laser equipment
+    // safe", "how do i know if refurbished laser equipment is reliable" and
+    // "how do i know a used laser is safe" drew impressions at positions 36–60
+    // with no page answering them directly. Keep it to verification steps and
+    // the regulatory framework; no clinical or safety-outcome claims.
+    slug: "is-refurbished-laser-equipment-safe",
+    title: "Is Refurbished Ophthalmic Laser Equipment Safe? How to Verify It",
+    description:
+      "How to tell whether a refurbished ophthalmic laser is reliable: the documents to ask for, the checks to see, the labeling and laser-safety rules, and red flags.",
+    publishedAt: "2026-11-17",
+    intro:
+      "A refurbished laser is only as dependable as the work done on it and the evidence behind that work. The question to ask is not whether refurbished equipment is safe in general, but whether this particular unit has been restored to its manufacturer's specifications and can prove it. This guide explains how to check.",
+    sections: [
+      {
+        heading: "What refurbishment should restore",
+        paragraphs: [
+          "A properly refurbished ophthalmic laser has been inspected, had worn or failed parts replaced, been recalibrated, and been tested against the performance specifications its manufacturer published for that model. The goal is to return it to its original specifications, not to change what it does.",
+          "That distinction matters in the United States. FDA guidance separates servicing, which restores a device to its original specifications, from remanufacturing, which significantly changes its performance, safety specifications or intended use. A refurbished unit should still match its original labeling. If a supplier describes modifications beyond the manufacturer's design, ask what they are and who is responsible for them.",
+        ],
+      },
+      {
+        heading: "Documents to ask for before you buy",
+        paragraphs: ["Reliability is something a supplier can show on paper. Ask for:"],
+        bullets: [
+          "The service or refurbishment report, listing what was inspected and which parts were replaced.",
+          "The calibration or energy-output report, with the measured values against the specification and the date of the test.",
+          "The usage history the unit records, such as shot or procedure counts, where the platform keeps one.",
+          "The manufacturing date, serial number and software version.",
+          "The operator's manual for that model and software version, including its labeling and indications.",
+          "The written warranty: what it covers, for how long, and who services the unit where you are.",
+        ],
+      },
+      {
+        heading: "Checks you can see for yourself",
+        paragraphs: [
+          "Ask to see the unit start up, by video if you cannot visit. A laser that powers on, passes its self-tests without error codes and shows its energy or power readings is a good sign, and it costs the supplier nothing to show you.",
+          "Look closely at the delivery system: slit-lamp optics free of haze and scratches, a crisp aiming beam, smooth joystick and controls, and an intact fibre and connectors on fibre-delivered lasers. These are the parts your surgeons use every day, and wear here is visible.",
+        ],
+      },
+      {
+        heading: "Laser safety labeling and the room",
+        paragraphs: [
+          "Laser products sold in the United States must meet the FDA's laser performance standard, and ophthalmic treatment lasers carry warning labels, a classification and safety features such as key switches and emergency stops. On a refurbished unit those labels should be present and legible and the safety features should work.",
+          "Safe use also depends on the room: the protective eyewear specified for the laser's wavelength, warning signs, controlled access and the electrical supply the manual requires. Plan these before installation, following the manufacturer's manual and your facility's laser-safety program.",
+        ],
+      },
+      {
+        heading: "Red flags",
+        paragraphs: ["Be cautious when you see any of the following:"],
+        bullets: [
+          "No service or calibration report, or one with no measured values.",
+          "Missing, painted-over or illegible warning labels and serial plates.",
+          "An unwillingness to show the unit powering on.",
+          "Vague answers about included accessories, software licences or who will install it.",
+          "No written warranty, or a warranty that does not name who performs service.",
+        ],
+      },
+      {
+        heading: "How MP MedPharma handles it",
+        paragraphs: [
+          "Every unit we list ships with its documented service history and warranty coverage, and we can share the service documentation before you commit. Tell us which model you are considering and we will send what we have for that unit.",
+        ],
+      },
+    ],
+    related: [
+      { label: "Refurbished vs new equipment", href: "/guides/refurbished-vs-new-ophthalmic-equipment" },
+      { label: "SLT vs YAG laser guide", href: "/guides/slt-vs-yag-laser-which-to-buy-first" },
+      { label: "Browse all equipment", href: "/products" },
+      { label: "Contact us", href: "/contact" },
+    ],
+  },
 ];
 
 /**
