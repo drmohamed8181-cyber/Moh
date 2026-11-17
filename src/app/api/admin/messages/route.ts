@@ -6,6 +6,7 @@ import { INFO_EMAIL, infoSignatureHtml, infoSignatureText } from "@/lib/emailSig
 import { escapeHtml } from "@/lib/utils";
 import { PRICE_CONFIRM_ERROR, containsPrice } from "@/lib/priceGuard";
 import { saveContactAsCustomer } from "@/lib/customers";
+import { getOptOut } from "@/lib/optOut";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -30,6 +31,18 @@ export async function POST(req: NextRequest) {
   // A price goes out only when the admin ticked "This is a price quote".
   const priceQuote = containsPrice(subject) || containsPrice(message);
   if (priceQuote && body.priceQuote !== true) return NextResponse.json({ error: PRICE_CONFIRM_ERROR }, { status: 400 });
+  // Someone who unsubscribed gets no marketing email until they contact us again.
+  // A new message to them goes out only when the admin confirms it isn't marketing.
+  const optOut = await getOptOut(email);
+  if (optOut && body.notMarketing !== true) {
+    return NextResponse.json(
+      {
+        code: "OPTED_OUT",
+        error: `${email} unsubscribed from marketing emails on ${optOut.createdAt.toISOString().slice(0, 10)}. Don't send sales or inventory emails. Send only if this is about something they asked for.`,
+      },
+      { status: 409 },
+    );
+  }
 
   const emailSent = await sendMail({
     to: email,

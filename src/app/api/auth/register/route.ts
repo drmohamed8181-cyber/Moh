@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { safeDb } from "@/lib/prisma";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
+import { clearOptOutOnContact } from "@/lib/optOut";
 
 export async function POST(req: NextRequest) {
   try {
@@ -34,6 +35,7 @@ export async function POST(req: NextRequest) {
     await safeDb((db) => db.user.create({
       data: { name, email, phone: phone || null, password: hashed },
     }));
+    await clearOptOutOnContact(email);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error(error);

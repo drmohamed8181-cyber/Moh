@@ -7,6 +7,7 @@ import { escapeHtml } from "@/lib/utils";
 import { saveContactAsCustomer } from "@/lib/customers";
 import { SITE_URL } from "@/lib/seo";
 import { STOCK_ALERT_LEAD_SOURCE, isBackInStock, stockAlertCancelUrl } from "@/lib/stockAlerts";
+import { clearOptOutOnContact } from "@/lib/optOut";
 
 // "Notify me when available" on a sold or unavailable product page. Saves the
 // request, logs it as a lead (someone waiting for this exact unit is a buyer),
@@ -117,6 +118,8 @@ export async function POST(req: NextRequest) {
         </div>`,
       text: `New "notify me when available" request\nProduct: ${product.name} (${productUrl})\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nClinic: ${organization}\nCountry: ${country ?? "—"}\n\nThey'll be emailed automatically when the unit is listed again. Reply to offer something similar now.`,
     });
+
+    await clearOptOutOnContact(email);
 
     return NextResponse.json({ success: true });
   } catch (error) {

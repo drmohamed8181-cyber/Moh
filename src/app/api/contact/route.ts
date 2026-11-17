@@ -7,6 +7,7 @@ import { escapeHtml } from "@/lib/utils";
 import { saveContactAsCustomer } from "@/lib/customers";
 import { getPriceDrop } from "@/lib/priceDrops";
 import { publicListPrice } from "@/lib/publicPricing";
+import { clearOptOutOnContact } from "@/lib/optOut";
 
 const NOTIFY_EMAIL = process.env.CONTACT_NOTIFY_EMAIL || process.env.PRODUCT_SUBMISSION_NOTIFY_EMAIL || "dr.mohamed8181@gmail.com";
 const INQUIRY_NOTIFY_EMAIL = "info@mpmedpharma.com";
@@ -155,6 +156,8 @@ export async function POST(req: NextRequest) {
         </div>`,
       text: `Thank you, ${firstName}!\n\n${isInquiry ? `We've received your inquiry about the ${product!.name} and a member of the MP MedPharma team will respond soon.` : `We've received your message and a member of the MP MedPharma team will respond soon.`}\n\nHave something to add? Just reply to this email.\n\n${infoSignatureText}`,
     });
+
+    await clearOptOutOnContact(email);
 
     return NextResponse.json({ success: true });
   } catch (error) {
