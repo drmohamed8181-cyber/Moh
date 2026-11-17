@@ -43,7 +43,7 @@ const defaultSlides: Slide[] = [
     id: "default-excimer",
     title: "Excimer Lasers",
     description: "Refractive excimer lasers, new or certified refurbished, with documented service history and warranty coverage.",
-    image: "/devices/Alcon-Wavelight-EX500-Official-HD.png",
+    image: "/devices/Alcon-Wavelight-EX500-Official.jpg",
     buttonText: "View Lasers",
     buttonLink: "/categories/excimer-lasers",
   },
