@@ -31,12 +31,12 @@ export default function PrivacyPage() {
         <section>
           <h2 className="text-xl font-bold text-gray-900 mb-3">How We Use Your Information</h2>
           <p className="text-gray-600 leading-relaxed">
-            We use the information you provide to respond to inquiries, prepare quotes, process orders,
-            provide customer support, and — where you&apos;ve opted in — send occasional product
-            updates or newsletters. If you ask us to notify you when a product is available again, we
-            use your email to send that one notice and may follow up about that product or similar
-            equipment; each notice includes a link to cancel. We do not sell your personal information to
-            third parties.
+            We use the information you provide to respond to inquiries, prepare quotes, process orders and
+            provide customer support. By submitting your information through any form on this website,
+            you agree that we may contact you about your request and send you future communications,
+            including inventory updates. You can unsubscribe at any time using the link in our emails or by
+            emailing us. If you ask us to notify you when a product is available again, we email you when
+            it is. We do not sell your personal information to third parties.
           </p>
         </section>
 

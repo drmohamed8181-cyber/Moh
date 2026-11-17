@@ -8,6 +8,7 @@ import { Phone, Mail, MapPin, Send, CheckCircle } from "lucide-react";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { websiteMailto } from "@/lib/mailto";
+import ConsentNotice from "@/components/ui/ConsentNotice";
 
 const schema = z.object({
   fullName: z.string().min(2, "Name must be at least 2 characters"),
@@ -153,6 +154,7 @@ export default function ContactSection({
                 <Button type="submit" loading={isSubmitting} size="lg" className="w-full">
                   <Send className="w-4 h-4 mr-2" /> Send Message
                 </Button>
+                <ConsentNotice />
               </form>
             )}
           </div>

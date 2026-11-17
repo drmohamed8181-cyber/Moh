@@ -10,6 +10,7 @@ import {
 import EmailSuggestion from "@/components/ui/EmailSuggestion";
 import { trackLead } from "@/lib/analytics";
 import { websiteMailto } from "@/lib/mailto";
+import ConsentNotice from "@/components/ui/ConsentNotice";
 
 const CATEGORIES = [
   "Diagnostic Equipment",
@@ -604,6 +605,7 @@ export default function SellProductForm() {
             </button>
           )}
         </div>
+        <ConsentNotice className="mt-4" />
       </form>
 
       <p className="text-[11px] text-gray-400 leading-relaxed text-center mt-6 max-w-xl mx-auto">

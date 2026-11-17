@@ -8,6 +8,7 @@ import { LogoMark } from "@/components/ui/Logo";
 import EmailSuggestion from "@/components/ui/EmailSuggestion";
 import { trackNewsletterSignup } from "@/lib/analytics";
 import { websiteMailto } from "@/lib/mailto";
+import ConsentNotice from "@/components/ui/ConsentNotice";
 
 type FooterSettings = {
   phone?: string;
@@ -203,6 +204,7 @@ export default function Footer({ settings }: { settings?: FooterSettings }) {
               </button>
             </form>
             <EmailSuggestion dark email={newsletterEmail} onAccept={setNewsletterEmail} />
+            <ConsentNotice dark className="mt-2" />
           </div>
         </div>
 

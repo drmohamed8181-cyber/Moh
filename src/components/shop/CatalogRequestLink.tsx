@@ -6,6 +6,7 @@ import Input from "@/components/ui/Input";
 import EmailSuggestion from "@/components/ui/EmailSuggestion";
 import type { Catalog } from "@/lib/catalogs";
 import { catalogHref, type CatalogLinkSource } from "@/lib/catalogDownloads";
+import ConsentNotice from "@/components/ui/ConsentNotice";
 
 // A catalog link on the website. Before the PDF opens, the visitor gives their
 // name, email and clinic, which are saved as a lead (see
@@ -191,10 +192,7 @@ export default function CatalogRequestLink({
                 {status === "sending" ? <Loader2 size={16} className="animate-spin" aria-hidden="true" /> : <FileDown size={16} aria-hidden="true" />}
                 Get the catalog
               </button>
-              <p className="mt-3 text-xs text-slate-400 leading-relaxed">
-                We use your details only to send the catalog and follow up about equipment. See our{" "}
-                <a href="/privacy" className="underline underline-offset-2 hover:text-slate-600">privacy policy</a>.
-              </p>
+              <ConsentNotice className="mt-3" />
             </form>
           )}
         </div>

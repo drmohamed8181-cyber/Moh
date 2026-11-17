@@ -7,6 +7,7 @@ import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
 import EmailSuggestion from "@/components/ui/EmailSuggestion";
 import { trackLead } from "@/lib/analytics";
 import { websiteMailto } from "@/lib/mailto";
+import ConsentNotice from "@/components/ui/ConsentNotice";
 
 function InquiryPrefill({ onPrefill }: { onPrefill: (subject: string, message: string, productSlug: string) => void }) {
   const searchParams = useSearchParams();
@@ -225,6 +226,7 @@ export default function ContactSection({ settings }: { settings?: ContactSetting
                 <Send size={16} />
                 {loading ? "Sending..." : "Send Message"}
               </button>
+              <ConsentNotice />
             </form>
           </div>
         </div>
