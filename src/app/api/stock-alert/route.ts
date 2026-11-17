@@ -29,9 +29,11 @@ export async function POST(req: NextRequest) {
     const body = await req.json().catch(() => ({}));
     const email = clean(body.email, 200).toLowerCase();
     const name = clean(body.name, 120);
+    const phone = clean(body.phone, 40);
+    const organization = clean(body.organization, 200);
     const productId = clean(body.productId, 64);
-    if (!EMAIL_RE.test(email)) {
-      return NextResponse.json({ error: "Please enter a valid email address." }, { status: 400 });
+    if (!name || !organization || !EMAIL_RE.test(email) || phone.replace(/\D/g, "").length < 7) {
+      return NextResponse.json({ error: "Please enter your full name, a valid email, a phone number and your clinic or hospital." }, { status: 400 });
     }
 
     const product = await safeDb((db) =>
@@ -49,8 +51,8 @@ export async function POST(req: NextRequest) {
       db.stockAlert.findUnique({ where: { productId_email: { productId: product.id, email } }, select: { id: true, notifiedAt: true } }),
     );
     const alert = existing
-      ? await safeDb((db) => db.stockAlert.update({ where: { id: existing.id }, data: { notifiedAt: null, ...(name ? { name } : {}) } }))
-      : await safeDb((db) => db.stockAlert.create({ data: { productId: product.id, email, name: name || null } }));
+      ? await safeDb((db) => db.stockAlert.update({ where: { id: existing.id }, data: { notifiedAt: null, name } }))
+      : await safeDb((db) => db.stockAlert.create({ data: { productId: product.id, email, name } }));
     if (!alert) return NextResponse.json({ error: "Internal server error" }, { status: 500 });
 
     // Already waiting for this unit: nothing new to log or email.
@@ -60,8 +62,10 @@ export async function POST(req: NextRequest) {
     await safeDb((db) =>
       db.contactMessage.create({
         data: {
-          name: name || email,
+          name,
           email,
+          phone,
+          organization,
           workLocation: country,
           subject: `Notify me when available: ${product.name}`,
           message: `Asked to be emailed when the ${product.name} is available again.${country ? `\nVisitor's country: ${country}` : ""}`,
@@ -70,7 +74,7 @@ export async function POST(req: NextRequest) {
       }),
     );
     try {
-      await saveContactAsCustomer({ name, email });
+      await saveContactAsCustomer({ name, email, phone, organization });
     } catch (error) {
       console.error("Failed to save stock-alert requester as customer", error);
     }
@@ -97,19 +101,21 @@ export async function POST(req: NextRequest) {
       to: INFO_EMAIL,
       internal: true,
       replyTo: email,
-      subject: `Notify-me request: ${product.name} — ${name || email}`,
+      subject: `Notify-me request: ${product.name} — ${name}, ${organization}`,
       html: `
         <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;">
           <h2 style="color:#0a2540;">New "notify me when available" request</h2>
           <table style="width:100%;border-collapse:collapse;font-size:14px;">
             <tr><td style="padding:4px 12px 4px 0;color:#667;">Product</td><td><a href="${productUrl}">${escapeHtml(product.name)}</a></td></tr>
-            <tr><td style="padding:4px 12px 4px 0;color:#667;">Name</td><td>${escapeHtml(name || "—")}</td></tr>
+            <tr><td style="padding:4px 12px 4px 0;color:#667;">Name</td><td>${escapeHtml(name)}</td></tr>
             <tr><td style="padding:4px 12px 4px 0;color:#667;">Email</td><td>${escapeHtml(email)}</td></tr>
+            <tr><td style="padding:4px 12px 4px 0;color:#667;">Phone</td><td>${escapeHtml(phone)}</td></tr>
+            <tr><td style="padding:4px 12px 4px 0;color:#667;">Clinic</td><td>${escapeHtml(organization)}</td></tr>
             <tr><td style="padding:4px 12px 4px 0;color:#667;">Country</td><td>${escapeHtml(country ?? "—")}</td></tr>
           </table>
           <p style="color:#333;">They'll be emailed automatically when the unit is listed again. Reply to offer something similar now.</p>
         </div>`,
-      text: `New "notify me when available" request\nProduct: ${product.name} (${productUrl})\nName: ${name || "—"}\nEmail: ${email}\nCountry: ${country ?? "—"}\n\nThey'll be emailed automatically when the unit is listed again. Reply to offer something similar now.`,
+      text: `New "notify me when available" request\nProduct: ${product.name} (${productUrl})\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nClinic: ${organization}\nCountry: ${country ?? "—"}\n\nThey'll be emailed automatically when the unit is listed again. Reply to offer something similar now.`,
     });
 
     return NextResponse.json({ success: true });
