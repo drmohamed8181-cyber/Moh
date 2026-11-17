@@ -49,7 +49,7 @@ export default function NotifyMeButton({
   if (status === "done") {
     return (
       <p role="status" className="flex items-center gap-2 text-sm text-green-700 bg-green-50 rounded-xl p-4 mb-5">
-        <CheckCircle2 size={16} /> Done. We'll email you once when the {productName} is available again.
+        <CheckCircle2 size={16} /> Done. We&apos;ll email you once when the {productName} is available again.
       </p>
     );
   }
@@ -68,7 +68,7 @@ export default function NotifyMeButton({
 
   return (
     <form onSubmit={submit} className="mb-5 p-4 rounded-xl border border-gray-200 bg-white space-y-3" aria-label="Notify me when available">
-      <p className="text-sm text-gray-700">We'll email you once when this unit is available again. No other emails.</p>
+      <p className="text-sm text-gray-700">We&apos;ll email you once when this unit is available again. No other emails.</p>
       <div className="grid sm:grid-cols-2 gap-3">
         <label className="text-sm text-gray-700">
           <span className="block mb-1">Email</span>
