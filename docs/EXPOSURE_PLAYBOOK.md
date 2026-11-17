@@ -111,7 +111,7 @@ just the homepage.
 
 ## 5. Content that earns visits over time (one piece per month)
 
-**Done for you:** the site now has a `/guides` section with sixteen articles,
+**Done for you:** the site now has a `/guides` section with seventeen articles,
 each targeting a real query and linking into the catalogue:
 - Refurbished vs new ophthalmic equipment: what actually differs
 - What to check before buying a used excimer laser
@@ -129,6 +129,7 @@ each targeting a real query and linking into the catalogue:
 - Corneal topographer buying guide
 - Microkeratome vs femtosecond laser for LASIK flaps
 - How to choose a fundus camera
+- Is refurbished ophthalmic laser equipment safe? How to verify it
 
 To add one, append an entry to `src/content/guides.ts`; the index, sitemap and
 Article markup update automatically. Good next topics are the questions your
