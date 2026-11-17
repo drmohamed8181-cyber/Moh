@@ -18,9 +18,13 @@ export async function GET(req: NextRequest) {
     return htmlPage(`<h2>Invalid or expired unsubscribe link</h2>`);
   }
 
-  await safeDb((db) => db.newsletter.deleteMany({ where: { email } }));
+  const address = email.trim().toLowerCase();
+  // Removes them from the newsletter list and records the opt-out, which every
+  // marketing send (digest and campaigns) checks, so it stops all marketing email.
+  await safeDb((db) => db.newsletter.deleteMany({ where: { email: { equals: address, mode: "insensitive" } } }));
+  await safeDb((db) => db.emailOptOut.upsert({ where: { email: address }, update: {}, create: { email: address } }));
 
   return htmlPage(
-    `<h2>You've been unsubscribed</h2><p>${escapeHtml(email)} will no longer receive product update emails from MP MedPharma.</p>`
+    `<h2>You've been unsubscribed</h2><p>${escapeHtml(email)} will no longer receive marketing emails from MP MedPharma.</p>`
   );
 }

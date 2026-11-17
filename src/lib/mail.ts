@@ -39,7 +39,7 @@ function isInternalRecipient(to: string) {
  * unless it is addressed to PRICING_EMAIL. `priceQuote: true` marks a quote the admin confirmed on the
  * Messages page, the only customer email allowed to carry a price.
  */
-export async function sendMail(options: { to: string; subject: string; html: string; text?: string; from?: string; replyTo?: string; internal?: boolean; pricing?: boolean; priceQuote?: boolean }) {
+export async function sendMail(options: { to: string; subject: string; html: string; text?: string; from?: string; replyTo?: string; internal?: boolean; pricing?: boolean; priceQuote?: boolean; headers?: Record<string, string> }) {
   if (options.pricing && options.to.trim().toLowerCase() !== PRICING_EMAIL) {
     console.error(`Pricing email not sent: it may only go to ${PRICING_EMAIL}.`);
     return false;
@@ -63,6 +63,7 @@ export async function sendMail(options: { to: string; subject: string; html: str
         html: options.html,
         text: options.text,
         replyTo,
+        ...(options.headers ? { headers: options.headers } : {}),
       });
       if (error) {
         console.error("Failed to send email via Resend:", error);
@@ -88,6 +89,7 @@ export async function sendMail(options: { to: string; subject: string; html: str
       html: options.html,
       text: options.text,
       replyTo,
+      ...(options.headers ? { headers: options.headers } : {}),
     });
     return true;
   } catch (e) {

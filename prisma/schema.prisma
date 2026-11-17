@@ -476,3 +476,21 @@ model StockAlert {
   @@unique([productId, email])
   @@index([notifiedAt])
 }
+
+// Addresses that unsubscribed from marketing email (newsletter link or a
+// campaign's unsubscribe link). Checked before any newsletter or campaign send.
+model EmailOptOut {
+  email     String   @id
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+}
+
+// One row per recipient per newsletter campaign, so a campaign is never sent
+// twice to the same address and a send can resume after a batch.
+model CampaignSend {
+  id       String   @id @default(dbgenerated("(gen_random_uuid())::text"))
+  campaign String
+  email    String
+  sentAt   DateTime @default(now()) @db.Timestamptz(6)
+
+  @@unique([campaign, email])
+}

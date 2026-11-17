@@ -21,6 +21,8 @@ type BuildDigestInput = {
   baseUrl: string;
   unsubscribeUrl: string;
   issueDate: Date;
+  /** "announcement" words it as a one-off inventory newsletter instead of the biweekly digest. */
+  mode?: "digest" | "announcement";
 };
 
 type BuiltDigest = {
@@ -50,7 +52,8 @@ const CONTACT = {
   phone: "917-582-4568",
   phoneHref: "tel:9175824568",
   email: "info@mpmedpharma.com",
-  address: "New Jersey, NJ 07675, USA",
+  // Postal address required in marketing email (CAN-SPAM). Owner-provided, Nov 17, 2026.
+  address: "2 Kinderkamack Rd, Hackensack, NJ 07601, USA",
 };
 
 const MAX_NEW = 6;
@@ -251,7 +254,7 @@ function updateRow(baseUrl: string, p: DigestProduct, note: string): string {
   </tr>`;
 }
 
-function featuredSection(baseUrl: string, p: DigestProduct): string {
+function featuredSection(baseUrl: string, p: DigestProduct, label: string): string {
   const image = resolveImage(baseUrl, p.images[0]);
   const highlights = p.features
     .slice(0, 3)
@@ -284,7 +287,7 @@ function featuredSection(baseUrl: string, p: DigestProduct): string {
     <tr>
       <td style="padding:32px 32px 36px;">
         <span style="display:inline-block;font-family:${FONT_SANS};font-size:11px;letter-spacing:2px;font-weight:700;
-          color:${COLORS.gold};text-transform:uppercase;margin-bottom:12px;">Featured This Fortnight</span>
+          color:${COLORS.gold};text-transform:uppercase;margin-bottom:12px;">${escapeHtml(label)}</span>
         <div style="font-family:${FONT_SERIF};font-size:26px;font-weight:700;color:${COLORS.white};line-height:32px;margin-bottom:12px;">
           ${escapeHtml(p.name)}
         </div>
@@ -300,6 +303,20 @@ function featuredSection(baseUrl: string, p: DigestProduct): string {
 
 export function buildProductDigestEmail(input: BuildDigestInput): BuiltDigest {
   const { baseUrl, unsubscribeUrl, issueDate } = input;
+  const announcement = input.mode === "announcement";
+  const copy = announcement
+    ? {
+        heading: "See what&rsquo;s new in our inventory",
+        headingText: "See what's new in our inventory",
+        intro: "Here is a look at the latest additions and changes to our inventory of tested and refurbished ophthalmic and surgical equipment &mdash; so your practice always has visibility into what&rsquo;s available. Here&rsquo;s what&rsquo;s new.",
+        introText: "Here is a look at the latest additions and changes to our inventory of tested and refurbished ophthalmic and surgical equipment. Here's what's new.",
+      }
+    : {
+        heading: "Discover what&rsquo;s new this fortnight",
+        headingText: "Discover what's new this fortnight",
+        intro: "Welcome to your biweekly MP MedPharma product update. Every two weeks we bring you a curated look at the latest additions and changes to our inventory of tested and refurbished ophthalmic and surgical equipment &mdash; so your practice always has visibility into what&rsquo;s available. Here&rsquo;s what&rsquo;s new since our last issue.",
+        introText: "Welcome to your biweekly MP MedPharma product update. Every two weeks we bring you a curated look at the latest additions and changes to our inventory of tested and refurbished ophthalmic and surgical equipment. Here's what's new since our last issue.",
+      };
 
   const combined = [...input.newProducts, ...input.updatedProducts];
   const featured =
@@ -316,8 +333,9 @@ export function buildProductDigestEmail(input: BuildDigestInput): BuiltDigest {
       ? `New Arrivals at MP MedPharma — ${issueDateStr}`
       : `Product Updates from MP MedPharma — ${issueDateStr}`;
 
-  const previewText =
-    "New arrivals, recent updates, and this fortnight's featured system inside — take a look.";
+  const previewText = announcement
+    ? "New arrivals, recent updates, and our featured system inside — take a look."
+    : "New arrivals, recent updates, and this fortnight's featured system inside — take a look.";
 
   const newCardsHtml = newProducts.map((p) => productCard(baseUrl, p, "New Arrival")).join("");
 
@@ -374,7 +392,7 @@ export function buildProductDigestEmail(input: BuildDigestInput): BuiltDigest {
                 Product Update
               </div>
               <div style="font-family:${FONT_SANS};font-size:13px;letter-spacing:0.5px;color:${COLORS.gold};margin-bottom:16px;">
-                Discover what&rsquo;s new this fortnight
+                ${copy.heading}
               </div>
               <span style="display:inline-block;font-family:${FONT_SANS};font-size:11px;letter-spacing:1px;color:#AEB6C9;
                 border:1px solid #2C3B5C;border-radius:20px;padding:6px 16px;">
@@ -390,10 +408,7 @@ export function buildProductDigestEmail(input: BuildDigestInput): BuiltDigest {
                 Dear Valued Customer,
               </p>
               <p style="font-family:${FONT_SANS};font-size:14px;line-height:23px;color:${COLORS.textMuted};margin:0 0 4px;">
-                Welcome to your biweekly MP MedPharma product update. Every two weeks we bring you a curated look at the
-                latest additions and changes to our inventory of precision-inspected, manufacturer-tested ophthalmic
-                and surgical equipment &mdash; so your practice always has visibility into what&rsquo;s available.
-                Here&rsquo;s what&rsquo;s new since our last issue.
+                ${copy.intro}
               </p>
             </td>
           </tr>
@@ -430,7 +445,7 @@ export function buildProductDigestEmail(input: BuildDigestInput): BuiltDigest {
               ? `<tr>
                   <td class="px" style="background:${COLORS.white};padding:28px 40px 4px;">
                     ${sectionLabel("Spotlight")}
-                    ${featuredSection(baseUrl, featured)}
+                    ${featuredSection(baseUrl, featured, announcement ? "Featured This Month" : "Featured This Fortnight")}
                   </td>
                 </tr>`
               : ""
@@ -541,13 +556,13 @@ export function buildProductDigestEmail(input: BuildDigestInput): BuiltDigest {
 
   const textLines: string[] = [];
   textLines.push("MP MEDPHARMA — PRODUCT UPDATE");
-  textLines.push("Discover what's new this fortnight");
+  textLines.push(copy.headingText);
   textLines.push(`Issue Date: ${issueDateStr}`);
   textLines.push("");
   textLines.push("Dear Valued Customer,");
   textLines.push("");
   textLines.push(
-    "Welcome to your biweekly MP MedPharma product update. Every two weeks we bring you a curated look at the latest additions and changes to our inventory of precision-inspected, manufacturer-tested ophthalmic and surgical equipment. Here's what's new since our last issue."
+    copy.introText
   );
   textLines.push("");
 
