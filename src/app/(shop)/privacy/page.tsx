@@ -33,7 +33,10 @@ export default function PrivacyPage() {
           <p className="text-gray-600 leading-relaxed">
             We use the information you provide to respond to inquiries, prepare quotes, process orders,
             provide customer support, and — where you&apos;ve opted in — send occasional product
-            updates or newsletters. We do not sell your personal information to third parties.
+            updates or newsletters. If you ask us to notify you when a product is available again, we
+            use your email to send that one notice and may follow up about that product or similar
+            equipment; each notice includes a link to cancel. We do not sell your personal information to
+            third parties.
           </p>
         </section>
 

@@ -3,6 +3,7 @@ import { safeDb } from "@/lib/prisma";
 import { sendMail } from "@/lib/mail";
 import { escapeHtml } from "@/lib/utils";
 import { DAY_MS, FOLLOW_UP_DAYS, HOUR_MS, NEW_LEAD_REMINDER_HOURS } from "@/lib/leads";
+import { sendBackInStockAlerts } from "@/lib/stockAlerts";
 
 // Daily check (13:00 UTC, about 9am US Eastern; Vercel Hobby allows one run a day).
 // Emails the business once per lead when:
@@ -47,6 +48,9 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  // Same daily run: email visitors whose "notify me" product is listed again.
+  const stockAlerts = await sendBackInStockAlerts();
+
   const now = new Date();
   const newCutoff = new Date(now.getTime() - NEW_LEAD_REMINDER_HOURS * HOUR_MS);
   const quoteCutoff = new Date(now.getTime() - FOLLOW_UP_DAYS * DAY_MS);
@@ -79,7 +83,7 @@ export async function GET(req: NextRequest) {
   const unanswered = due.filter((m) => m.leadStatus === "NEW").map((m) => toLead(m, m.createdAt));
   const followUps = due.filter((m) => m.leadStatus === "QUOTED").map((m) => toLead(m, m.statusUpdatedAt ?? m.createdAt));
 
-  if (due.length === 0) return NextResponse.json({ unanswered: 0, followUps: 0, sent: false });
+  if (due.length === 0) return NextResponse.json({ unanswered: 0, followUps: 0, sent: false, stockAlerts });
 
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXTAUTH_URL || req.nextUrl.origin;
   const fresh = section(`No reply after ${NEW_LEAD_REMINDER_HOURS} hours`, unanswered.map((l) => ({ ...l, age: `waiting ${l.age}` })));
@@ -108,5 +112,5 @@ export async function GET(req: NextRequest) {
     await safeDb((db) => db.contactMessage.updateMany({ where: { id: { in: due.map((m) => m.id) } }, data: { reminderSentAt: now } }));
   }
 
-  return NextResponse.json({ unanswered: unanswered.length, followUps: followUps.length, sent });
+  return NextResponse.json({ unanswered: unanswered.length, followUps: followUps.length, sent, stockAlerts });
 }
