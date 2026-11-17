@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Bell, CheckCircle2 } from "lucide-react";
+import ConsentNotice from "@/components/ui/ConsentNotice";
 
 // "Notify me when available" on sold or unavailable products. Opens a short
 // form; the request goes to /api/stock-alert and the email is sent once, by
@@ -70,7 +71,7 @@ export default function NotifyMeButton({
 
   return (
     <form onSubmit={submit} className="mb-5 p-4 rounded-xl border border-gray-200 bg-white space-y-3" aria-label="Notify me when available">
-      <p className="text-sm text-gray-700">We&apos;ll email you once when this unit is available again. No other emails.</p>
+      <p className="text-sm text-gray-700">We&apos;ll email you when this unit is available again.</p>
       <div className="grid sm:grid-cols-2 gap-3">
         <label className="text-sm text-gray-700">
           <span className="block mb-1">Full name</span>
@@ -130,9 +131,7 @@ export default function NotifyMeButton({
           Cancel
         </button>
       </div>
-      <p className="text-xs text-gray-500">
-        See our <a href="/privacy" className="underline">privacy policy</a>. Every email has a link to cancel.
-      </p>
+      <ConsentNotice />
     </form>
   );
 }

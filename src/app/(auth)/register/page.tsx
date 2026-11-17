@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Eye, EyeOff, User, Mail, Lock, ArrowLeft, Phone } from "lucide-react";
 import { toast } from "sonner";
 import EmailSuggestion from "@/components/ui/EmailSuggestion";
+import ConsentNotice from "@/components/ui/ConsentNotice";
 
 export default function RegisterPage() {
   const [form, setForm] = useState({ name: "", email: "", phone: "", password: "", confirm: "" });
@@ -123,6 +124,7 @@ export default function RegisterPage() {
             >
               {loading ? "Creating Account..." : "Create Account"}
             </button>
+            <ConsentNotice />
           </form>
 
           <p className="text-center text-sm text-gray-600 mt-6">

@@ -5,6 +5,7 @@ import { ArrowRight, CheckCircle2, Loader2, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import EmailSuggestion from "@/components/ui/EmailSuggestion";
 import { trackNewsletterSignup } from "@/lib/analytics";
+import ConsentNotice from "@/components/ui/ConsentNotice";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -278,7 +279,7 @@ export default function NewsletterBox() {
                 Join the Newsletter
               </button>
 
-              <p className="text-center text-xs text-white/45">No spam. Unsubscribe anytime.</p>
+              <ConsentNotice dark className="text-center" />
             </form>
           )}
         </div>
