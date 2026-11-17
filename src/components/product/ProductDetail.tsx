@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { buildInquiryHref, formatPrice } from "@/lib/utils";
 import { useWishlistStore } from "@/store/wishlistStore";
 import { watermarkedSrc } from "@/lib/watermark";
+import NotifyMeButton from "@/components/product/NotifyMeButton";
 
 interface Product {
   id: string;
@@ -205,6 +206,15 @@ export default function ProductDetail({ product }: { product: Product }) {
                 <Heart size={18} fill={wishlisted ? "currentColor" : "none"} />
               </button>
             </div>
+
+            {(product.isSold || !product.isAvailable) && (
+              <NotifyMeButton
+                productId={product.id}
+                productName={product.name}
+                defaultEmail={session?.user?.email}
+                defaultName={session?.user?.name}
+              />
+            )}
 
             {/* Trust signals */}
             <div className="grid grid-cols-3 gap-3 p-4 bg-gray-50 rounded-xl">
