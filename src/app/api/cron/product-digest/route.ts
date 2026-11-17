@@ -129,7 +129,14 @@ export async function GET(req: NextRequest) {
       unsubscribeUrl,
       issueDate: now,
     });
-    const ok = await sendMail({ to: email, replyTo: INFO_EMAIL, subject, html, text });
+    const ok = await sendMail({
+      to: email,
+      replyTo: INFO_EMAIL,
+      subject,
+      html,
+      text,
+      headers: { "List-Unsubscribe": `<${unsubscribeUrl}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" },
+    });
     if (ok) sent++;
     else failed++;
   }

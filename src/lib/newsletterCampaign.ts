@@ -123,7 +123,7 @@ async function sendOne(email: string) {
     subject,
     html,
     text,
-    headers: { "List-Unsubscribe": `<${unsub}>` },
+    headers: { "List-Unsubscribe": `<${unsub}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" },
   });
 }
 
