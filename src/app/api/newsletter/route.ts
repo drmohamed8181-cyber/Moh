@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { safeDb } from "@/lib/prisma";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
+import { clearOptOutOnContact } from "@/lib/optOut";
 
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req);
@@ -29,5 +30,6 @@ export async function POST(req: NextRequest) {
   }));
 
   if (!result) return NextResponse.json({ error: "Server error" }, { status: 500 });
+  await clearOptOutOnContact(email);
   return NextResponse.json({ success: true });
 }

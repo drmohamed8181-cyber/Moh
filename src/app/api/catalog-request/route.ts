@@ -8,6 +8,7 @@ import { saveContactAsCustomer } from "@/lib/customers";
 import { CATALOGS } from "@/lib/catalogs";
 import { CATALOG_LINK_SOURCES, SOURCE_LABELS, catalogHref, type CatalogLinkSource } from "@/lib/catalogDownloads";
 import { SITE_URL } from "@/lib/seo";
+import { clearOptOutOnContact } from "@/lib/optOut";
 
 // A catalog requested from a button on the website. The visitor gives their
 // name, email and clinic; we save them as a lead (source "Catalog download")
@@ -108,6 +109,8 @@ export async function POST(req: NextRequest) {
         </div>`,
       text: `New catalog request\nCatalog: ${catalog.title}\nName: ${name}\nEmail: ${email}\nClinic: ${organization}\nCountry: ${country ?? "—"}\nFrom: ${where}\n\nThey already have the catalog. Reply to this email to follow up.`,
     });
+
+    await clearOptOutOnContact(email);
 
     return NextResponse.json({ success: true, href: catalogHref(catalog.href, source ?? "catalogs") });
   } catch (error) {

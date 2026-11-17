@@ -81,12 +81,19 @@ export default function ComposeMessageDialog({
     }
     setSending(true);
     try {
-      const res = await fetch("/api/admin/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, name, subject, message, priceQuote: hasPrice && priceConfirmed }),
-      });
-      const data = await res.json().catch(() => ({}));
+      const send = (notMarketing: boolean) =>
+        fetch("/api/admin/messages", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, name, subject, message, priceQuote: hasPrice && priceConfirmed, notMarketing }),
+        });
+      let res = await send(false);
+      let data = await res.json().catch(() => ({}));
+      if (res.status === 409 && data.code === "OPTED_OUT") {
+        if (!window.confirm(`${data.error}\n\nIs this message about something they asked for (not marketing)?`)) return;
+        res = await send(true);
+        data = await res.json().catch(() => ({}));
+      }
       if (!res.ok) {
         toast.error(data.error ?? "Failed to send the message.");
         return;

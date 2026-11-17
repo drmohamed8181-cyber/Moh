@@ -5,6 +5,7 @@ import { INFO_EMAIL, infoSignatureHtml, infoSignatureText } from "@/lib/emailSig
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { escapeHtml, generateSubmissionReference } from "@/lib/utils";
 import { saveContactAsCustomer } from "@/lib/customers";
+import { clearOptOutOnContact } from "@/lib/optOut";
 
 const NOTIFY_EMAIL = process.env.PRODUCT_SUBMISSION_NOTIFY_EMAIL || "dr.mohamed8181@gmail.com";
 const SUPPORT_EMAIL = process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "dr.mohamed8181@gmail.com";
@@ -176,6 +177,7 @@ export async function POST(req: NextRequest) {
       text: `Thank you for submitting your product to MP MedPharma (reference ${referenceNumber}). Estimated review time: ${REVIEW_TIMEFRAME}. Questions? ${SUPPORT_EMAIL}\n\n${infoSignatureText}`,
     });
 
+    await clearOptOutOnContact(email);
     return NextResponse.json({
       success: true,
       referenceNumber,
