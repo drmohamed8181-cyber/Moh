@@ -131,6 +131,7 @@ export async function GET(req: NextRequest) {
     });
     const ok = await sendMail({
       to: email,
+      from: `MP MedPharma <${INFO_EMAIL}>`, // owner's rule: newsletters go out from info@
       replyTo: INFO_EMAIL,
       subject,
       html,

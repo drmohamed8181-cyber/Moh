@@ -15,7 +15,8 @@ import { SITE_URL } from "@/lib/seo";
 
 export const STOCK_ALERT_LEAD_SOURCE = "Back-in-stock alert";
 
-const INQUIRY_FROM_EMAIL = process.env.INQUIRY_FROM_EMAIL || process.env.SMTP_FROM;
+// Owner's rule: emails to customers about our inventory go out from info@.
+const FROM = `MP MedPharma <${INFO_EMAIL}>`;
 
 /** The token in an alert's cancel link, tied to that one alert. */
 export function stockAlertToken(alertId: string, email: string) {
@@ -59,7 +60,7 @@ export async function sendBackInStockAlerts(): Promise<{ due: number; sent: numb
 
     const ok = await sendMail({
       to: alert.email,
-      from: INQUIRY_FROM_EMAIL,
+      from: FROM,
       replyTo: INFO_EMAIL,
       subject: `Back in inventory: ${alert.product.name}`,
       html: `
