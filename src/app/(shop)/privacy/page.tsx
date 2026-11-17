@@ -35,8 +35,9 @@ export default function PrivacyPage() {
             provide customer support. By submitting your information through any form on this website,
             you agree that we may contact you about your request and send you future communications,
             including inventory updates. You can unsubscribe at any time using the link in our emails or by
-            emailing us. If you ask us to notify you when a product is available again, we email you when
-            it is. We do not sell your personal information to third parties.
+            emailing us. Visitors from the EU, EEA, UK and Switzerland receive inventory updates only if
+            they tick the opt-in box on our forms or subscribe to our newsletter. If you ask us to notify
+            you when a product is available again, we email you when it is. We do not sell your personal information to third parties.
           </p>
         </section>
 
