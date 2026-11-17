@@ -279,7 +279,7 @@ export default function NewsletterBox() {
                 Join the Newsletter
               </button>
 
-              <ConsentNotice dark newsletter className="text-center" />
+              <ConsentNotice dark className="text-center" />
             </form>
           )}
         </div>

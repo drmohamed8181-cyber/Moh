@@ -204,7 +204,7 @@ export default function Footer({ settings }: { settings?: FooterSettings }) {
               </button>
             </form>
             <EmailSuggestion dark email={newsletterEmail} onAccept={setNewsletterEmail} />
-            <ConsentNotice dark newsletter className="mt-2" />
+            <ConsentNotice dark className="mt-2" />
           </div>
         </div>
 
