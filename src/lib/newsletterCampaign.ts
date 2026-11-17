@@ -1,6 +1,7 @@
-// One-off inventory newsletter to everyone who gave us their details:
-// registered customers, anyone who sent an inquiry (website or logged email),
-// and newsletter subscribers. Content is in src/content/newsletterCampaign.ts.
+// One-off inventory newsletter to people who actually reached out to us:
+// anyone who sent an inquiry (website form or logged email), newsletter
+// subscribers, and customers who registered an account themselves. Customer
+// records imported in bulk (no inquiry, no signup) are never mailed. Content is in src/content/newsletterCampaign.ts.
 //
 // Compliance: every email carries a working unsubscribe link (recorded in
 // EmailOptOut, which every marketing send checks), the business postal
@@ -36,7 +37,7 @@ export function unsubscribeUrl(email: string) {
 
 export async function getCampaignAudience() {
   const [users, messages, subscribers, optOuts, sent] = await Promise.all([
-    safeDb((db) => db.user.findMany({ where: { role: "CUSTOMER" }, select: { email: true } })),
+    safeDb((db) => db.user.findMany({ where: { role: "CUSTOMER", password: { not: null } }, select: { email: true } })),
     safeDb((db) => db.contactMessage.findMany({ select: { email: true } })),
     safeDb((db) => db.newsletter.findMany({ select: { email: true } })),
     safeDb((db) => db.emailOptOut.findMany({ select: { email: true } })),
