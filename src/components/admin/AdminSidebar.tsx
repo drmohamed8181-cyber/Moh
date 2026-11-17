@@ -8,8 +8,7 @@ import {
   LayoutDashboard, Package, Tags, ShoppingBag, Users,
   MessageSquare, Image, Home, Settings, Search,
   LogOut, ChevronRight, Globe, Calendar, PackageSearch, KeyRound,
-  Menu, X,
-} from "lucide-react";
+  Menu, X, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LogoMark } from "@/components/ui/Logo";
 
@@ -20,6 +19,7 @@ const navItems = [
   { label: "Orders", href: "/admin/orders", icon: ShoppingBag },
   { label: "Customers", href: "/admin/customers", icon: Users },
   { label: "Messages", href: "/admin/messages", icon: MessageSquare },
+  { label: "Newsletter", href: "/admin/newsletter", icon: Mail },
   { label: "Demo Requests", href: "/admin/demo-requests", icon: Calendar },
   { label: "Product Submissions", href: "/admin/product-submissions", icon: PackageSearch },
   { label: "Media Library", href: "/admin/media", icon: Image },

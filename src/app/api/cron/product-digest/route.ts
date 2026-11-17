@@ -113,7 +113,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ productsFound: 0, sent: 0 });
   }
 
-  const subscribers = await safeDb((db) => db.newsletter.findMany({ select: { email: true } }));
+  const optOuts = new Set(((await safeDb((db) => db.emailOptOut.findMany({ select: { email: true } }))) ?? []).map((o) => o.email));
+  const subscribers = (await safeDb((db) => db.newsletter.findMany({ select: { email: true } })))?.filter((s) => !optOuts.has(s.email.trim().toLowerCase())) ?? null;
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXTAUTH_URL || req.nextUrl.origin;
 
   let sent = 0;
