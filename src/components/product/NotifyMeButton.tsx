@@ -20,6 +20,8 @@ export default function NotifyMeButton({
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState(defaultEmail ?? "");
   const [name, setName] = useState(defaultName ?? "");
+  const [phone, setPhone] = useState("");
+  const [organization, setOrganization] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [error, setError] = useState("");
 
@@ -31,7 +33,7 @@ export default function NotifyMeButton({
       const res = await fetch("/api/stock-alert", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId, email, name }),
+        body: JSON.stringify({ productId, email, name, phone, organization }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
@@ -71,6 +73,17 @@ export default function NotifyMeButton({
       <p className="text-sm text-gray-700">We&apos;ll email you once when this unit is available again. No other emails.</p>
       <div className="grid sm:grid-cols-2 gap-3">
         <label className="text-sm text-gray-700">
+          <span className="block mb-1">Full name</span>
+          <input
+            type="text"
+            required
+            autoComplete="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full rounded-lg border border-gray-300 px-3 py-2"
+          />
+        </label>
+        <label className="text-sm text-gray-700">
           <span className="block mb-1">Email</span>
           <input
             type="email"
@@ -82,12 +95,24 @@ export default function NotifyMeButton({
           />
         </label>
         <label className="text-sm text-gray-700">
-          <span className="block mb-1">Name (optional)</span>
+          <span className="block mb-1">Phone</span>
+          <input
+            type="tel"
+            required
+            autoComplete="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            className="w-full rounded-lg border border-gray-300 px-3 py-2"
+          />
+        </label>
+        <label className="text-sm text-gray-700">
+          <span className="block mb-1">Clinic or hospital</span>
           <input
             type="text"
-            autoComplete="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            required
+            autoComplete="organization"
+            value={organization}
+            onChange={(e) => setOrganization(e.target.value)}
             className="w-full rounded-lg border border-gray-300 px-3 py-2"
           />
         </label>
