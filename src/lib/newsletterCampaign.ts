@@ -1,7 +1,8 @@
-// One-off inventory newsletter to people who actually reached out to us:
-// anyone who sent an inquiry (website form or logged email), newsletter
-// subscribers, and customers who registered an account themselves. Customer
-// records imported in bulk (no inquiry, no signup) are never mailed. Content is in src/content/newsletterCampaign.ts.
+// One-off inventory newsletter to every customer record (including the
+// business contacts imported in bulk, by the owner's decision of Nov 17, 2026),
+// anyone who sent an inquiry (website form or logged email) and newsletter
+// subscribers. It is sent from info@ so replies land in the main inbox.
+// Content is in src/content/newsletterCampaign.ts.
 //
 // Compliance: every email carries a working unsubscribe link (recorded in
 // EmailOptOut, which every marketing send checks), the business postal
@@ -19,7 +20,7 @@ import { SITE_URL } from "@/lib/seo";
 import { NEWSLETTER_CAMPAIGN } from "@/content/newsletterCampaign";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const FROM = process.env.NEWSLETTER_FROM_EMAIL || process.env.INQUIRY_FROM_EMAIL || process.env.SMTP_FROM;
+const FROM = `MP MedPharma <${INFO_EMAIL}>`;
 
 /** Our own and our partner's addresses: never part of a customer campaign. */
 function isInternal(email: string) {
@@ -37,7 +38,7 @@ export function unsubscribeUrl(email: string) {
 
 export async function getCampaignAudience() {
   const [users, messages, subscribers, optOuts, sent] = await Promise.all([
-    safeDb((db) => db.user.findMany({ where: { role: "CUSTOMER", password: { not: null } }, select: { email: true } })),
+    safeDb((db) => db.user.findMany({ where: { role: "CUSTOMER" }, select: { email: true } })),
     safeDb((db) => db.contactMessage.findMany({ select: { email: true } })),
     safeDb((db) => db.newsletter.findMany({ select: { email: true } })),
     safeDb((db) => db.emailOptOut.findMany({ select: { email: true } })),
