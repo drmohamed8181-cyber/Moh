@@ -463,6 +463,29 @@ export const GUIDES: Guide[] = [
         ],
       },
       {
+        // Search Console (Nov 2026): "what should a service contract for an
+        // ophthalmic surgical microscope include?" ranks around position 6.
+        heading: "What a microscope service contract should include",
+        paragraphs: ["Whether you buy new or pre-owned, compare service contracts on these points rather than on price alone:"],
+        bullets: [
+          "How many preventive maintenance visits a year, and what each visit checks: optics, illumination, motors, arm balance, brakes and electrical safety.",
+          "Whether parts are covered, and which ones are excluded. Lamps, fuses and other consumables are often excluded.",
+          "The response time for a breakdown, and whether a loaner microscope is provided if a repair takes longer.",
+          "Who performs the service, and whether that engineer is trained on your model.",
+          "Coverage for the video system, camera and assistant scope, which are sometimes excluded from the microscope contract.",
+          "What happens when the manufacturer ends parts support for the model during the contract term.",
+        ],
+      },
+      {
+        // Search Console (Nov 2026): "which surgical microscopes connect to a
+        // clinic's diagnostic devices…" ranks around position 7.
+        heading: "Connecting the microscope to other devices",
+        paragraphs: [
+          "Newer microscopes can connect to other systems in the operating room: video recording, intraoperative OCT on some platforms, and image-guidance systems that use data from the clinic's diagnostic devices. Older microscopes usually offer video output only.",
+          "Connectivity is model- and software-specific. Before you buy, list the devices the microscope must work with, then ask the supplier to confirm in writing that the exact microscope, software version and adapters support those connections. Do not assume that a feature offered on the current generation is available on an older one.",
+        ],
+      },
+      {
         heading: "How MP MedPharma can help",
         paragraphs: [
           "Tell us your procedure mix and your room, and we will match a microscope and mounting option to it. Every unit ships with its service documentation and warranty coverage, and pricing is quoted per unit according to configuration.",
@@ -1134,6 +1157,97 @@ export const GUIDES: Guide[] = [
       { label: "Sell your equipment", href: "/sell-your-product" },
       { label: "What is used equipment worth?", href: "/guides/how-to-sell-used-ophthalmic-equipment" },
       { label: "Browse replacement equipment", href: "/products" },
+    ],
+  },
+  {
+    // Search Console (Aug–Nov 2026): "how much does a femtosecond laser cost",
+    // "femtosecond laser price", "constellation vision system price". Ranges are
+    // deliberately wide and rounded (owner's decision, Nov 17 2026), built from
+    // our own asking prices; keep them in line with the catalogue when prices
+    // move, and never list a specific unit's price here.
+    slug: "used-ophthalmic-equipment-prices",
+    title: "How Much Does Used Ophthalmic Equipment Cost? 2026 Price Ranges",
+    description:
+      "Approximate 2026 price ranges for refurbished YAG, SLT and retina lasers, OCTs, phaco systems, microscopes, excimer and femtosecond lasers, and what moves the price.",
+    publishedAt: "2026-11-17",
+    intro:
+      "Prices for pre-owned ophthalmic equipment are hard to find: many dealers list equipment without a price and quote only on request. This guide gives approximate price ranges for refurbished equipment in the United States so you can budget before you ask for quotes. The ranges are deliberately broad, because the platform generation, condition and accessories included can move the price of the same model considerably.",
+    sections: [
+      {
+        heading: "How to read these ranges",
+        paragraphs: [
+          "The figures are approximate asking prices for refurbished units in late 2026. They are a starting point for budgeting, not a quote. They generally exclude shipping, crating, installation and taxes, which depend on where the unit is going. Older generations sit at the low end of each range and current or recent generations with full accessories at the high end.",
+        ],
+      },
+      {
+        heading: "Anterior segment and glaucoma lasers",
+        paragraphs: ["Approximate ranges for refurbished units:"],
+        bullets: [
+          "YAG lasers: about $7,000 to $30,000. Older single-function units sit at the low end; current-generation models and combination platforms at the top.",
+          "SLT lasers: about $15,000 to $30,000.",
+          "Combination SLT/YAG platforms: about $25,000 to $40,000.",
+        ],
+      },
+      {
+        heading: "Retina lasers",
+        paragraphs: ["Approximate ranges for refurbished units:"],
+        bullets: [
+          "Single-spot 532 nm and 810 nm photocoagulation lasers: about $10,000 to $25,000, depending on the delivery included (console only, slit lamp adapter, integrated slit lamp or LIO).",
+          "Pattern-scanning photocoagulation lasers: about $18,000 to $30,000.",
+        ],
+      },
+      {
+        heading: "Diagnostic equipment",
+        paragraphs: ["Approximate ranges for refurbished units:"],
+        bullets: [
+          "OCT, earlier spectral-domain generations: about $12,000 to $25,000.",
+          "OCT, recent generations: about $30,000 to $45,000, and about $35,000 to $75,000 with angiography.",
+          "Widefield fundus cameras: about $25,000 to $70,000.",
+          "Corneal topographers: about $7,000 to $22,000.",
+          "Optical biometers, visual field analyzers and specular microscopes: about $7,000 to $18,000.",
+        ],
+      },
+      {
+        heading: "Surgical equipment",
+        paragraphs: ["Approximate ranges for refurbished units:"],
+        bullets: [
+          "Phaco and phaco/vitrectomy systems: about $12,000 to $45,000, depending on platform generation and the handpieces included.",
+          "Ophthalmic surgical microscopes: about $25,000 to $40,000 on a floor stand, more with video and assistant options.",
+          "Microkeratome consoles and heads: about $2,000 to $15,000.",
+        ],
+      },
+      {
+        heading: "Refractive lasers",
+        paragraphs: ["Approximate ranges for refurbished units:"],
+        bullets: [
+          "Excimer lasers: about $50,000 to $125,000.",
+          "Femtosecond lasers: about $50,000 to $100,000.",
+        ],
+        // Refractive pricing depends heavily on usage, licences and service status.
+      },
+      {
+        heading: "What moves the price",
+        paragraphs: ["Two units of the same model can be priced far apart. The usual reasons:"],
+        bullets: [
+          "Generation and software version, and whether the manufacturer still supports it with parts and updates.",
+          "Usage: shot counts, procedure counts and the service status of wear parts such as laser cavities and optics.",
+          "What is included: delivery devices, handpieces, tables, lenses, footswitches and software licences.",
+          "The operating system on diagnostic devices, since older Windows versions may need an upgrade.",
+          "Warranty length and who provides service after the sale.",
+        ],
+      },
+      {
+        heading: "Getting an exact price",
+        paragraphs: [
+          "Our product pages show the price for each unit where one is listed. For any model, tell us the configuration you need and where it will be installed, and we will send a written quote that states what is included and what shipping and installation cost.",
+        ],
+      },
+    ],
+    related: [
+      { label: "Browse equipment with prices", href: "/products" },
+      { label: "Is refurbished laser equipment safe?", href: "/guides/is-refurbished-laser-equipment-safe" },
+      { label: "What is used equipment worth?", href: "/guides/how-to-sell-used-ophthalmic-equipment" },
+      { label: "Contact us", href: "/contact" },
     ],
   },
 ];
