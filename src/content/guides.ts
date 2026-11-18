@@ -1161,92 +1161,54 @@ export const GUIDES: Guide[] = [
   },
   {
     // Search Console (Aug–Nov 2026): "how much does a femtosecond laser cost",
-    // "femtosecond laser price", "constellation vision system price". Ranges are
-    // deliberately wide and rounded (owner's decision, Nov 17 2026), built from
-    // our own asking prices; keep them in line with the catalogue when prices
-    // move, and never list a specific unit's price here.
-    slug: "used-ophthalmic-equipment-prices",
-    title: "How Much Does Used Ophthalmic Equipment Cost? 2026 Price Ranges",
+    // "femtosecond laser price", "constellation vision system price". Owner's
+    // decision (Nov 17 2026): publish ranges only for what buyers search for,
+    // wide and rounded, never a specific unit's price. Keep the ranges around
+    // our own asking prices when the catalogue changes.
+    slug: "femtosecond-laser-and-phaco-system-cost",
+    title: "How Much Does a Used Femtosecond Laser or Phaco System Cost?",
     description:
-      "Approximate 2026 price ranges for refurbished YAG, SLT and retina lasers, OCTs, phaco systems, microscopes, excimer and femtosecond lasers, and what moves the price.",
+      "Approximate 2026 price ranges for refurbished femtosecond lasers and phaco/vitrectomy systems such as the Alcon Constellation, and what moves the price.",
     publishedAt: "2026-11-17",
     intro:
-      "Prices for pre-owned ophthalmic equipment are hard to find: many dealers list equipment without a price and quote only on request. This guide gives approximate price ranges for refurbished equipment in the United States so you can budget before you ask for quotes. The ranges are deliberately broad, because the platform generation, condition and accessories included can move the price of the same model considerably.",
+      "Femtosecond lasers and phaco/vitrectomy systems are two of the largest equipment purchases an eye surgery practice makes, and their prices are rarely published. This guide gives approximate ranges for refurbished units in the United States so you can budget before asking for quotes. The ranges are broad on purpose: generation, usage, software and accessories can move the price of the same model a long way.",
     sections: [
       {
-        heading: "How to read these ranges",
+        heading: "Refurbished femtosecond lasers",
         paragraphs: [
-          "The figures are approximate asking prices for refurbished units in late 2026. They are a starting point for budgeting, not a quote. They generally exclude shipping, crating, installation and taxes, which depend on where the unit is going. Older generations sit at the low end of each range and current or recent generations with full accessories at the high end.",
+          "Refurbished femtosecond lasers for LASIK flaps and corneal procedures generally sell for about $40,000 to $125,000. Older platforms with lower pulse rates sit at the low end; recent generations with current software and a manufacturer service history sit at the high end.",
+          "The purchase price is only part of the cost. Femtosecond platforms use procedure-specific patient interfaces or other disposables, and some charge per-procedure fees or licences. Ask for the per-case cost and confirm the consumables are still manufactured before comparing quotes.",
         ],
       },
       {
-        heading: "Anterior segment and glaucoma lasers",
-        paragraphs: ["Approximate ranges for refurbished units:"],
-        bullets: [
-          "YAG lasers: about $5,000 to $35,000. Older single-function units sit at the low end; current-generation models and combination platforms at the top.",
-          "SLT lasers: about $10,000 to $35,000.",
-          "Combination SLT/YAG platforms: about $20,000 to $50,000.",
+        heading: "Refurbished phaco and phaco/vitrectomy systems",
+        paragraphs: [
+          "Refurbished phaco and combined phaco/vitrectomy systems, such as the Alcon Constellation Vision System, generally sell for about $10,000 to $55,000. Dedicated cataract platforms of earlier generations sit at the low end; current-generation and combined anterior/posterior systems with a full set of handpieces sit at the top.",
+          "As with femtosecond lasers, compare the per-case cost of cassettes and packs as well as the purchase price, and check which handpieces, probes and footswitches are included.",
         ],
-      },
-      {
-        heading: "Retina lasers",
-        paragraphs: ["Approximate ranges for refurbished units:"],
-        bullets: [
-          "Single-spot 532 nm and 810 nm photocoagulation lasers: about $8,000 to $30,000, depending on the delivery included (console only, slit lamp adapter, integrated slit lamp or LIO).",
-          "Pattern-scanning photocoagulation lasers: about $15,000 to $40,000.",
-        ],
-      },
-      {
-        heading: "Diagnostic equipment",
-        paragraphs: ["Approximate ranges for refurbished units:"],
-        bullets: [
-          "OCT, earlier spectral-domain generations: about $10,000 to $30,000.",
-          "OCT, recent generations: about $25,000 to $50,000, and about $30,000 to $85,000 with angiography.",
-          "Widefield fundus cameras: about $20,000 to $80,000.",
-          "Corneal topographers: about $5,000 to $25,000.",
-          "Optical biometers, visual field analyzers and specular microscopes: about $5,000 to $20,000.",
-        ],
-      },
-      {
-        heading: "Surgical equipment",
-        paragraphs: ["Approximate ranges for refurbished units:"],
-        bullets: [
-          "Phaco and phaco/vitrectomy systems: about $10,000 to $55,000, depending on platform generation and the handpieces included.",
-          "Ophthalmic surgical microscopes: about $20,000 to $50,000 on a floor stand, more with video and assistant options.",
-          "Microkeratome consoles and heads: about $1,500 to $20,000.",
-        ],
-      },
-      {
-        heading: "Refractive lasers",
-        paragraphs: ["Approximate ranges for refurbished units:"],
-        bullets: [
-          "Excimer lasers: about $40,000 to $150,000.",
-          "Femtosecond lasers: about $40,000 to $125,000.",
-        ],
-        // Refractive pricing depends heavily on usage, licences and service status.
       },
       {
         heading: "What moves the price",
         paragraphs: ["Two units of the same model can be priced far apart. The usual reasons:"],
         bullets: [
           "Generation and software version, and whether the manufacturer still supports it with parts and updates.",
-          "Usage: shot counts, procedure counts and the service status of wear parts such as laser cavities and optics.",
-          "What is included: delivery devices, handpieces, tables, lenses, footswitches and software licences.",
-          "The operating system on diagnostic devices, since older Windows versions may need an upgrade.",
+          "Usage: procedure counts and the service status of wear parts such as the laser source.",
+          "What is included: handpieces, probes, footswitches, patient beds and software licences.",
+          "Whether licences and service agreements transfer to the new owner.",
           "Warranty length and who provides service after the sale.",
         ],
       },
       {
         heading: "Getting an exact price",
         paragraphs: [
-          "Our product pages show the price for each unit where one is listed. For any model, tell us the configuration you need and where it will be installed, and we will send a written quote that states what is included and what shipping and installation cost.",
+          "These ranges are approximate asking prices for refurbished units in late 2026 and exclude shipping, crating, installation and taxes. For an exact figure, tell us the configuration you need and where it will be installed, and we will send a written quote that states what is included.",
         ],
       },
     ],
     related: [
-      { label: "Browse equipment with prices", href: "/products" },
-      { label: "Is refurbished laser equipment safe?", href: "/guides/is-refurbished-laser-equipment-safe" },
-      { label: "What is used equipment worth?", href: "/guides/how-to-sell-used-ophthalmic-equipment" },
+      { label: "Femtosecond lasers", href: "/categories/femtosecond-lasers" },
+      { label: "Phaco and vitrectomy systems", href: "/categories/phaco-vitrectomy" },
+      { label: "Buying a used femtosecond laser", href: "/guides/buying-a-used-femtosecond-laser" },
       { label: "Contact us", href: "/contact" },
     ],
   },

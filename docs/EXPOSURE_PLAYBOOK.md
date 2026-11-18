@@ -132,7 +132,7 @@ each targeting a real query and linking into the catalogue:
 - Is refurbished ophthalmic laser equipment safe? How to verify it
 - Integrated vs slit lamp adapter retina lasers
 - What to do with old ophthalmic equipment: sell, trade in or recycle
-- How much does used ophthalmic equipment cost? 2026 price ranges
+- How much does a used femtosecond laser or phaco system cost?
 
 To add one, append an entry to `src/content/guides.ts`; the index, sitemap and
 Article markup update automatically. Good next topics are the questions your
