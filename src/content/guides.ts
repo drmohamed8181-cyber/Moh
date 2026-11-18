@@ -1008,6 +1008,134 @@ export const GUIDES: Guide[] = [
       { label: "Contact us", href: "/contact" },
     ],
   },
+  {
+    // Topic suggested by the owner from partner newsletters (Nov 2026). The
+    // text is original; do not paste partner or manufacturer articles here.
+    slug: "integrated-vs-slit-lamp-adapter-retina-lasers",
+    title: "Integrated vs Slit Lamp Adapter Retina Lasers: Which Setup to Buy",
+    description:
+      "How integrated slit-lamp photocoagulation lasers differ from adapters that mount on an existing slit lamp, plus LIO delivery, and what to check on a used unit.",
+    publishedAt: "2026-11-17",
+    intro:
+      "A retina photocoagulation laser is a console that generates the beam and a delivery device that brings it to the eye. The same console can often be bought with different delivery options, and that choice affects price, room layout and day-to-day handling as much as the laser itself. This guide compares the main setups.",
+    sections: [
+      {
+        heading: "Integrated slit lamp delivery",
+        paragraphs: [
+          "In an integrated setup the laser is delivered through a slit lamp built or configured for it, usually on its own instrument table. The fibre, optics and safety filter are matched and aligned as one system, and the fibre is routed and protected inside the assembly.",
+          "The advantages are consistency and simplicity: the aiming beam and treatment beam stay aligned, the controls sit where the operator expects them, and there is little to set up between patients. The trade-offs are cost and space. You are buying a slit lamp and table with the laser, and the station is usually dedicated to laser work.",
+        ],
+      },
+      {
+        heading: "Slit lamp adapter (clip-on) delivery",
+        paragraphs: [
+          "An adapter mounts the laser delivery optics onto a compatible slit lamp you already own. It is the lower-cost way to add photocoagulation, and it lets one slit lamp serve both examinations and laser treatment.",
+          "Compatibility is the first question. Adapters are made for specific slit lamp models and mounts, so confirm the exact make and model of your slit lamp against the adapter's specification before you buy. Ask how the adapter is aligned after mounting and who does it, and make sure the operator's safety filter required for the laser's wavelength is part of the setup.",
+        ],
+      },
+      {
+        heading: "Laser indirect ophthalmoscope (LIO) delivery",
+        paragraphs: [
+          "An LIO delivers the laser through a headset worn by the operator, used with a handheld lens. It reaches the peripheral retina and suits patients who cannot sit at a slit lamp, such as infants or patients in a supine position. Many practices buy an LIO in addition to slit lamp delivery rather than instead of it.",
+          "Check that the LIO is compatible with the exact laser console and its software, that the fibre connector matches, and that the headset illumination and optics are in good condition.",
+        ],
+      },
+      {
+        heading: "How to choose",
+        paragraphs: ["Start from how the laser will be used:"],
+        bullets: [
+          "A busy retina service with a dedicated laser room usually benefits from integrated delivery.",
+          "A general or comprehensive practice adding occasional laser treatment can often use an adapter on its existing slit lamp, if the models are compatible.",
+          "Practices treating peripheral retina, infants or bed-bound patients should plan for an LIO as well.",
+          "Whatever the setup, confirm that the delivery devices you need are cleared for use with that console under its manufacturer's labeling.",
+        ],
+      },
+      {
+        heading: "What to check on a pre-owned unit",
+        paragraphs: ["The delivery device is where wear shows. Before you buy, confirm:"],
+        bullets: [
+          "The fibre and connectors are intact, with no kinks or damage, and the power reaching the eye has been measured against specification.",
+          "The aiming beam is crisp and centred on the treatment beam.",
+          "The operator's safety filter is present and works with the delivery device.",
+          "For an adapter, which slit lamp models it fits; for an LIO, which consoles it is compatible with.",
+          "The footswitch, interlock and remote controls are included and working.",
+        ],
+      },
+      {
+        heading: "How MP MedPharma can help",
+        paragraphs: [
+          "Our photocoagulation laser listings show which delivery options are included, and several models are offered with integrated slit lamp delivery, a slit lamp adapter or an LIO. Tell us which slit lamp you have and how you plan to use the laser, and we will suggest the configuration that fits.",
+        ],
+      },
+    ],
+    related: [
+      { label: "Photocoagulation lasers", href: "/categories/photocoagulation-lasers" },
+      { label: "532 nm vs 577 nm lasers", href: "/guides/532nm-vs-577nm-photocoagulation-laser" },
+      { label: "Slit lamps", href: "/categories/slit-lamps" },
+      { label: "Contact us", href: "/contact" },
+    ],
+  },
+  {
+    // Topic suggested by the owner from partner newsletters (Nov 2026). Points
+    // retiring equipment toward the sell form; original text only.
+    slug: "what-to-do-with-old-ophthalmic-equipment",
+    title: "What to Do With Old Ophthalmic Equipment: Sell, Trade In or Recycle",
+    description:
+      "Options for ophthalmic equipment you are retiring: selling, trading in, or recycling it responsibly, plus how to protect patient data before it leaves.",
+    publishedAt: "2026-11-17",
+    intro:
+      "When a practice upgrades a laser, an OCT or a phaco system, the old unit rarely leaves on its own. Left in a storeroom it loses value every month. This guide sets out the options, in the order most practices should consider them, and the steps that protect patient data whichever route you choose.",
+    sections: [
+      {
+        heading: "First, find out what it is worth",
+        paragraphs: [
+          "Equipment that still works, or that a dealer can repair, usually has resale value, sometimes far more than expected. Platform, generation, condition, usage and completeness set the price. Get a valuation before you decide anything else, because the answer changes which route makes sense.",
+        ],
+      },
+      {
+        heading: "Sell it",
+        paragraphs: [
+          "Selling to a dealer is the simplest route for working equipment: the dealer quotes a price, arranges de-installation and collection, and pays. A private sale to another practice can bring more money but leaves you handling logistics and the buyer's questions.",
+          "Sell sooner rather than later. Values fall as a platform ages and as its parts support winds down, so a unit sold the month it is replaced is usually worth more than the same unit a year later.",
+        ],
+      },
+      {
+        heading: "Trade it in",
+        paragraphs: [
+          "If you are buying a replacement, ask whether the supplier takes the old unit in part exchange. A trade-in reduces the price of the new purchase and removes the old device in the same delivery, which saves a separate collection.",
+        ],
+      },
+      {
+        heading: "Recycle what cannot be reused",
+        paragraphs: [
+          "Equipment with no remaining value should be recycled, not thrown away. Electronic medical equipment contains circuit boards, batteries and other components that are regulated as electronic waste in many states. Use a recycler that holds a recognised certification such as R2 or e-Stewards, and keep the certificate of recycling for your records.",
+        ],
+      },
+      {
+        heading: "Protect patient data before anything leaves",
+        paragraphs: [
+          "Diagnostic devices such as OCTs, fundus cameras, topographers and visual field analyzers, and the computers attached to them, often store patient images and records. That information stays your responsibility under HIPAA until it is properly removed.",
+        ],
+        bullets: [
+          "Export anything you need to keep to your records system first.",
+          "Have the device's database and drives securely wiped, or the drives removed and destroyed, following recognised media-sanitization practice such as NIST SP 800-88.",
+          "Get written confirmation of what was wiped or destroyed, and by whom.",
+          "Remove the device from your network, and revoke any accounts or licences tied to your practice.",
+        ],
+      },
+      {
+        heading: "Selling to MP MedPharma",
+        paragraphs: [
+          "We buy pre-owned ophthalmic equipment, including lasers, phaco and vitrectomy systems, OCTs, microscopes and diagnostic devices. Send us the model, its condition and a few photos through our Sell Your Equipment form, and we will reply with an offer. Please do not include patient information in the photos.",
+        ],
+      },
+    ],
+    related: [
+      { label: "Sell your equipment", href: "/sell-your-product" },
+      { label: "What is used equipment worth?", href: "/guides/how-to-sell-used-ophthalmic-equipment" },
+      { label: "Browse replacement equipment", href: "/products" },
+    ],
+  },
 ];
 
 /**
