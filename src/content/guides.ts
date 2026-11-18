@@ -463,6 +463,29 @@ export const GUIDES: Guide[] = [
         ],
       },
       {
+        // Search Console (Nov 2026): "what should a service contract for an
+        // ophthalmic surgical microscope include?" ranks around position 6.
+        heading: "What a microscope service contract should include",
+        paragraphs: ["Whether you buy new or pre-owned, compare service contracts on these points rather than on price alone:"],
+        bullets: [
+          "How many preventive maintenance visits a year, and what each visit checks: optics, illumination, motors, arm balance, brakes and electrical safety.",
+          "Whether parts are covered, and which ones are excluded. Lamps, fuses and other consumables are often excluded.",
+          "The response time for a breakdown, and whether a loaner microscope is provided if a repair takes longer.",
+          "Who performs the service, and whether that engineer is trained on your model.",
+          "Coverage for the video system, camera and assistant scope, which are sometimes excluded from the microscope contract.",
+          "What happens when the manufacturer ends parts support for the model during the contract term.",
+        ],
+      },
+      {
+        // Search Console (Nov 2026): "which surgical microscopes connect to a
+        // clinic's diagnostic devices…" ranks around position 7.
+        heading: "Connecting the microscope to other devices",
+        paragraphs: [
+          "Newer microscopes can connect to other systems in the operating room: video recording, intraoperative OCT on some platforms, and image-guidance systems that use data from the clinic's diagnostic devices. Older microscopes usually offer video output only.",
+          "Connectivity is model- and software-specific. Before you buy, list the devices the microscope must work with, then ask the supplier to confirm in writing that the exact microscope, software version and adapters support those connections. Do not assume that a feature offered on the current generation is available on an older one.",
+        ],
+      },
+      {
         heading: "How MP MedPharma can help",
         paragraphs: [
           "Tell us your procedure mix and your room, and we will match a microscope and mounting option to it. Every unit ships with its service documentation and warranty coverage, and pricing is quoted per unit according to configuration.",
@@ -1134,6 +1157,59 @@ export const GUIDES: Guide[] = [
       { label: "Sell your equipment", href: "/sell-your-product" },
       { label: "What is used equipment worth?", href: "/guides/how-to-sell-used-ophthalmic-equipment" },
       { label: "Browse replacement equipment", href: "/products" },
+    ],
+  },
+  {
+    // Search Console (Aug–Nov 2026): "how much does a femtosecond laser cost",
+    // "femtosecond laser price", "constellation vision system price". Owner's
+    // decision (Nov 17 2026): publish ranges only for what buyers search for,
+    // wide and rounded, never a specific unit's price. Keep the ranges around
+    // our own asking prices when the catalogue changes.
+    slug: "femtosecond-laser-and-phaco-system-cost",
+    title: "How Much Does a Used Femtosecond Laser or Phaco System Cost?",
+    description:
+      "Approximate 2026 price ranges for refurbished femtosecond lasers and phaco/vitrectomy systems such as the Alcon Constellation, and what moves the price.",
+    publishedAt: "2026-11-17",
+    intro:
+      "Femtosecond lasers and phaco/vitrectomy systems are two of the largest equipment purchases an eye surgery practice makes, and their prices are rarely published. This guide gives approximate ranges for refurbished units in the United States so you can budget before asking for quotes. The ranges are broad on purpose: generation, usage, software and accessories can move the price of the same model a long way.",
+    sections: [
+      {
+        heading: "Refurbished femtosecond lasers",
+        paragraphs: [
+          "Refurbished femtosecond lasers for LASIK flaps and corneal procedures generally sell for about $40,000 to $125,000. Older platforms with lower pulse rates sit at the low end; recent generations with current software and a manufacturer service history sit at the high end.",
+          "The purchase price is only part of the cost. Femtosecond platforms use procedure-specific patient interfaces or other disposables, and some charge per-procedure fees or licences. Ask for the per-case cost and confirm the consumables are still manufactured before comparing quotes.",
+        ],
+      },
+      {
+        heading: "Refurbished phaco and phaco/vitrectomy systems",
+        paragraphs: [
+          "Refurbished phaco and combined phaco/vitrectomy systems, such as the Alcon Constellation Vision System, generally sell for about $10,000 to $55,000. Dedicated cataract platforms of earlier generations sit at the low end; current-generation and combined anterior/posterior systems with a full set of handpieces sit at the top.",
+          "As with femtosecond lasers, compare the per-case cost of cassettes and packs as well as the purchase price, and check which handpieces, probes and footswitches are included.",
+        ],
+      },
+      {
+        heading: "What moves the price",
+        paragraphs: ["Two units of the same model can be priced far apart. The usual reasons:"],
+        bullets: [
+          "Generation and software version, and whether the manufacturer still supports it with parts and updates.",
+          "Usage: procedure counts and the service status of wear parts such as the laser source.",
+          "What is included: handpieces, probes, footswitches, patient beds and software licences.",
+          "Whether licences and service agreements transfer to the new owner.",
+          "Warranty length and who provides service after the sale.",
+        ],
+      },
+      {
+        heading: "Getting an exact price",
+        paragraphs: [
+          "These ranges are approximate asking prices for refurbished units in late 2026 and exclude shipping, crating, installation and taxes. For an exact figure, tell us the configuration you need and where it will be installed, and we will send a written quote that states what is included.",
+        ],
+      },
+    ],
+    related: [
+      { label: "Femtosecond lasers", href: "/categories/femtosecond-lasers" },
+      { label: "Phaco and vitrectomy systems", href: "/categories/phaco-vitrectomy" },
+      { label: "Buying a used femtosecond laser", href: "/guides/buying-a-used-femtosecond-laser" },
+      { label: "Contact us", href: "/contact" },
     ],
   },
 ];
