@@ -1212,6 +1212,138 @@ export const GUIDES: Guide[] = [
       { label: "Contact us", href: "/contact" },
     ],
   },
+  {
+    // Planned in the Nov 20 2026 summary as the next article. Answers a common
+    // buyer worry about older platforms. Keep it general: never state a
+    // specific model's support end date unless the manufacturer published it.
+    slug: "end-of-support-ophthalmic-equipment-parts",
+    title: "End of Support: Will I Still Get Parts for Used Ophthalmic Equipment?",
+    description:
+      "What a manufacturer's end-of-support notice means for a used laser, phaco system or OCT, where parts come from afterwards, and how to judge the risk.",
+    publishedAt: "2026-11-20",
+    intro:
+      "Sooner or later every platform reaches the point where its manufacturer stops supporting it. For a buyer of pre-owned equipment, that raises a fair question: if something breaks, can it still be fixed? The answer is usually yes for some years, but it depends on the device, the part and who services it. This guide explains what end of support really means and how to weigh it before you buy.",
+    sections: [
+      {
+        heading: "What the terms mean",
+        paragraphs: [
+          "Manufacturers use several terms, and they are not the same. End of sale (or end of production) means the device is no longer sold new, but the manufacturer still supplies parts and service. End of support, end of service or end of life usually means the manufacturer will no longer guarantee parts, repairs, software updates or field engineers after a stated date.",
+          "Those dates are often years apart. A platform that left production recently may still have years of full manufacturer support ahead of it, so \"no longer made\" is not the same as \"no longer supported\".",
+        ],
+      },
+      {
+        heading: "Where parts come from after support ends",
+        paragraphs: [
+          "When the manufacturer stops, the market usually does not. Independent service organisations and refurbishers keep many platforms running for years using stocked spare parts, parts recovered from retired units, and repaired or rebuilt assemblies. Platforms with a large installed base are the easiest to keep running, simply because there are more donor units and more engineers who know them.",
+          "The risk is concentrated in a few parts: laser sources, specialised optics, proprietary circuit boards and software-locked components. Mechanical parts, covers, footswitches and many accessories are usually the least of the worry.",
+        ],
+      },
+      {
+        heading: "Consumables matter more than spare parts",
+        paragraphs: [
+          "For phaco systems, femtosecond lasers and other devices that use cassettes, packs or patient interfaces, the real question is whether those consumables are still made. A device can be perfectly repairable and still be unusable if its single-use items are no longer available. Confirm current availability, and ideally your price per case, before buying any platform near the end of its life.",
+        ],
+      },
+      {
+        heading: "How to judge the risk before you buy",
+        paragraphs: ["Ask the seller, and where possible the manufacturer, the following:"],
+        bullets: [
+          "Has the manufacturer announced an end-of-support date for this model, and what is it?",
+          "Are the consumables, if any, still in production, and from whom will I buy them?",
+          "Who will service the unit locally, and do they keep parts for this platform?",
+          "Which parts are known to fail on this model, and were they replaced during refurbishment?",
+          "Is the software tied to a licence or a computer that cannot be replaced? (See our guide on Windows versions in used diagnostic equipment.)",
+        ],
+      },
+      {
+        heading: "When an older platform still makes sense",
+        paragraphs: [
+          "An unsupported or soon-to-be-unsupported device can still be a sound purchase when the price reflects the risk, the platform is widely installed, an independent engineer you trust will service it, and the device does a job your practice needs today. It makes less sense when the device depends on consumables that are being phased out or on a single part with no source.",
+        ],
+      },
+      {
+        heading: "How MP MedPharma can help",
+        paragraphs: [
+          "Tell us the model you are considering and we will share what we know about its support status, consumables and typical service needs, so you can decide with the facts in front of you.",
+        ],
+      },
+    ],
+    related: [
+      { label: "Is refurbished laser equipment safe?", href: "/guides/is-refurbished-laser-equipment-safe" },
+      { label: "What to include in a phaco service contract", href: "/guides/phaco-service-contract-what-to-include" },
+      { label: "Phaco and vitrectomy systems", href: "/categories/phaco-vitrectomy" },
+      { label: "Contact us", href: "/contact" },
+    ],
+  },
+  {
+    // Planned in the Nov 20 2026 summary. Facts used: Microsoft ended support
+    // for Windows XP (Apr 2014), Windows 7 (Jan 2020) and Windows 10 (Oct
+    // 2025). Do not name the Windows version of a specific model here.
+    slug: "windows-versions-on-used-diagnostic-equipment",
+    title: "Windows Versions on Used Diagnostic Equipment: What Buyers Should Know",
+    description:
+      "Many used OCTs, fundus cameras and topographers run older Windows. What that means for security, networking and your EHR, and how to manage it safely.",
+    publishedAt: "2026-11-20",
+    intro:
+      "Most ophthalmic diagnostic devices are really two machines: the optical instrument and a Windows computer that runs its software. On a pre-owned OCT, fundus camera, topographer or visual field analyzer, that computer may run a version of Windows that Microsoft no longer supports. That is common and usually manageable, but you should know about it before you buy.",
+    sections: [
+      {
+        heading: "Why older Windows is normal on medical devices",
+        paragraphs: [
+          "A manufacturer validates its device software on a specific operating system, and that combination is what was cleared for sale. You cannot simply upgrade Windows yourself: a new version can break the acquisition software, the drivers that talk to the instrument or the licence, and it may take the device outside its validated configuration. That is why many devices in daily clinical use still run Windows XP, Windows 7 or Windows 10.",
+          "Microsoft ended support for Windows XP in April 2014, for Windows 7 in January 2020 and for Windows 10 in October 2025. After those dates the operating system no longer receives regular security updates.",
+        ],
+      },
+      {
+        heading: "What it means in practice",
+        paragraphs: [
+          "The device will keep working: an unsupported operating system does not stop the instrument from taking scans. The issues are security and connectivity. An unpatched computer on your network is a target for malware and ransomware, and modern antivirus, browsers and EHR integrations may not support it.",
+        ],
+      },
+      {
+        heading: "Ask before you buy",
+        paragraphs: ["Get answers to these questions for the exact unit:"],
+        bullets: [
+          "Which Windows version and which device software version does the unit run?",
+          "Does the manufacturer offer an upgrade path to a newer computer or operating system, and at what cost?",
+          "Is the software licence tied to this particular computer or hard drive?",
+          "Does the software export in the formats your EHR or image-management system needs, such as DICOM?",
+          "Has the computer been wiped of the previous owner's patient data?",
+        ],
+      },
+      {
+        heading: "Running an older system safely",
+        paragraphs: [
+          "If you keep an older Windows device, follow the manufacturer's security guidance for it and involve your IT provider. Common practice is to limit its exposure rather than leave it on the open network:",
+        ],
+        bullets: [
+          "Keep it off the internet, or place it on a separate network segment that only reaches what it needs.",
+          "Do not use it for email, web browsing or anything other than running the device.",
+          "Disable USB autorun and control who can plug in removable media.",
+          "Back up the patient database and software settings regularly, and store the backup elsewhere.",
+          "Keep the original installation media and licence keys in a safe place.",
+        ],
+      },
+      {
+        heading: "Patient data and HIPAA",
+        paragraphs: [
+          "The images and records on a diagnostic device are protected health information. A security weakness on that computer is a compliance issue as well as an IT one, so include these devices in your practice's HIPAA risk assessment. When you buy a used device, confirm that the previous owner's data has been removed before it reaches you.",
+        ],
+      },
+      {
+        heading: "How MP MedPharma can help",
+        paragraphs: [
+          "Ask us about any diagnostic device in our catalogue and we will tell you what we know about its operating system and software version before you commit.",
+        ],
+      },
+    ],
+    related: [
+      { label: "Diagnostic equipment", href: "/categories/diagnostic-equipment" },
+      { label: "Buying a used Zeiss Cirrus OCT", href: "/guides/buying-a-used-oct-zeiss-cirrus-guide" },
+      { label: "Fundus camera buying guide", href: "/guides/fundus-camera-buying-guide" },
+      { label: "End of support: will I still get parts?", href: "/guides/end-of-support-ophthalmic-equipment-parts" },
+    ],
+  },
 ];
 
 /**
