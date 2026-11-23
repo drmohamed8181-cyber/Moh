@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getBrandBySlug, getProductsByBrand, getPublicBrands, getPublicBrandSlugs } from "@/lib/publicData";
+import {
+  getBrandBySlug,
+  getDormantBrandBySlug,
+  getProductsByBrand,
+  getPublicBrands,
+  getPublicBrandSlugs,
+} from "@/lib/publicData";
 import { jsonLdScript } from "@/lib/jsonLd";
 import { SITE_URL, brandDescription, brandTitle } from "@/lib/seo";
 import ProductCard from "@/components/product/ProductCard";
@@ -23,23 +29,39 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }));
 }
 
+// A brand with stock gets its full page. A brand we carry whose units are all
+// unavailable right now keeps its URL alive (empty and noindexed) instead of
+// returning 404, so a page Google already knows does not become an error each
+// time stock runs out. Only a slug no product has ever used is a 404.
+async function resolveBrand(slug: string) {
+  const brand = await getBrandBySlug(slug);
+  if (brand) return { brand, dormant: false };
+  const dormant = await getDormantBrandBySlug(slug);
+  if (dormant) return { brand: { ...dormant, productCount: 0 }, dormant: true };
+  notFound();
+}
+
 function uniqueCategoryNames(products: { category: { name: string } | null }[]): string[] {
   return [...new Set(products.map((product) => product.category?.name).filter((name): name is string => Boolean(name)))];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const brand = await getBrandBySlug(slug);
-  if (!brand) notFound();
-  const products = await getProductsByBrand(slug);
+  const { brand, dormant } = await resolveBrand(slug);
+  const products = dormant ? [] : await getProductsByBrand(slug);
   const title = brandTitle(brand);
-  const description = brandDescription(brand, uniqueCategoryNames(products));
+  const description = dormant
+    ? `No ${brand.name} equipment is available at MP MedPharma right now. Browse our other new and refurbished equipment or contact us.`
+    : brandDescription(brand, uniqueCategoryNames(products));
   const image = products.find((product) => product.images.length > 0)?.images[0];
   const imageUrl = image ? (image.startsWith("http") ? image : `${SITE_URL}${image}`) : undefined;
   return {
     title,
     description,
     alternates: { canonical: `/brands/${slug}` },
+    // An empty brand page has nothing to rank for; keep it out of the index
+    // until a unit is available again, but let crawlers follow its links.
+    ...(dormant ? { robots: { index: false, follow: true } } : {}),
     openGraph: {
       type: "website",
       title,
@@ -57,10 +79,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BrandPage({ params }: Props) {
   const { slug } = await params;
-  const brand = await getBrandBySlug(slug);
-  if (!brand) notFound();
+  const { brand, dormant } = await resolveBrand(slug);
 
-  const [products, allBrands] = await Promise.all([getProductsByBrand(slug), getPublicBrands()]);
+  const [products, allBrands] = await Promise.all([
+    dormant ? Promise.resolve([]) : getProductsByBrand(slug),
+    getPublicBrands(),
+  ]);
   const categories = uniqueCategoryNames(products);
   const otherBrands = allBrands.filter((other) => other.slug !== slug);
 
@@ -100,9 +124,15 @@ export default async function BrandPage({ params }: Props) {
             <span className="text-white">{brand.name}</span>
           </nav>
           <h1 className="text-4xl font-bold mb-3">{brand.name} Equipment</h1>
-          <p className="text-blue-100 text-lg max-w-3xl">
-            New and certified refurbished {brand.name} {categories.length > 0 ? categories.join(", ") : "equipment"} from MP MedPharma, with documented service history and warranty on every unit. Request pricing on any product below.
-          </p>
+          {dormant ? (
+            <p className="text-blue-100 text-lg max-w-3xl">
+              We have no {brand.name} units available right now. Browse our other equipment below, or contact us and we will let you know when one comes in.
+            </p>
+          ) : (
+            <p className="text-blue-100 text-lg max-w-3xl">
+              New and certified refurbished {brand.name} {categories.length > 0 ? categories.join(", ") : "equipment"} from MP MedPharma, with documented service history and warranty on every unit. Request pricing on any product below.
+            </p>
+          )}
           <p className="text-blue-200 text-sm mt-3">
             {products.length} {products.length === 1 ? "product" : "products"} available
           </p>
@@ -113,9 +143,14 @@ export default async function BrandPage({ params }: Props) {
         {products.length === 0 ? (
           <div className="text-center py-20">
             <p className="text-gray-500 text-lg mb-2">No {brand.name} products are listed right now.</p>
-            <Link href="/products" className="inline-flex items-center gap-2 mt-4 px-6 py-3 bg-primary-600 text-white rounded-xl font-semibold hover:bg-primary-700 transition-colors">
-              Browse All Products
-            </Link>
+            <div className="flex flex-wrap justify-center gap-3 mt-4">
+              <Link href="/products" className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-xl font-semibold hover:bg-primary-700 transition-colors">
+                Browse All Products
+              </Link>
+              <Link href="/contact" className="inline-flex items-center gap-2 px-6 py-3 bg-white border border-gray-300 text-gray-700 rounded-xl font-semibold hover:border-primary-300 hover:text-primary-600 transition-colors">
+                Contact Us
+              </Link>
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">

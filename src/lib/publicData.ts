@@ -489,6 +489,30 @@ export async function getBrandBySlug(slug: string): Promise<PublicBrand | null> 
 }
 
 /**
+ * A brand whose products are all unavailable right now, or null. Its page
+ * used to 404 the moment the last unit went unavailable, so a URL Google had
+ * already crawled (e.g. /brands/quantel-medical) turned into a "Not found
+ * (404)" error. The page now stays up, empty and noindexed, and becomes
+ * indexable again by itself when a unit is back.
+ */
+export const getDormantBrandBySlug = unstable_cache(
+  async (slug: string): Promise<{ name: string; slug: string } | null> => {
+    if (!prisma) throw new DatabaseUnavailableError();
+    const rows = await prisma.product.findMany({
+      where: { isAvailable: false, category: { slug: { notIn: HIDDEN_CATEGORY_SLUGS } } },
+      select: { name: true, manufacturer: true },
+    });
+    for (const row of rows) {
+      const brand = productBrand(row);
+      if (brand?.slug === slug) return brand;
+    }
+    return null;
+  },
+  ["public-dormant-brand-by-slug"],
+  { tags: [PRODUCTS_TAG, CATEGORIES_TAG], revalidate: ONE_HOUR }
+);
+
+/**
  * Visible products belonging to the brand `slug`, alphabetically. Filtered in
  * memory rather than by `manufacturer = name` because one brand covers several
  * spellings; the visible catalogue is small enough for that.
