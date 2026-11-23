@@ -5,6 +5,7 @@ import { GUIDES, getGuide } from "@/content/guides";
 import { jsonLdScript } from "@/lib/jsonLd";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
 import { ArrowRight, ChevronRight } from "lucide-react";
+import SellProductForm from "@/components/product/SellProductForm";
 
 // Static article pages. Each guide is a search-intent landing page that links
 // into the catalogue; see src/content/guides.ts for the content itself.
@@ -99,6 +100,19 @@ export default async function GuidePage({ params }: Props) {
             )}
           </section>
         ))}
+
+        {guide.sellForm && (
+          <section className="mt-12 pt-10 border-t border-gray-200" aria-labelledby="sell-offer-heading">
+            <h2 id="sell-offer-heading" className="text-2xl font-bold text-gray-900 mb-2">
+              Get an offer for your equipment
+            </h2>
+            <p className="text-gray-600 leading-relaxed mb-8">
+              Tell us the model and condition and add a few photos. We review every submission and reply with an offer
+              or questions. There is no obligation to sell.
+            </p>
+            <SellProductForm location={`guide_${slug}`} />
+          </section>
+        )}
 
         <div className="mt-12 p-6 bg-primary-50 border border-primary-100 rounded-2xl">
           <h2 className="text-sm font-semibold text-primary-700 uppercase tracking-wider mb-4">Next steps</h2>

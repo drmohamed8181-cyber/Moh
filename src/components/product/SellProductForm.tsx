@@ -133,7 +133,9 @@ function Checkbox({ checked, onChange, children }: { checked: boolean; onChange:
 
 const steps = ["Product Details", "Photos", "Contact & Review"];
 
-export default function SellProductForm() {
+/** `location` says which page the form sits on, so Analytics can tell the
+ * sell page and the selling guides apart. */
+export default function SellProductForm({ location = "sell_page" }: { location?: string } = {}) {
   const [step, setStep] = useState(0);
   const [product, setProduct] = useState(initialProduct);
   const [contact, setContact] = useState(initialContact);
@@ -255,7 +257,7 @@ export default function SellProductForm() {
       });
       const data = await res.json();
       if (res.ok) {
-        trackLead("sell_equipment");
+        trackLead("sell_equipment", { form_location: location });
         setResult({ referenceNumber: data.referenceNumber, estimatedReview: data.estimatedReview, supportEmail: data.supportEmail });
       } else {
         toast.error(data.error || "Something went wrong. Please try again.");
