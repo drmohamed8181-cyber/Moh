@@ -23,6 +23,13 @@ export type Guide = {
   sections: GuideSection[];
   /** Internal links shown at the end of the guide. */
   related: { label: string; href: string }[];
+  /**
+   * Show the "Get an offer" sell form at the end of the guide. Search Console
+   * (Nov 2026) shows Google ranks the selling guides, not /sell-your-product,
+   * for "sell ophthalmic equipment" searches, so sellers can ask for an offer
+   * right where they land.
+   */
+  sellForm?: boolean;
 };
 
 export const GUIDES: Guide[] = [
@@ -183,6 +190,7 @@ export const GUIDES: Guide[] = [
   },
   {
     slug: "how-to-sell-used-ophthalmic-equipment",
+    sellForm: true,
     // Kept distinct from the sell page's title (see sell-your-product/page.tsx):
     // this page answers the valuation question, the sell page takes the offer.
     title: "What Is Used Ophthalmic Equipment Worth? A Valuation Guide",
@@ -1102,6 +1110,7 @@ export const GUIDES: Guide[] = [
     // Topic suggested by the owner from partner newsletters (Nov 2026). Points
     // retiring equipment toward the sell form; original text only.
     slug: "what-to-do-with-old-ophthalmic-equipment",
+    sellForm: true,
     title: "What to Do With Old Ophthalmic Equipment: Sell, Trade In or Recycle",
     description:
       "Options for ophthalmic equipment you are retiring: selling, trading in, or recycling it responsibly, plus how to protect patient data before it leaves.",
