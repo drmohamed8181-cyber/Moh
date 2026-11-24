@@ -1221,6 +1221,133 @@ export const GUIDES: Guide[] = [
       { label: "Contact us", href: "/contact" },
     ],
   },
+  {
+    // Topic suggested by the owner from partner newsletters (Nov 2026). The
+    // text is original; do not paste partner or manufacturer articles here.
+    // No tax or financing advice beyond pointing buyers to their accountant.
+    slug: "planning-ophthalmic-equipment-purchases-2027",
+    title: "Planning Ophthalmic Equipment Purchases for 2027: A Practical Checklist",
+    description:
+      "How a practice or surgery center can plan 2027 ophthalmic equipment purchases: auditing what you own, budgeting total cost, timing, and new vs refurbished.",
+    publishedAt: "2026-11-23",
+    intro:
+      "Equipment decisions made in a hurry, after a laser fails or a surgeon joins, usually cost more than ones made on a plan. The last weeks of the year are a good time to look at what your practice owns, what it will need in 2027 and how to pay for it. This checklist walks through the steps.",
+    sections: [
+      {
+        heading: "Start with an audit of what you own",
+        paragraphs: [
+          "List every major device with its model, year of manufacture, software version, service status and how heavily it is used. For each one, note whether the manufacturer still supplies parts and service for it, and when its service contract or warranty ends.",
+          "This list shows where the risk is. A heavily used laser that is out of manufacturer support is a more urgent replacement than an older device that sits idle most of the week.",
+        ],
+      },
+      {
+        heading: "Match equipment to the year's plans",
+        paragraphs: ["Next, write down what will change in 2027 and what equipment each change needs:"],
+        bullets: [
+          "A new surgeon or a new subspecialty, such as glaucoma laser treatment or refractive surgery.",
+          "A second location or an extra exam lane.",
+          "Procedures you currently refer out that you could bring in-house.",
+          "Diagnostic capacity: OCT, visual field or topography appointments that are booked weeks ahead.",
+        ],
+      },
+      {
+        heading: "Budget the total cost, not the price tag",
+        paragraphs: [
+          "The purchase price is only one line. A realistic budget also includes shipping and crating, installation and calibration, room preparation, staff training, disposables and per-procedure fees, service contracts and software licences. Two units with the same price can have very different costs over five years.",
+          "Ask your accountant how equipment purchases are treated for tax in your situation, for example whether accelerated depreciation applies and whether the timing of delivery matters. Rules change and depend on the practice, so get that advice before you commit to a date.",
+        ],
+      },
+      {
+        heading: "Decide between new and refurbished for each item",
+        paragraphs: [
+          "Refurbished equipment usually costs much less than new and is often available sooner. It suits proven platforms where parts and service are still available. New equipment makes more sense when you need the latest software or features, or when the manufacturer's own service agreement is a requirement for your facility. Many practices mix the two, buying new for the flagship device and refurbished for the rest.",
+          "Whichever you choose, ask for the service history, calibration records and written warranty before you buy.",
+        ],
+      },
+      {
+        heading: "Time the purchase",
+        paragraphs: [
+          "Lead times for crating, shipping, installation and training can add several weeks, and large lasers may need room preparation before they arrive. Work back from the date you want to start treating patients. It also helps to sell or trade in the device you are replacing at the same time, while it still has value.",
+        ],
+      },
+      {
+        heading: "How MP MedPharma can help",
+        paragraphs: [
+          "Send us your equipment list and plans for 2027, and we will suggest refurbished options that fit, with written quotes that state what is included. If you are retiring equipment, we can make an offer on it too.",
+        ],
+      },
+    ],
+    related: [
+      { label: "Refurbished vs new equipment", href: "/guides/refurbished-vs-new-ophthalmic-equipment" },
+      { label: "Used femtosecond laser and phaco costs", href: "/guides/femtosecond-laser-and-phaco-system-cost" },
+      { label: "Sell your equipment", href: "/sell-your-product" },
+      { label: "Browse all equipment", href: "/products" },
+    ],
+  },
+  {
+    // Topic suggested by the owner from partner newsletters (Nov 2026). The
+    // text is original. Keep it general: never state that a specific model is
+    // or is not supported by its manufacturer.
+    slug: "ophthalmic-laser-after-manufacturer-end-of-support",
+    title: "When Your Ophthalmic Laser Reaches End of Manufacturer Support",
+    description:
+      "What end of manufacturer support means for an ophthalmic laser, how to keep it in service with independent service and parts, and when to replace it.",
+    publishedAt: "2026-11-23",
+    intro:
+      "Manufacturers stop supporting older platforms: first new software, then service contracts, and eventually parts. That notice does not mean the laser stops working. Many practices keep reliable lasers in service for years afterwards. This guide explains what changes, the options for keeping a laser running, and the signs it is time to replace it.",
+    sections: [
+      {
+        heading: "What end of support usually means",
+        paragraphs: [
+          "Wording differs between manufacturers, but end of support generally means the manufacturer no longer sells service contracts for the model, no longer guarantees parts, or no longer releases software updates. Read the notice carefully: some stop service at once, others continue parts supply for a period.",
+          "The laser's labeling and indications do not change. It must still be maintained and calibrated to its original specifications and used as its operator's manual describes.",
+        ],
+      },
+      {
+        heading: "Options for keeping it in service",
+        paragraphs: ["A supported laser and an unsupported one can perform the same; what changes is who looks after it:"],
+        bullets: [
+          "Independent service: engineers trained on the platform who can inspect, repair and calibrate it, often with faster response than a manufacturer for older models.",
+          "Refurbished and harvested parts: modules from retired units of the same model, tested before reuse.",
+          "Preventive maintenance: regular checks of energy output, optics, fibres and safety interlocks, so problems are found before they cancel a clinic.",
+          "A spare: some practices with two lasers of the same model keep a retired unit for parts.",
+        ],
+      },
+      {
+        heading: "Questions to ask an independent service provider",
+        paragraphs: ["Before you rely on anyone to look after a laser, ask:"],
+        bullets: [
+          "How many units of this model have they serviced, and do they have its service documentation and test equipment?",
+          "Where do their parts come from, and how are they tested?",
+          "Do they provide a written calibration or energy-output report after each visit?",
+          "What is their response time, and what warranty do they give on repairs?",
+        ],
+      },
+      {
+        heading: "Signs it is time to replace it",
+        paragraphs: ["Keeping a laser running is usually the cheaper choice, until one of these applies:"],
+        bullets: [
+          "A critical part, such as the laser source or a main board, is no longer available from any source.",
+          "Breakdowns are cancelling clinics often enough to cost more than a replacement.",
+          "The software or an attached computer can no longer be kept secure on your network.",
+          "Your facility, payer or accreditation requires manufacturer-supported equipment.",
+          "Your surgeons need features the platform does not have.",
+        ],
+      },
+      {
+        heading: "How MP MedPharma can help",
+        paragraphs: [
+          "If you decide to replace a laser, we offer refurbished units of newer platforms with documented service history and a written warranty, and we can make an offer on the laser you are retiring. Tell us the model you have and we will suggest options.",
+        ],
+      },
+    ],
+    related: [
+      { label: "Is refurbished laser equipment safe?", href: "/guides/is-refurbished-laser-equipment-safe" },
+      { label: "What to do with old equipment", href: "/guides/what-to-do-with-old-ophthalmic-equipment" },
+      { label: "YAG lasers", href: "/categories/yag-lasers" },
+      { label: "Photocoagulation lasers", href: "/categories/photocoagulation-lasers" },
+    ],
+  },
 ];
 
 /**
