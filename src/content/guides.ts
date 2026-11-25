@@ -1348,6 +1348,80 @@ export const GUIDES: Guide[] = [
       { label: "Photocoagulation lasers", href: "/categories/photocoagulation-lasers" },
     ],
   },
+  {
+    // Owner-approved topic (Nov 2026): buyers ask which Windows version a used
+    // diagnostic device runs, and the catalogue lists the same topographer on
+    // Windows XP, 10 and 11. Original text. Keep it general: never state which
+    // operating systems a specific manufacturer supports or validates.
+    slug: "windows-version-used-diagnostic-equipment",
+    title: "Windows Versions on Used Diagnostic Equipment: What Buyers Should Check",
+    description:
+      "Why the Windows version matters when buying a used OCT, topographer or fundus camera, what to ask the seller, and how to run an older system safely.",
+    publishedAt: "2026-11-25",
+    intro:
+      "Most ophthalmic diagnostic devices, including OCTs, topographers, fundus cameras, biometers and visual field analyzers, are run by a Windows computer. When you buy one used, that computer's operating system matters almost as much as the optics: it decides whether the device can safely join your network, connect to your records system, and be repaired when the computer fails. This guide explains what to check before you buy.",
+    sections: [
+      {
+        heading: "Why the operating system matters",
+        paragraphs: [
+          "The device's acquisition and review software is written and tested for particular operating system versions. The same model can therefore be sold with very different computers: an older unit may still run Windows XP or Windows 7, while a later or upgraded unit runs Windows 10 or Windows 11.",
+          "Microsoft ended support for Windows XP in 2014, Windows 7 in 2020 and Windows 10 in October 2025. An unsupported system no longer receives security updates, which matters for any computer that stores patient images or connects to a practice network.",
+        ],
+      },
+      {
+        heading: "Do not simply upgrade Windows yourself",
+        paragraphs: [
+          "It is tempting to buy an older unit and install a newer Windows version. Ask first. The device software, drivers and capture hardware may not work on an operating system they were not designed for, and an unapproved change can leave the device unable to acquire images or unsupported by service engineers.",
+          "Instead, ask whether the manufacturer offers an upgrade path for that model, such as a newer computer and software package, what it costs, and whether it is still available. Factor that cost into the price of an older unit.",
+        ],
+      },
+      {
+        heading: "Questions to ask the seller",
+        paragraphs: ["Get written answers to these before you agree a price:"],
+        bullets: [
+          "Which Windows version and which device software version are installed?",
+          "Is the computer the original one supplied with the device, or a replacement, and is the software licensed for it?",
+          "Are the installation and recovery media, licence keys and any software modules (for example analysis or angiography options) included?",
+          "Has the patient database been removed, and how?",
+          "Can the device export images or reports in the formats your records or image-management system accepts, such as DICOM or PDF?",
+          "How old are the computer's hard drive and power supply? These wear out long before the optics.",
+        ],
+      },
+      {
+        heading: "Running an older system safely",
+        paragraphs: [
+          "Many practices keep reliable diagnostic devices on older Windows versions for years. If you do, reduce the risk rather than ignore it. Talk to your IT provider and include the device in your HIPAA security risk analysis.",
+        ],
+        bullets: [
+          "Keep the device off the internet; connect it only to what it needs, ideally on a separate network segment.",
+          "Disable unused services and remove software that is not part of the device installation.",
+          "Control USB use, since removable drives are a common way malware reaches isolated computers.",
+          "Back up the patient database and keep a recovery image so a failed drive does not take the device out of service.",
+          "Plan for replacement or an approved upgrade, rather than waiting for the computer to fail.",
+        ],
+      },
+      {
+        heading: "How the Windows version affects price",
+        paragraphs: [
+          "Expect the same model to cost more on a newer, supported operating system, and less on an older one. A cheaper older unit can still be the right choice for a standalone exam room, as long as you budget for isolating it now and for an upgrade or replacement later.",
+        ],
+      },
+      {
+        heading: "Buying from MP MedPharma",
+        paragraphs: [
+          "Where we know it, we state the operating system in the listing. For example, we list the Zeiss Atlas 9000 topographer in separate Windows XP, Windows 10 and Windows 11 versions. If a listing does not say, ask us and we will confirm the Windows and software versions before you buy.",
+        ],
+      },
+    ],
+    related: [
+      { label: "Atlas 9000 topographer, Windows 11", href: "/products/zeiss-atlas-9000-topographer-windows-11" },
+      { label: "Atlas 9000 topographer, Windows 10", href: "/products/zeiss-atlas-9000-topographer-windows-10" },
+      { label: "Corneal topographer buying guide", href: "/guides/corneal-topographer-buying-guide" },
+      { label: "Buying a used OCT", href: "/guides/buying-a-used-oct-zeiss-cirrus-guide" },
+      { label: "Diagnostic equipment", href: "/categories/diagnostic-equipment" },
+      { label: "Topographers", href: "/categories/topographers" },
+    ],
+  },
 ];
 
 /**
