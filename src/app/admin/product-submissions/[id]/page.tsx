@@ -6,6 +6,7 @@ import { safeDb } from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
 import { getSignedImageUrl } from "@/lib/cloudinary";
 import SubmissionStatusControl from "@/components/admin/SubmissionStatusControl";
+import SubmissionActions from "@/components/admin/SubmissionActions";
 
 export const metadata: Metadata = { title: "Product Submission – Admin" };
 
@@ -117,7 +118,14 @@ export default async function AdminProductSubmissionDetailPage({ params }: { par
             </div>
           </div>
 
-          <SubmissionStatusControl id={submission.id} status={submission.status} adminNotes={submission.adminNotes} />
+          {/* Keyed so the form shows the status and notes a sent reply just changed. */}
+          <SubmissionStatusControl
+            key={`${submission.status}:${submission.adminNotes ?? ""}`}
+            id={submission.id}
+            status={submission.status}
+            adminNotes={submission.adminNotes}
+          />
+          <SubmissionActions id={submission.id} email={submission.email} productName={submission.productName} />
         </div>
       </div>
     </div>
